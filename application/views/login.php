@@ -26,7 +26,7 @@
 <div class="login-box-body">
 <p class="login-box-msg">Sign in</p>
 
-<form action="<?php echo base_url(); ?>index.php/ceklogin" method="POST">
+<form id="form" method="POST">
 <div class="form-group has-feedback">
 <input type="text" class="form-control" name="username" placeholder="Username">
 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
