@@ -10,6 +10,8 @@ class default_controller extends CI_Controller {
 		$this->load->view('frontpage');
 	}
 
+
+	//Login
 	public function login(){
 		$this->load->view('login');
 	}
@@ -22,7 +24,7 @@ class default_controller extends CI_Controller {
 			$this->load->helper('cookie');
 			$cookie= array(
 				'name'   => 'backendCookie',
-				'value'  => md5($username),
+				'value'  => $username,
 				'expire' => '0',
 			);
 			$this->input->set_cookie($cookie);
@@ -53,6 +55,7 @@ class default_controller extends CI_Controller {
 
 	}
 
+	//Check cookie
 	public function checkcookieadmin(){
 		$this->load->helper('cookie');
 		if ($this->input->cookie('backendCookie',true)!=NULL) {
@@ -74,6 +77,28 @@ class default_controller extends CI_Controller {
 		}
 	}
 
+
+	//Logout
+	public function logoutadmin(){
+		$this->load->helper('cookie');
+		delete_cookie("memberCookie");
+		header("Location: ".base_url()."index.php/login");
+		die();
+	}
+
+	public function logoutmember(){
+		$this->load->helper('cookie');
+		delete_cookie("memberCookie");
+		header("Location: ".base_url()."index.php/login");
+		die();
+	}
+
+
+
+
+
+
+	//Dashboard
 	public function dashboardadmin(){
 		if ($this->checkcookieadmin()) {
 			$this->load->view('admin/dashboard');
@@ -92,18 +117,141 @@ class default_controller extends CI_Controller {
 		}
 	}
 
-	public function logoutadmin(){
-		$this->load->helper('cookie');
-		delete_cookie("memberCookie");
-		header("Location: ".base_url()."index.php/login");
-		die();
+
+
+	//Ubah password
+	public function changepasswordadmin(){
+		$oldpassword = md5($this->input->post('oldpassword'));
+		$data = $this->default_model->get_data_admin();
+		if ($oldpassword == $data['password']){
+			$data = array(
+				'password' => md5($this->input->post('newpassword'));
+			);
+			$insertStatus = $this->default_model->update_password_admin($this->input->cookie('backendCookie',true),$data);
+			echo $insertStatus;
+		}else{
+			echo "password lama salah";
+		}
 	}
 
-	public function logoutmember(){
-		$this->load->helper('cookie');
-		delete_cookie("memberCookie");
-		header("Location: ".base_url()."index.php/login");
-		die();
+	public function changepasswordmember(){
+		$oldpassword = md5($this->input->post('oldpassword'));
+		$data = $this->default_model->get_data_admin();
+		if ($oldpassword == $data['password']){
+			$data = array(
+				'password' => md5($this->input->post('newpassword'));
+			);
+			$insertStatus = $this->default_model->update_password_member($this->input->cookie('memberCookie',true),$data);
+			echo $insertStatus;
+		}else{
+			echo "password lama salah";
+		}
+	}
+
+
+
+
+
+	//Data member
+	public function get_currentuser(){
+		$data = $this->default_model->get_data_member($this->input->cookie('memberCookie',true));
+		if (empty($data)){
+			$data = [];
+		}
+		// else{
+		// 	unset($data['password']); //unset password to make it not visible in API output
+		// }
+		echo json_encode($data);
+	}
+
+	public function get_alluser(){
+		$data = $this->default_model->get_data_member();
+		if (empty($data)){
+			$data = [];
+		}
+		// else{
+		// 	foreach ($data as &$row){ //& mean to call by reference
+		// 		unset($row['password']);
+		// 	}
+		// }
+		echo json_encode($data);
+	}
+
+
+	//Data Withdraw
+	public function get_currentuser_withdraw(){
+		$data = $this->default_model->get_data_withdraw($this->input->cookie('memberCookie',true));
+		if (empty($data)){
+			$data = [];
+		}
+		// else{
+		// 	unset($data['password']); //unset password to make it not visible in API output
+		// }
+		echo json_encode($data);
+	}
+
+	public function get_alluser_withdraw(){
+		$data = $this->default_model->get_data_withdraw();
+		if (empty($data)){
+			$data = [];
+		}
+		// else{
+		// 	foreach ($data as &$row){ //& mean to call by reference
+		// 		unset($row['password']);
+		// 	}
+		// }
+		echo json_encode($data);
+	}
+
+	//Data Sponsor
+	public function get_currentuser_bonussponsor(){
+		$data = $this->default_model->get_data_bonussponsor($this->input->cookie('memberCookie',true));
+		if (empty($data)){
+			$data = [];
+		}
+		// else{
+		// 	unset($data['password']); //unset password to make it not visible in API output
+		// }
+		echo json_encode($data);
+	}
+
+	public function get_alluser_bonussponsor(){
+		$data = $this->default_model->get_data_bonussponsor();
+		if (empty($data)){
+			$data = [];
+		}
+		// else{
+		// 	foreach ($data as &$row){ //& mean to call by reference
+		// 		unset($row['password']);
+		// 	}
+		// }
+		echo json_encode($data);
+	}
+
+
+	//Data Pairing
+	public function get_currentuser_bonuspair(){
+		$data = $this->default_model->get_data_bonuspair($this->input->cookie('memberCookie',true));
+		if (empty($data)){
+			$data = [];
+		}
+		// else{
+		// 	unset($data['password']); //unset password to make it not visible in API output
+		// }
+		echo json_encode($data);
+	}
+
+	public function get_alluser_bonuspair(){
+		$data = $this->default_model->get_data_bonuspair();
+		if (empty($data)){
+			$data = [];
+		}
+		// else{
+		// 	foreach ($data as &$row){ //& mean to call by reference
+		// 		unset($row['password']);
+		// 	}
+		// }
+		echo json_encode($data);
 	}
 
 	
