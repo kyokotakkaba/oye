@@ -5,6 +5,7 @@ class default_controller extends CI_Controller {
 		$this->load->model('default_model');
 		$this->load->helper('url_helper');
 	}
+
 	//LOAD VIEW
 
 	//front
@@ -179,7 +180,7 @@ class default_controller extends CI_Controller {
 	//UPDATE
 
 	//Ubah password
-	public function updatepasswordadmin(){
+	public function update_passwordadmin(){
 		$oldpassword = md5($this->input->post('oldpassword'));
 		$data = $this->default_model->get_data_admin();
 		if ($oldpassword == $data['password']){
@@ -193,7 +194,7 @@ class default_controller extends CI_Controller {
 		}
 	}
 
-	public function updatepasswordmember(){
+	public function update_passwordmember(){
 		$oldpassword = md5($this->input->post('oldpassword'));
 		$data = $this->default_model->get_data_admin();
 		if ($oldpassword == $data['password']){
