@@ -56,26 +56,21 @@
 
 <!-- Main JS -->
 <script>
-(function (document, window, $) {
-    'use strict';
-    var Site = window.Site;
-    $(document).ready(function () {
-        Site.run();
-    });
-})(document, window, jQuery);
-$(document).on('click', '#submit', function(){
+
+$(document).on('submit', '#form', function(event){
+    event.preventDefault();
     var urls='ceklogin';
     var dataString = $("#form").serialize();
-    $("#submit").html("<?php echo $tunggu ?>");
+    $("#submit").html("tunggu");
     $("#submit").prop("disabled",true);
     $.ajax({
         url:"<?php echo base_url() ?>index.php/"+urls,
         type: 'POST',
         data:dataString,
         success: function(response){
-            if (response == member) {
-                window.location.href = "<?php echo base_url() ?>index.php/dashboardmember";
-            }else if(response == admin){
+            if (response == "berhasil login admin") {
+                window.location.href = "<?php echo base_url() ?>index.php/dashboardadmin";
+            }else if(response == "berhasil login member"){
                 window.location.href = "<?php echo base_url() ?>index.php/dashboardmember";
             }else{
                 alert(response);
