@@ -125,7 +125,7 @@ class default_controller extends CI_Controller {
 		$data = $this->default_model->get_data_admin();
 		if ($oldpassword == $data['password']){
 			$data = array(
-				'password' => md5($this->input->post('newpassword'));
+				'password' => md5($this->input->post('newpassword'))
 			);
 			$insertStatus = $this->default_model->update_password_admin($this->input->cookie('backendCookie',true),$data);
 			echo $insertStatus;
@@ -139,7 +139,7 @@ class default_controller extends CI_Controller {
 		$data = $this->default_model->get_data_admin();
 		if ($oldpassword == $data['password']){
 			$data = array(
-				'password' => md5($this->input->post('newpassword'));
+				'password' => md5($this->input->post('newpassword'))
 			);
 			$insertStatus = $this->default_model->update_password_member($this->input->cookie('memberCookie',true),$data);
 			echo $insertStatus;
