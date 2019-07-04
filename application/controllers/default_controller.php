@@ -177,6 +177,38 @@ class default_controller extends CI_Controller {
 
 
 
+	//INSERT
+
+	//register new member
+	public function insert_registrasimember(){
+		$data = array(
+			'username' => $this->input->post('username'),
+			'password' => md5($this->input->post('password')),
+			'nama' => $this->input->post('nama'),
+			'email' => $this->input->post('email'),
+			'no_telepon' => $this->input->post('no_telepon'),
+			'ktp' => $this->input->post('ktp'),
+			'alamat' => $this->input->post('alamat'),
+			'nama_bank' => $this->input->post('nama_bank'),
+			'no_rekening' => $this->input->post('no_rekening'),
+			'atas_nama_bank' => $this->input->post('atas_nama_bank'),
+			'sponsor' => $this->input->cookie('memberCookie',true),
+			'replacement_user' => $this->input->post('replacement_user'),
+			'icash' => 0,
+			'bv_kanan' => 0,
+			'bv_kiri' => 0,
+			'tanggal_registrasi' => date('Y-m-d H:i:s'),
+			'status' => "Pending"
+		);
+
+		$insertStatus = $this->default_model->insert_member($data);
+		echo $insertStatus;
+	}
+
+
+
+
+
 	//UPDATE
 
 	//Ubah password
@@ -187,7 +219,7 @@ class default_controller extends CI_Controller {
 			$data = array(
 				'password' => md5($this->input->post('newpassword'))
 			);
-			$insertStatus = $this->default_model->update_password_admin($this->input->cookie('backendCookie',true),$data);
+			$insertStatus = $this->default_model->update_admin($this->input->cookie('backendCookie',true),$data);
 			echo $insertStatus;
 		}else{
 			echo "password lama salah";
@@ -201,11 +233,70 @@ class default_controller extends CI_Controller {
 			$data = array(
 				'password' => md5($this->input->post('newpassword'))
 			);
-			$insertStatus = $this->default_model->update_password_member($this->input->cookie('memberCookie',true),$data);
+			$insertStatus = $this->default_model->update_member($this->input->cookie('memberCookie',true),$data);
 			echo $insertStatus;
 		}else{
 			echo "password lama salah";
 		}
+	}
+
+	//edit profil
+	public function update_profilmember(){
+		$data = array(
+			'email' => $this->input->post('email'),
+			'no_telepon' => $this->input->post('no_telepon'),
+			'alamat' => $this->input->post('alamat'),
+			'nama_bank' => $this->input->post('nama_bank'),
+			'no_rekening' => $this->input->post('no_rekening'),
+			'atas_nama_bank' => $this->input->post('atas_nama_bank'),
+			'security_code' => $this->input->post('security_code')
+		);
+
+		$insertStatus = $this->default_model->update_member($this->input->cookie('memberCookie',true),$data);
+		echo $insertStatus;
+	}
+
+	public function update_profilmember_admin($id){
+		$data = array(
+			'nama' => $this->input->post('nama'),
+			'email' => $this->input->post('email'),
+			'no_telepon' => $this->input->post('no_telepon'),
+			'ktp' => $this->input->post('ktp'),
+			'alamat' => $this->input->post('alamat'),
+			'nama_bank' => $this->input->post('nama_bank'),
+			'no_rekening' => $this->input->post('no_rekening'),
+			'atas_nama_bank' => $this->input->post('atas_nama_bank'),
+			'sponsor' => $this->input->cookie('memberCookie',true),
+			'replacement_user' => $this->input->post('replacement_user'),
+			'icash' => 0,
+			'bv_kanan' => 0,
+			'bv_kiri' => 0,
+			'tanggal_registrasi' => date('Y-m-d H:i:s'),
+			'status' => "Pending"
+		);
+
+		if (!empty($this->input->post('password'))) {
+			$data['password'] = md5($this->input->post('password'));//password reset
+		}
+
+		$insertStatus = $this->default_model->update_member($id,$data);
+		echo $insertStatus;
+	}
+
+
+	public function update_verifikasi_member(){
+		//to do here
+	}
+
+
+
+
+	//DELETE
+
+	//delete member
+	public function delete_member($id){
+		$insertStatus = $this->main_model->delete_member($id); 
+		echo $insertStatus;
 	}
 
 

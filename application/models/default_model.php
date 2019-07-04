@@ -75,29 +75,54 @@ class default_model extends CI_Model {
 	}
 
 
+	//INSERT DATABASE
+	public function insert_member($data){
+		$this->db->insert('member', $data);
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
 
 
 
 
 	//UPDATE DATABASE
-	public function update_password_admin($id, $data){
+	public function update_admin($id, $data){
 		$this->db->where('username', $id);
 		$this->db->update('admin', $data);
 		if ($this->db->affected_rows() > 0 ) {
-			$return_message = 'berhasil mengubah password';
+			$return_message = 'berhasil mengubah data';
 		}else{
-			$return_message = 'gagal mengubah password';
+			$return_message = 'gagal mengubah data';
 		}
 		return $return_message;
 	}
 
-	public function update_password_member($id, $data){
+	public function update_member($id, $data){
 		$this->db->where('username', $id);
 		$this->db->update('member', $data);
 		if ($this->db->affected_rows() > 0 ) {
-			$return_message = 'berhasil mengubah password';
+			$return_message = 'berhasil mengubah data';
 		}else{
-			$return_message = 'gagal mengubah password';
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+
+
+	//DELETE DATABASE
+	public function delete_member($id){
+		$this->db->where('username', $id);
+		$this->db->delete('member'); 
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil menghapus data';
+		}else{
+			$return_message = 'gagal menghapus data';
 		}
 		return $return_message;
 	}
