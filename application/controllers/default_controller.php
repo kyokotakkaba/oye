@@ -72,105 +72,122 @@ class default_controller extends CI_Controller {
 
 	//GET DATA
 
-	//Data member
-	public function get_currentuser(){
-		$data = $this->default_model->get_data_member($this->input->cookie('memberCookie',true));
+	//note: ambil semua data dari database parameter. 
+	//Parameter return_var tidak untuk front end, jadi bisa langsung request url dengan /get_parameter
+	public function get_parameter($return_var = NULL){
+		$data = $this->default_model->get_data_parameter();
 		if (empty($data)){
 			$data = [];
 		}
-		// else{
-		// 	unset($data['password']); //unset password to make it not visible in API output
-		// }
-		echo json_encode($data);
+		if ($return_var == true) {
+			return $data;
+		}else{
+			echo json_encode($data);
+		}
 	}
 
+
+	//Data member
+
+	//note: ambil data user secara spesifik dengan parameter username. Parameter dua bisa diabaikan front end
+	public function get_specificuser($id, $return_var = NULL){
+		$data = $this->default_model->get_data_member($id);
+		if (empty($data)){
+			$data = [];
+		}
+		if ($return_var == true) {
+			return $data;
+		}else{
+			echo json_encode($data);
+		}
+	}
+
+	//note: ambil data user yang sedang login
+	public function get_currentuser(){
+		$this->get_specificuser($this->input->cookie('memberCookie',true));
+	}
+
+	//note: ambil semua data user
 	public function get_alluser(){
 		$data = $this->default_model->get_data_member();
 		if (empty($data)){
 			$data = [];
 		}
-		// else{
-		// 	foreach ($data as &$row){ //& mean to call by reference
-		// 		unset($row['password']);
-		// 	}
-		// }
 		echo json_encode($data);
+	}
+
+	//note: tidak untuk front end, ambil data user dengan parameter filter array
+	public function get_filtereduser($filter, $return_var = NULL){
+		$data = $this->default_model->get_data_member_filter($filter);
+		if (empty($data)){
+			$data = [];
+		}
+		if ($return_var == true) {
+			return $data;
+		}else{
+			echo json_encode($data);
+		}
 	}
 
 
 	//Data Withdraw
+
+	//note: ambil data withdraw dari user yang sedang login
 	public function get_currentuser_withdraw(){
 		$data = $this->default_model->get_data_withdraw($this->input->cookie('memberCookie',true));
 		if (empty($data)){
 			$data = [];
 		}
-		// else{
-		// 	unset($data['password']); //unset password to make it not visible in API output
-		// }
 		echo json_encode($data);
 	}
 
+	//note: ambil data withdraw dari semua user
 	public function get_alluser_withdraw(){
 		$data = $this->default_model->get_data_withdraw();
 		if (empty($data)){
 			$data = [];
 		}
-		// else{
-		// 	foreach ($data as &$row){ //& mean to call by reference
-		// 		unset($row['password']);
-		// 	}
-		// }
 		echo json_encode($data);
 	}
 
 	//Data Sponsor
+
+	//note: ambil data sponsor dari user yang sedang login
 	public function get_currentuser_bonussponsor(){
 		$data = $this->default_model->get_data_bonussponsor($this->input->cookie('memberCookie',true));
 		if (empty($data)){
 			$data = [];
 		}
-		// else{
-		// 	unset($data['password']); //unset password to make it not visible in API output
-		// }
 		echo json_encode($data);
 	}
 
+	//note: ambil data sponsor dari semua user
 	public function get_alluser_bonussponsor(){
 		$data = $this->default_model->get_data_bonussponsor();
 		if (empty($data)){
 			$data = [];
 		}
-		// else{
-		// 	foreach ($data as &$row){ //& mean to call by reference
-		// 		unset($row['password']);
-		// 	}
-		// }
 		echo json_encode($data);
 	}
 
 
 	//Data Pairing
+
+	//note: ambil data pair dari user yang sedang login
 	public function get_currentuser_bonuspair(){
 		$data = $this->default_model->get_data_bonuspair($this->input->cookie('memberCookie',true));
 		if (empty($data)){
 			$data = [];
 		}
-		// else{
-		// 	unset($data['password']); //unset password to make it not visible in API output
-		// }
 		echo json_encode($data);
 	}
 
+	//note: ambil data pair dari semua user
 	public function get_alluser_bonuspair(){
 		$data = $this->default_model->get_data_bonuspair();
 		if (empty($data)){
 			$data = [];
 		}
-		// else{
-		// 	foreach ($data as &$row){ //& mean to call by reference
-		// 		unset($row['password']);
-		// 	}
-		// }
 		echo json_encode($data);
 	}
 
@@ -180,7 +197,11 @@ class default_controller extends CI_Controller {
 	//INSERT
 
 	//register new member
+	//note: registrasi member baru dengan request POST seperti di bawah.
+	//Output: berhasil mengubah data / gagal mengubah data
 	public function insert_registrasimember(){
+		$parameter = $this->get_parameter(true);
+		$biaya = $parameter['biaya_registrasi'] + rand(500, 999);
 		$data = array(
 			'username' => $this->input->post('username'),
 			'password' => md5($this->input->post('password')),
@@ -198,6 +219,7 @@ class default_controller extends CI_Controller {
 			'bv_kanan' => 0,
 			'bv_kiri' => 0,
 			'tanggal_registrasi' => date('Y-m-d H:i:s'),
+			'nominal_pembayaran' => $biaya,
 			'status' => "Pending"
 		);
 
@@ -212,6 +234,9 @@ class default_controller extends CI_Controller {
 	//UPDATE
 
 	//Ubah password
+
+	//note: ubah password admin dengan request POST seperti di bawah.
+	//Output: berhasil mengubah data / gagal mengubah data / password lama salah
 	public function update_passwordadmin(){
 		$oldpassword = md5($this->input->post('oldpassword'));
 		$data = $this->default_model->get_data_admin();
@@ -226,6 +251,8 @@ class default_controller extends CI_Controller {
 		}
 	}
 
+	//note: ubah password member yang sedang login dengan request POST seperti di bawah.
+	//Output: berhasil mengubah data / gagal mengubah data / password lama salah
 	public function update_passwordmember(){
 		$oldpassword = md5($this->input->post('oldpassword'));
 		$data = $this->default_model->get_data_admin();
@@ -241,6 +268,8 @@ class default_controller extends CI_Controller {
 	}
 
 	//edit profil
+	//note: ubah data member yang sedang login dengan request POST seperti di bawah.
+	//Output: berhasil mengubah data / gagal mengubah data
 	public function update_profilmember(){
 		$data = array(
 			'email' => $this->input->post('email'),
@@ -256,7 +285,11 @@ class default_controller extends CI_Controller {
 		echo $insertStatus;
 	}
 
-	public function update_profilmember_admin($id){
+	//note: ubah data member parameter 1: username, dengan request POST seperti di bawah. 
+	//Parameter 2 bisa diabaikan oleh front end
+	//Jika POST password kosong atau tidak ada, password tidak diupdate. Ini untuk fitur reset password oleh admin.
+	//Output: berhasil mengubah data / gagal mengubah data
+	public function update_profilmember_admin($id,$return_var = NULL){
 		$data = array(
 			'nama' => $this->input->post('nama'),
 			'email' => $this->input->post('email'),
@@ -280,12 +313,40 @@ class default_controller extends CI_Controller {
 		}
 
 		$insertStatus = $this->default_model->update_member($id,$data);
-		echo $insertStatus;
+		if ($return_var==true) {
+			return $insertStatus;
+		}else{
+			echo $insertStatus;
+		}
 	}
 
+	//warning: Belum selesai
+	//note: verifikasi member berdasarkan parameter 1 username, untuk mengubah status ke aktif
+	//Termasuk penempatan kaki dan perhitungan bonus sponsor dan BV
+	//output: kaki sudah penuh, silahkan gunakan replacement user yang lain
+	//output: 
+	public function update_verifikasi_member($id){
+		// $updateprofil = $this->update_profilmember_admin($id,true); //apakah profil diupdate dulu sebelum verifikasi atau tidak?
+		$data = $this->get_specificuser($id,true);
+		$datadownline= $this->get_filtereduser(array('status'=> 'active','replacement_user'=>$data['replacement_user']), true);
+		$posisikaki = 'batal';
+		if (count($datadownline) == 0) {
+			$posisikaki = 'kiri';
+		}else if (count($datadownline) == 1) {
+			$posisikaki = 'kanan';
+		}
 
-	public function update_verifikasi_member(){
-		//to do here
+		if ($posisikaki != 'batal') {
+			$data = array(
+				'posisi_kaki' => $posisikaki,
+				'status' => "active"
+			);
+			$insertStatus = $this->default_model->update_member($id,$data);
+			echo $insertStatus;
+			//continue here
+		}else{
+			echo "kaki sudah penuh, silahkan gunakan replacement user yang lain";
+		}
 	}
 
 
@@ -294,6 +355,8 @@ class default_controller extends CI_Controller {
 	//DELETE
 
 	//delete member
+	//note: hapus data member sesuai username parameter 1
+	//Output: berhasil menghapus data / gagal menghapus data
 	public function delete_member($id){
 		$insertStatus = $this->main_model->delete_member($id); 
 		echo $insertStatus;
@@ -306,6 +369,9 @@ class default_controller extends CI_Controller {
 	//OTHER
 
 	//Login
+	//note: login dengan request POST seperti di bawah. 
+	//Melakukan pengecekan login admin dulu, jika gagal, pengecekan login user yang aktif
+	//Output: berhasil login admin / berhasil login member / gagal login
 	public function ceklogin(){
 		$username = $this->input->post('username');
 		$password = md5($this->input->post('password'));
@@ -320,7 +386,7 @@ class default_controller extends CI_Controller {
 			$this->input->set_cookie($cookie);
 			echo "berhasil login admin";
 		}else{
-			$data = $this->default_model->get_data_member(NULL);
+			$data = $this->get_filtereduser(array('status'=> 'active'), true);
 			$is_login = false;
 			foreach ($data as $row){
 				if ($username == $row['username'] && $password == $row['password']) {
@@ -346,6 +412,7 @@ class default_controller extends CI_Controller {
 	}
 
 	//Check cookie
+	//note: tidak untuk front end
 	public function checkcookieadmin(){
 		$this->load->helper('cookie');
 		if ($this->input->cookie('backendCookie',true)!=NULL) {
@@ -356,7 +423,7 @@ class default_controller extends CI_Controller {
 		}
 	}
 
-
+	//note: tidak untuk front end
 	public function checkcookiemember(){
 		$this->load->helper('cookie');
 		if ($this->input->cookie('memberCookie',true)!=NULL) {
@@ -369,6 +436,7 @@ class default_controller extends CI_Controller {
 
 
 	//Logout
+	//note: menghapus cookie admin dan langsung redirect ke halaman login
 	public function logoutadmin(){
 		$this->load->helper('cookie');
 		delete_cookie("memberCookie");
@@ -376,6 +444,7 @@ class default_controller extends CI_Controller {
 		die();
 	}
 
+	//note: menghapus cookie member dan langsung redirect ke halaman login
 	public function logoutmember(){
 		$this->load->helper('cookie');
 		delete_cookie("memberCookie");

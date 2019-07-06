@@ -24,6 +24,14 @@ class default_model extends CI_Model {
 		}
 	}
 
+	public function get_data_member_filter($filter){
+		$this->db->select('*');
+		$this->db->from('member');
+		$this->db->where($filter);
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
 	public function get_data_withdraw($id = NULL){
 		$this->db->select('withdraw.*, member.nama');
 		$this->db->from('withdraw');
@@ -72,6 +80,11 @@ class default_model extends CI_Model {
 			$query = $this->db->get();
 			return $query->result_array();
 		}
+	}
+
+	public function get_data_parameter(){
+		$query = $this->db->get('parameter');
+		return $query->row_array();
 	}
 
 
