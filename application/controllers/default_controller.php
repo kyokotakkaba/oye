@@ -324,7 +324,7 @@ class default_controller extends CI_Controller {
 	//note: verifikasi member berdasarkan parameter 1 username, untuk mengubah status ke aktif
 	//Termasuk penempatan kaki dan perhitungan bonus sponsor dan BV
 	//output: kaki sudah penuh, silahkan gunakan replacement user yang lain
-	//output: 
+	//output: gagal mengubah data / gagal mengubah status / gagal menambah icash sponsor
 	public function update_verifikasi_member($id){
 		// $updateprofil = $this->update_profilmember_admin($id,true); //apakah profil diupdate dulu sebelum verifikasi atau tidak?
 		$data = $this->get_specificuser($id,true);
@@ -336,13 +336,43 @@ class default_controller extends CI_Controller {
 			$posisikaki = 'kanan';
 		}
 
+		//update status verifikasi
 		if ($posisikaki != 'batal') {
 			$data = array(
 				'posisi_kaki' => $posisikaki,
 				'status' => "active"
 			);
 			$insertStatus = $this->default_model->update_member($id,$data);
-			echo $insertStatus;
+			if ($insertStatus == "berhasil mengubah data") {
+
+				//insert bonus sponsor
+				$parameter = $this->get_parameter(true);
+				$data = array(
+					'sponsor' => $data['sponsor'],
+					'username_member' => $id,
+					'nominal' => $parameter['bonus_sponsor']
+				);
+				$insertStatus = $this->default_model->insert_bonussponsor($data);
+
+				if ($insertStatus == "berhasil mengubah data"){
+					//tambah icash dari bonus sponsor
+					$insertStatus = $this->default_model->update_add_icash($data['sponsor'],$parameter['bonus_sponsor']);
+					if ($insertStatus == "berhasil mengubah data"){
+						//tambah bv semua upline
+						//to be continued
+					}else{
+						echo "gagal menambah icash sponsor";
+					}
+
+
+				}else{
+					echo "gagal menginput bonus sponsor";
+				}
+
+
+			}else{
+				echo "gagal mengubah status";
+			}
 			//continue here
 		}else{
 			echo "kaki sudah penuh, silahkan gunakan replacement user yang lain";

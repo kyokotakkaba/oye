@@ -99,6 +99,16 @@ class default_model extends CI_Model {
 		return $return_message;
 	}
 
+	public function insert_bonussponsor($data){
+		$this->db->insert('bonus_sponsor', $data);
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
 
 
 
@@ -118,6 +128,78 @@ class default_model extends CI_Model {
 	public function update_member($id, $data){
 		$this->db->where('username', $id);
 		$this->db->update('member', $data);
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+	public function update_add_icash($id, $value){
+		$this->db->where('username', $id);
+		$this->db->set('icash', 'icash+'.$value,false);
+		$this->db->update('member');
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+	public function update_subtract_icash($id, $value){
+		$this->db->where('username', $id);
+		$this->db->set('icash', 'icash-'.$value,false);
+		$this->db->update('member');
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+	public function update_add_bvkiri($id, $value){
+		$this->db->where('username', $id);
+		$this->db->set('bv_kiri', 'bv_kiri+'.$value,false);
+		$this->db->update('member');
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+	public function update_subtract_bvkiri($id, $value){
+		$this->db->where('username', $id);
+		$this->db->set('bv_kiri', 'bv_kiri-'.$value,false);
+		$this->db->update('member');
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+	public function update_add_bvkanan($id, $value){
+		$this->db->where('username', $id);
+		$this->db->set('bv_kanan', 'bv_kanan+'.$value,false);
+		$this->db->update('member');
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+	public function update_subtract_bvkanan($id, $value){
+		$this->db->where('username', $id);
+		$this->db->set('bv_kanan', 'bv_kanan-'.$value,false);
+		$this->db->update('member');
 		if ($this->db->affected_rows() > 0 ) {
 			$return_message = 'berhasil mengubah data';
 		}else{
