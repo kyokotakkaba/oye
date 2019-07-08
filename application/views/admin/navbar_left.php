@@ -12,12 +12,12 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
-            <li class="treeview">
+            <li id="member">
             <a href="<?=base_url("/index.php/memberadmin");?>">
                 <span>Member</span>
             </a>
             </li>
-            <li class="treeview">
+            <li id="withdraw">
             <a href="<?=base_url("/index.php/withdrawadmin");?>">
                  <span>Withdraw</span>
             </a>
