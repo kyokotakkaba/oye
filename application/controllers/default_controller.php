@@ -242,6 +242,7 @@ class default_controller extends CI_Controller {
 	public function insert_registrasimember(){
 		$parameter = $this->get_parameter(true);
 		$biaya = $parameter['biaya_registrasi'] + rand(500, 999);
+		date_default_timezone_set('Asia/Jakarta');
 		$data = array(
 			'username' => $this->input->post('username'),
 			'password' => md5($this->input->post('password')),
@@ -364,14 +365,17 @@ class default_controller extends CI_Controller {
 	//Termasuk penempatan kaki dan perhitungan bonus sponsor dan BV
 	//output: kaki sudah penuh, silahkan gunakan replacement user yang lain
 	//output: gagal mengubah data / gagal mengubah status / gagal menambah icash sponsor
+	//output: gagal menambah bv upline $userUpline
+	//output: verifikasi sukses
 	public function update_verifikasi_member($id){
 		// $updateprofil = $this->update_profilmember_admin($id,true); //apakah profil diupdate dulu sebelum verifikasi atau tidak?
-		$data = $this->get_specificuser($id,true);
-		$datadownline= $this->get_filtereduser(array('status'=> 'active','replacement_user'=>$data['replacement_user']), true);
+		$datauser = $this->get_specificuser($id,true);
+		$jumlahdownline = $this->validasireplacementuser($datauser['replacement_user'],true);
+		$datadownline= $this->get_filtereduser(array('status'=> 'active','replacement_user'=>$datauser['replacement_user']), true);
 		$posisikaki = 'batal';
-		if (count($datadownline) == 0) {
+		if ($jumlahdownline == 0) {
 			$posisikaki = 'kiri';
-		}else if (count($datadownline) == 1) {
+		}else if ($jumlahdownline == 1) {
 			$posisikaki = 'kanan';
 		}
 
@@ -387,7 +391,7 @@ class default_controller extends CI_Controller {
 				//insert bonus sponsor
 				$parameter = $this->get_parameter(true);
 				$data = array(
-					'sponsor' => $data['sponsor'],
+					'sponsor' => $datauser['sponsor'],
 					'username_member' => $id,
 					'nominal' => $parameter['bonus_sponsor']
 				);
@@ -395,10 +399,35 @@ class default_controller extends CI_Controller {
 
 				if ($insertStatus == "berhasil mengubah data"){
 					//tambah icash dari bonus sponsor
-					$insertStatus = $this->default_model->update_add_icash($data['sponsor'],$parameter['bonus_sponsor']);
+					$insertStatus = $this->default_model->update_add_icash($datauser['sponsor'],$parameter['bonus_sponsor']);
 					if ($insertStatus == "berhasil mengubah data"){
 						//tambah bv semua upline
+						$dataupline = $this->get_specificuser($datauser['replacement_user'],true);
+						$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
+						if ($insertStatus == "berhasil mengubah data") {
+							$sukses = true;
+							while (!empty($dataupline['replacement_user'])) {
+								set_time_limit(30);
+								$posisikaki = $dataupline['posisi_kaki'];
+								$dataupline = $this->get_specificuser($dataupline['replacement_user'],true);
+								$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
+								if ($insertStatus == "gagal mengubah data"){
+									$sukses = false;
+									break;
+								}
+							}
+
+							if ($sukses) {
+								echo "verifikasi sukses";
+							}else{
+								echo "gagal menambah bv upline ".$dataupline['username'];
+							}
+						}else{
+							echo "gagal menambah bv upline ".$dataupline['username'];
+						}
+						
 						//to be continued
+						
 					}else{
 						echo "gagal menambah icash sponsor";
 					}
@@ -416,6 +445,17 @@ class default_controller extends CI_Controller {
 		}else{
 			echo "kaki sudah penuh, silahkan gunakan replacement user yang lain";
 		}
+	}
+
+	//note: bukan untuk front end
+	//Mengecek posisi kaki bv dan menambah bv
+	public function update_add_bv($idupline, $kakidownline){
+		if ($kakidownline == 'kiri') {
+			$insertStatus = $this->default_model->update_add_bvkiri($idupline,1);
+		}else if ($kakidownline == 'kanan'){
+			$insertStatus = $this->default_model->update_add_bvkanan($idupline,1);
+		}
+		return $insertStatus;
 	}
 
 
@@ -520,6 +560,33 @@ class default_controller extends CI_Controller {
 		delete_cookie("memberCookie");
 		header("Location: ".base_url()."index.php/login");
 		die();
+	}
+
+	public function validasiusername(){
+
+	}
+
+	//untuk mengecek apakah replacement user ada dan kakinya sudah penuh atau belum
+	//output: replacement user tidak ditemukan
+	//output: 0/1/2 (jumlah downline, 2 berarti penuh)
+	public function validasireplacementuser($id, $return_var=NULL){
+		$datauser = $this->get_specificuser($id,true);
+		if (empty($datauser)) {
+			if ($return_var == true) {
+				return 'replacement user tidak ditemukan';
+			}else{
+				echo "replacement user tidak ditemukan";
+			}
+		}else{
+			$datadownline = $this->get_filtereduser(array('status'=> 'active','replacement_user'=>$id), true);
+			if ($return_var == true) {
+				return count($datadownline);
+			}else{
+				echo count($datadownline);
+			}
+		}
+		
+		
 	}
 
 	
