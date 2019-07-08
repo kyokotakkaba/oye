@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 06, 2019 at 03:37 PM
+-- Generation Time: Jul 08, 2019 at 09:02 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 5.6.38
 
@@ -127,19 +127,21 @@ INSERT INTO `member` (`username`, `password`, `nama`, `email`, `no_telepon`, `kt
 --
 
 CREATE TABLE `parameter` (
+  `id` int(11) NOT NULL,
   `biaya_registrasi` int(11) NOT NULL DEFAULT '0',
   `bonus_sponsor` int(11) NOT NULL DEFAULT '0',
   `bonus_pairing_pertama` int(11) NOT NULL DEFAULT '0',
   `bonus pairing_kedua` int(11) NOT NULL DEFAULT '0',
-  `batas_pairing_pertama` int(11) NOT NULL DEFAULT '0'
+  `batas_pairing_pertama` int(11) NOT NULL DEFAULT '0',
+  `admin_fee` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `parameter`
 --
 
-INSERT INTO `parameter` (`biaya_registrasi`, `bonus_sponsor`, `bonus_pairing_pertama`, `bonus pairing_kedua`, `batas_pairing_pertama`) VALUES
-(100000, 10000, 4000, 2000, 256);
+INSERT INTO `parameter` (`id`, `biaya_registrasi`, `bonus_sponsor`, `bonus_pairing_pertama`, `bonus pairing_kedua`, `batas_pairing_pertama`, `admin_fee`) VALUES
+(1, 100000, 10000, 4000, 2000, 256, 10000);
 
 -- --------------------------------------------------------
 
@@ -186,10 +188,26 @@ ALTER TABLE `member`
   ADD PRIMARY KEY (`username`);
 
 --
+-- Indexes for table `parameter`
+--
+ALTER TABLE `parameter`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `withdraw`
 --
 ALTER TABLE `withdraw`
   ADD PRIMARY KEY (`username`,`tanggal`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `parameter`
+--
+ALTER TABLE `parameter`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
