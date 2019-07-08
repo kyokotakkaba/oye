@@ -329,7 +329,7 @@ class default_controller extends CI_Controller {
 			'nama_bank' => $this->input->post('nama_bank'),
 			'no_rekening' => $this->input->post('no_rekening'),
 			'atas_nama_bank' => $this->input->post('atas_nama_bank'),
-			'sponsor' => $this->input->cookie('memberCookie',true),
+			'sponsor' => $this->input->post('sponsor'),
 			'replacement_user' => $this->input->post('replacement_user'),
 			'icash' => 0,
 			'bv_kanan' => 0,
