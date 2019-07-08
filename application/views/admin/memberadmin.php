@@ -127,16 +127,6 @@
     					}
     					$('#datamember').append(tr_str);
     					$("#tablemember").DataTable({
-                     'pageLength': 25,
-    						
-                     dom: 'Bfrtip',
-    						buttons: [{
-                        className: 'btn btn-success',
-    							text: 'New Member',
-    							action: function (e, dt, node, config) {
-                            window.location.href = new_member_url;
-                         }
-    						}]
     					});
     				}
     			})
