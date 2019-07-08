@@ -143,8 +143,16 @@ class default_controller extends CI_Controller {
 	}
 
 	//note: ambil data user yang sedang login
-	public function get_currentuser(){
-		$this->get_specificuser($this->input->cookie('memberCookie',true));
+	public function get_currentuser($return_var = NULL){
+		$data = $this->get_specificuser($this->input->cookie('memberCookie',true),true);
+		if (empty($data)){
+			$data = [];
+		}
+		if ($return_var == true) {
+			return $data;
+		}else{
+			echo json_encode($data);
+		}
 	}
 
 	//note: ambil semua data user
@@ -296,7 +304,7 @@ class default_controller extends CI_Controller {
 	//Output: berhasil mengubah data / gagal mengubah data / password lama salah
 	public function update_passwordmember(){
 		$oldpassword = md5($this->input->post('oldpassword'));
-		$data = $this->default_model->get_data_admin();
+		$data = $this->get_currentuser(true);
 		if ($oldpassword == $data['password']){
 			$data = array(
 				'password' => md5($this->input->post('newpassword'))
