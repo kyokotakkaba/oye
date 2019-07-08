@@ -54,11 +54,14 @@
     									<thead>
     										<tr>
     											<th>Option</th>
+												<th>Sponsor</th>
+												<th>Replacement User</th>
     											<th>Username</th>
-    											<th>Password</th>
     											<th>Nama</th>
     											<th>Email</th>
     											<th>No Telepon</th>
+												<th>Alamat</th>
+												<th>i-cash</th>
     										</tr>
     									</thead>
     									<tbody id="datamember">
@@ -111,18 +114,21 @@
     					for (var i = 0; i < response.length; i++) {
     						tr_str +=
     							'<tr class="text-center" >' +
-    							'<td><button class="btn btn-sm btn-primary">Detail</button></td>' +
+								'<td><button class="btn btn-sm btn-primary">Detail</button></td>' +
+								'<td>' + response[i].sponsor+ '</td>' +
+								'<td>' + response[i].replacement_user+ '</td>' +
     							'<td>' + response[i].username + '</td>' +
-    							'<td>' + response[i].password + '</td>' +
     							'<td>' + response[i].nama + '</td>' +
     							'<td>' + response[i].email + '</td>' +
-    							'<td>' + response[i].no_telepon + '</td>' +
+								'<td>' + response[i].no_telepon + '</td>' +
+								'<td>' + response[i].alamat + '</td>' +
+								'<td>' + response[i].icash+ '</td>' +
     							'</tr>';
     					}
     					$('#datamember').append(tr_str);
     					$("#tablemember").DataTable({
                      'pageLength': 25,
-    						'scrollX': true,
+    						
                      dom: 'Bfrtip',
     						buttons: [{
                         className: 'btn btn-success',

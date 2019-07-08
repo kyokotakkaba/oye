@@ -96,6 +96,16 @@ class default_controller extends CI_Controller {
 		}
 	}
 
+	//registrasi member
+	public function registrasimember(){
+		if ($this->checkcookiemember()) {
+			$this->load->view('member/registrasimember');
+		}else{
+			header("Location: ".base_url()."index.php/login");
+			die();
+		}
+	}
+	
 
 
 
