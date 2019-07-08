@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 01, 2019 at 03:45 PM
+-- Generation Time: Jul 08, 2019 at 09:02 AM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 5.6.38
 
@@ -54,6 +54,14 @@ CREATE TABLE `bonus_pair` (
   `total` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `bonus_pair`
+--
+
+INSERT INTO `bonus_pair` (`username`, `tanggal`, `harga_pair`, `jumlah_pair`, `total`) VALUES
+('benny', '2019-07-02 00:00:00', 4000, NULL, NULL),
+('enniecorn', '2019-07-01 00:00:00', 4000, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -65,6 +73,13 @@ CREATE TABLE `bonus_sponsor` (
   `username_member` varchar(255) NOT NULL,
   `nominal` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `bonus_sponsor`
+--
+
+INSERT INTO `bonus_sponsor` (`sponsor`, `username_member`, `nominal`) VALUES
+('enniecorn', 'benny', 10000);
 
 -- --------------------------------------------------------
 
@@ -86,10 +101,12 @@ CREATE TABLE `member` (
   `security_code` varchar(255) DEFAULT NULL,
   `sponsor` varchar(255) DEFAULT NULL,
   `replacement_user` varchar(255) DEFAULT NULL,
-  `icash` int(11) DEFAULT NULL,
-  `bv_kanan` int(11) DEFAULT NULL,
-  `bv_kiri` int(11) DEFAULT NULL,
+  `posisi_kaki` varchar(255) DEFAULT NULL,
+  `icash` int(11) DEFAULT '0',
+  `bv_kanan` int(11) DEFAULT '0',
+  `bv_kiri` int(11) DEFAULT '0',
   `tanggal_registrasi` datetime DEFAULT NULL,
+  `nominal_pembayaran` int(11) DEFAULT '0',
   `status` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -97,8 +114,34 @@ CREATE TABLE `member` (
 -- Dumping data for table `member`
 --
 
-INSERT INTO `member` (`username`, `password`, `nama`, `email`, `no_telepon`, `ktp`, `alamat`, `nama_bank`, `no_rekening`, `atas_nama_bank`, `security_code`, `sponsor`, `replacement_user`, `icash`, `bv_kanan`, `bv_kiri`, `tanggal_registrasi`, `status`) VALUES
-('enniecorn', '827ccb0eea8a706c4c34a16891f84e7b', 'Benny Hartono', 'djaka.tingkir2@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `member` (`username`, `password`, `nama`, `email`, `no_telepon`, `ktp`, `alamat`, `nama_bank`, `no_rekening`, `atas_nama_bank`, `security_code`, `sponsor`, `replacement_user`, `posisi_kaki`, `icash`, `bv_kanan`, `bv_kiri`, `tanggal_registrasi`, `nominal_pembayaran`, `status`) VALUES
+('andreas', '827ccb0eea8a706c4c34a16891f84e7b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'enniecorn', 'kanan', 0, 0, 0, NULL, NULL, 'active'),
+('benny', '827ccb0eea8a706c4c34a16891f84e7b', 'benny hartono', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'enniecorn', 'enniecorn', 'kiri', NULL, NULL, NULL, NULL, NULL, 'active'),
+('enniecorn', '827ccb0eea8a706c4c34a16891f84e7b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, '2019-07-06 13:03:19', NULL, 'active'),
+('yoko', '827ccb0eea8a706c4c34a16891f84e7b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'enniecorn', NULL, 0, 0, 0, '2019-07-06 14:25:13', 100584, 'Pending');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `parameter`
+--
+
+CREATE TABLE `parameter` (
+  `id` int(11) NOT NULL,
+  `biaya_registrasi` int(11) NOT NULL DEFAULT '0',
+  `bonus_sponsor` int(11) NOT NULL DEFAULT '0',
+  `bonus_pairing_pertama` int(11) NOT NULL DEFAULT '0',
+  `bonus pairing_kedua` int(11) NOT NULL DEFAULT '0',
+  `batas_pairing_pertama` int(11) NOT NULL DEFAULT '0',
+  `admin_fee` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `parameter`
+--
+
+INSERT INTO `parameter` (`id`, `biaya_registrasi`, `bonus_sponsor`, `bonus_pairing_pertama`, `bonus pairing_kedua`, `batas_pairing_pertama`, `admin_fee`) VALUES
+(1, 100000, 10000, 4000, 2000, 256, 10000);
 
 -- --------------------------------------------------------
 
@@ -145,10 +188,26 @@ ALTER TABLE `member`
   ADD PRIMARY KEY (`username`);
 
 --
+-- Indexes for table `parameter`
+--
+ALTER TABLE `parameter`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `withdraw`
 --
 ALTER TABLE `withdraw`
   ADD PRIMARY KEY (`username`,`tanggal`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `parameter`
+--
+ALTER TABLE `parameter`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -164,7 +223,8 @@ ALTER TABLE `bonus_pair`
 -- Constraints for table `bonus_sponsor`
 --
 ALTER TABLE `bonus_sponsor`
-  ADD CONSTRAINT `bonus_sponsor_ibfk_1` FOREIGN KEY (`username_member`) REFERENCES `member` (`username`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `bonus_sponsor_ibfk_1` FOREIGN KEY (`username_member`) REFERENCES `member` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `bonus_sponsor_ibfk_2` FOREIGN KEY (`sponsor`) REFERENCES `member` (`username`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `withdraw`
