@@ -28,6 +28,36 @@ class default_controller extends CI_Controller {
 		}
 	}
 
+	//Member Admin
+	public function memberadmin(){
+		if ($this->checkcookieadmin()) {
+			$this->load->view('admin/memberadmin');
+		}else{
+			header("Location: ".base_url()."index.php/login");
+			die();
+		}
+	}
+
+	//Withdraw Admin
+	public function withdrawadmin(){
+		if ($this->checkcookieadmin()) {
+			$this->load->view('admin/withdrawadmin');
+		}else{
+			header("Location: ".base_url()."index.php/login");
+			die();
+		}
+	}
+
+	//New Member Admin
+	public function new_memberadmin(){
+		if ($this->checkcookieadmin()) {
+			$this->load->view('admin/new_memberadmin');
+		}else{
+			header("Location: ".base_url()."index.php/login");
+			die();
+		}
+	}
+
 	public function dashboardmember(){
 		if ($this->checkcookiemember()) {
 			$this->load->view('member/dashboard');
