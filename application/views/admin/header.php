@@ -25,17 +25,11 @@
                 </a>
                 <ul class="dropdown-menu">
                 <!-- User image -->
-                <li class="user-header">
-                    <img src="<?=base_url("dist/img/user2-160x160.jpg");?>" class="img-circle" alt="User Image">
-                    <p>
-                    Alexander Pierce - Web Developer
-                    <small>Member since Nov. 2012</small>
-                    </p>
-                </li>
+                
                 <!-- Menu Footer-->
                 <li class="user-footer">
                     <div class="pull-left">
-                    <a href="#" class="btn btn-default btn-flat">Change Password</a>
+                    <a href="<?=base_url("/index.php/changepasswordadmin");?>" class="btn btn-default btn-flat">Ubah Password</a>
                     </div>
                     <div class="pull-right">
                     <a href="<?=base_url("index.php/logoutmember");?>" class="btn btn-default btn-flat">Sign out</a>
