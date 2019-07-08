@@ -213,6 +213,7 @@ class default_model extends CI_Model {
 	//DELETE DATABASE
 	public function delete_member($id){
 		$this->db->where('username', $id);
+		$this->db->where('status', 'Pending');
 		$this->db->delete('member'); 
 		if ($this->db->affected_rows() > 0 ) {
 			$return_message = 'berhasil menghapus data';
