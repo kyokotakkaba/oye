@@ -334,7 +334,6 @@ class default_controller extends CI_Controller {
 			'icash' => 0,
 			'bv_kanan' => 0,
 			'bv_kiri' => 0,
-			'tanggal_registrasi' => date('Y-m-d H:i:s'),
 			'status' => "Pending"
 		);
 
@@ -416,6 +415,7 @@ class default_controller extends CI_Controller {
 
 	//delete member
 	//note: hapus data member sesuai username parameter 1
+	//Hanya bisa menghapus user yang pending
 	//Output: berhasil menghapus data / gagal menghapus data
 	public function delete_member($id){
 		$insertStatus = $this->main_model->delete_member($id); 
