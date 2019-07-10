@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 10, 2019 at 05:42 PM
+-- Generation Time: Jul 10, 2019 at 05:50 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 5.6.38
 
@@ -51,16 +51,18 @@ CREATE TABLE `bonus_pair` (
   `tanggal` datetime NOT NULL,
   `harga_pair` int(11) NOT NULL,
   `jumlah_pair` int(11) DEFAULT NULL,
-  `total` int(11) DEFAULT NULL
+  `total` int(11) DEFAULT NULL,
+  `icash` int(11) DEFAULT NULL,
+  `poin` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `bonus_pair`
 --
 
-INSERT INTO `bonus_pair` (`username`, `tanggal`, `harga_pair`, `jumlah_pair`, `total`) VALUES
-('benny', '2019-07-02 00:00:00', 4000, NULL, NULL),
-('enniecorn', '2019-07-01 00:00:00', 4000, NULL, NULL);
+INSERT INTO `bonus_pair` (`username`, `tanggal`, `harga_pair`, `jumlah_pair`, `total`, `icash`, `poin`) VALUES
+('benny', '2019-07-02 00:00:00', 4000, 2, 8000, 7000, 1000),
+('enniecorn', '2019-07-01 00:00:00', 4000, 1, 4000, 3500, 500);
 
 -- --------------------------------------------------------
 
