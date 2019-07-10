@@ -20,8 +20,6 @@
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
 		<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
 
-		<!-- jQuery 3 -->
-		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
 		<!-- Google Font -->
 		<link rel="stylesheet"
 			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -137,6 +135,8 @@
 		</div>
 		<!-- ./wrapper -->
 
+		<!-- jQuery 3 -->
+		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
 		<!-- Bootstrap 3.3.7 -->
 		<script src="<?=base_url("bower_components/bootstrap/dist/js/bootstrap.min.js");?>"></script>
 		<!-- SlimScroll -->
@@ -152,27 +152,8 @@
 		<script src="<?=base_url("dist/js/demo.js");?>"></script>
 		<script>
 			$(document).ready(function () {
-				userCookie = getCookie("memberCookie");
-
 				$("#registrasimember").addClass('active');
 				$("#username").text(userCookie);
-				
-
-				function getCookie(cname) {
-					var name = cname + "=";
-					var decodedCookie = decodeURIComponent(document.cookie);
-					var ca = decodedCookie.split(';');
-					for (var i = 0; i < ca.length; i++) {
-						var c = ca[i];
-						while (c.charAt(0) == ' ') {
-							c = c.substring(1);
-						}
-						if (c.indexOf(name) == 0) {
-							return c.substring(name.length, c.length);
-						}
-					}
-					return "";
-				}
 			})
 
 			function insertfunction(e) {
@@ -203,8 +184,6 @@
 							$("#submitButton").prop("disabled", false);
 						}
 					});
-
-
 				}
 		</script>
 	</body>

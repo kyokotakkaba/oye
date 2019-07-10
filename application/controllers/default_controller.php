@@ -58,6 +58,7 @@ class default_controller extends CI_Controller {
 		}
 	}
 
+	//dashboard member
 	public function dashboardmember(){
 		if ($this->checkcookiemember()) {
 			$this->load->view('member/dashboard');
@@ -67,7 +68,7 @@ class default_controller extends CI_Controller {
 		}
 	}
 
-	//change password
+	//change password admin
 	public function changepasswordadmin(){
 		if ($this->checkcookieadmin()) {
 			$this->load->view('admin/change_password');
@@ -77,6 +78,7 @@ class default_controller extends CI_Controller {
 		}
 	}
 
+	//change password member
 	public function changepasswordmember(){
 		if ($this->checkcookiemember()) {
 			$this->load->view('member/change_password');
@@ -105,8 +107,46 @@ class default_controller extends CI_Controller {
 			die();
 		}
 	}
-	
 
+	//laporan bonus sponsor
+	public function laporanbonussponsor(){
+		if ($this->checkcookiemember()) {
+			$this->load->view('member/laporanbonussponsor');
+		}else{
+			header("Location: ".base_url()."index.php/login");
+			die();
+		}
+	}
+	
+	//laporan bonus pairing
+	public function laporanbonuspair(){
+		if ($this->checkcookiemember()) {
+			$this->load->view('member/laporanbonuspair');
+		}else{
+			header("Location: ".base_url()."index.php/login");
+			die();
+		}
+	}
+
+	//genealogy tree
+	public function genealogytree(){
+		if ($this->checkcookiemember()) {
+			$this->load->view('member/genealogytree');
+		}else{
+			header("Location: ".base_url()."index.php/login");
+			die();
+		}
+	}
+	
+	//withdraw
+	public function withdrawmember(){
+		if ($this->checkcookiemember()) {
+			$this->load->view('member/withdrawmember');
+		}else{
+			header("Location: ".base_url()."index.php/login");
+			die();
+		}
+	}
 
 
 
