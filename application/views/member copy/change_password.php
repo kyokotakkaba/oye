@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>Registrasi Member</title>
+		<title>Dashboard Member</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<!-- Tell the browser to be responsive to screen width -->
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -20,8 +20,6 @@
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
 		<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
 
-		<!-- jQuery 3 -->
-		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
 		<!-- Google Font -->
 		<link rel="stylesheet"
 			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -38,84 +36,34 @@
 				<!-- Content Header (Page header) -->
 				<section class="content-header">
 					<h1>
-						Registrasi Member
-						<small>oye member registration</small>
+						Dashboard Member
+						<small>it all starts here</small>
 					</h1>
 				</section>
 				<!-- Main content -->
 				<section class="content">
 					<!-- Default box -->
-					<div class="box">
-						<div class="box-header with-border">
-							<h3 class="box-title">Registrasi Member</h3>
+					<div class="col-sm-2">
 						</div>
-						<div class="box-body">
-							<form class="form-horizontal" id="insert_member" onsubmit="insertfunction(event)">
+					<div class="col-sm-8">
+						<div class="box">
+							<div class="box-header with-border">
+								<h3 class="box-title">Ubah Password </h3>
+							</div>
+							<div class="box-body">
+							<form class="form-horizontal" id="insert_password" onsubmit="insertfunction(event)">
 								<div class="form-group">
-									<label class="col-sm-3 control-label">Replacement User</label>
+									<label class="col-sm-3 control-label">Password Lama</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="replacement_user" type="text"
-											name="replacement_user">
+										<input class="form-control" id="oldpassword" type="password"
+											name="oldpassword">
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-3 control-label">Username</label>
+									<label class="col-sm-3 control-label">Password Baru</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="username" type="text" name="username">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Password</label>
-									<div class="col-sm-9">
-										<input class="form-control" id="password" type="password" name="password">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Nama Lengkap</label>
-									<div class="col-sm-9">
-										<input class="form-control" id="nama" type="text" name="nama">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Email</label>
-									<div class="col-sm-9">
-										<input class="form-control" id="email" type="email" name="email">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Nomor Telepon</label>
-									<div class="col-sm-9">
-										<input class="form-control" id="no_telepon" type="text" name="no_telepon">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">KTP</label>
-									<div class="col-sm-9">
-										<input class="form-control" id="ktp" type="text" name="ktp">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Alamat</label>
-									<div class="col-sm-9">
-										<input class="form-control" id="alamat" type="text" name="alamat">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Nama Bank</label>
-									<div class="col-sm-9">
-										<input class="form-control" id="nama_bank" type="text" name="nama_bank">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Nomor Rekening</label>
-									<div class="col-sm-9">
-										<input class="form-control" id="no_rekening" type="text" name="no_rekening">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 control-label">Atas Nama Bank</label>
-									<div class="col-sm-9">
-										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank">
+										<input class="form-control" id="newpassword" type="password"
+											name="newpassword">
 									</div>
 								</div>
 								<div class="form-group">
@@ -124,11 +72,15 @@
 											<span id="submit">Submit</span></button>
 									</div>
 								</div>
-								<form>
+							</form>
+							</div>
+							<!-- /.box-body -->
+							<div class="box-footer">
+
+							</div>
 						</div>
-						<!-- /.box-body -->
+
 					</div>
-					<!-- /.box -->
 				</section>
 				<!-- /.content -->
 			</div>
@@ -137,6 +89,8 @@
 		</div>
 		<!-- ./wrapper -->
 
+		<!-- jQuery 3 -->
+		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
 		<!-- Bootstrap 3.3.7 -->
 		<script src="<?=base_url("bower_components/bootstrap/dist/js/bootstrap.min.js");?>"></script>
 		<!-- SlimScroll -->
@@ -151,34 +105,10 @@
 		<!-- AdminLTE for demo purposes -->
 		<script src="<?=base_url("dist/js/demo.js");?>"></script>
 		<script>
-			$(document).ready(function () {
-				userCookie = getCookie("memberCookie");
-
-				$("#registrasimember").addClass('active');
-				$("#username").text(userCookie);
-				
-
-				function getCookie(cname) {
-					var name = cname + "=";
-					var decodedCookie = decodeURIComponent(document.cookie);
-					var ca = decodedCookie.split(';');
-					for (var i = 0; i < ca.length; i++) {
-						var c = ca[i];
-						while (c.charAt(0) == ' ') {
-							c = c.substring(1);
-						}
-						if (c.indexOf(name) == 0) {
-							return c.substring(name.length, c.length);
-						}
-					}
-					return "";
-				}
-			})
-
 			function insertfunction(e) {
 					e.preventDefault(); // will stop the form submission						
-					urls = "insert_registrasimember";
-					var dataString = $("#insert_member").serialize();
+					urls = "update_passwordmember";
+					var dataString = $("#insert_password").serialize();
 					console.log(dataString);
 					
 					
@@ -203,8 +133,6 @@
 							$("#submitButton").prop("disabled", false);
 						}
 					});
-
-
 				}
 		</script>
 	</body>

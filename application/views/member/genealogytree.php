@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>Dashboard Member</title>
+		<title>Genealogy Tree</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<!-- Tell the browser to be responsive to screen width -->
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -20,6 +20,8 @@
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
 		<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
 
+		<!-- jQuery 3 -->
+		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
 		<!-- Google Font -->
 		<link rel="stylesheet"
 			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -36,48 +38,24 @@
 				<!-- Content Header (Page header) -->
 				<section class="content-header">
 					<h1>
-						Dashboard Member
+						Genealogy Tree
 						<small>it all starts here</small>
 					</h1>
 				</section>
 				<!-- Main content -->
 				<section class="content">
 					<!-- Default box -->
-					<div class="col-sm-6">
-						<div class="box">
-							<div class="box-header with-border">
-								<h3 class="box-title">Info Saldo BV </h3>
-							</div>
-							<div class="box-body">
-								<div class="col-sm-6">
-									<h4 class="text-center">BV Kiri</h1>
-										<h1 class="text-center" id="bvkiri">...</h1>
-								</div>
-								<div class="col-sm-6">
-									<h4 class="text-center">BV Kanan</h1>
-										<h1 class="text-center" id="bvkanan">...</h1>
-								</div>
-							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
-
-							</div>
+					<div class="box">
+						<div class="box-header with-border">
+							<h3 class="box-title">Genealogy Tree</h3>
 						</div>
+						<div class="box-body">
+							<!-- CONTENT HERE -->
+							<!-- /. CONTENT HERE -->
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer">
 
-					</div>
-					<!-- /.box -->
-					<div class="col-sm-6">
-						<div class="box">
-							<div class="box-header with-border">
-								<h3 class="box-title">Info i-cash</h3>
-							</div>
-							<div class="box-body">
-								<h1 class="text-center" id="icash">...</h1>
-							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
-
-							</div>
 						</div>
 					</div>
 					<!-- /.box -->
@@ -109,7 +87,8 @@
 				userCookie = getCookie("memberCookie");
 				urls = "get_specificuser/";
 				
-				$("#dashboard").addClass('active');
+				$("#reporting").addClass('active');
+				$("#genealogytree").addClass('active');
 				$("#username").text(userCookie);
 
 				function getCookie(cname) {
@@ -128,17 +107,17 @@
 					return "";
 				}
 
-    			$.ajax({
-    				url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
-    				type: 'get',
-    				dataType: "json",
-    				success: function (response) {
-    					console.log(response.bv_kanan);
+				$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
+					type: 'get',
+					dataType: "json",
+					success: function (response) {
+						console.log(response.bv_kanan);
 						$("#bvkiri").text(response.bv_kiri);
 						$("#bvkanan").text(response.bv_kanan);
 						$("#icash").text(response.icash);
-    				}
-    			})
+					}
+				})
 			})
 		</script>
 	</body>
