@@ -411,7 +411,7 @@ class default_controller extends CI_Controller {
 	//warning: Belum selesai
 	//note: verifikasi member berdasarkan parameter 1 username, untuk mengubah status ke aktif
 	//Termasuk penempatan kaki dan perhitungan bonus sponsor dan BV
-	//output: kaki sudah penuh, silahkan gunakan replacement user yang lain
+	//output: Replacement user tidak bisa digunakan
 	//output: gagal mengubah data / gagal mengubah status / gagal menambah icash sponsor / gagal menambah poin sponsor
 	//output: gagal menambah bv upline $userUpline
 	//output: verifikasi sukses
@@ -496,7 +496,7 @@ class default_controller extends CI_Controller {
 			}
 			//continue here
 		}else{
-			echo "kaki sudah penuh, silahkan gunakan replacement user yang lain";
+			echo "Replacement user tidak bisa digunakan";
 		}
 	}
 
@@ -615,13 +615,26 @@ class default_controller extends CI_Controller {
 		die();
 	}
 
-	public function validasiusername(){
+	//untuk mengecek apakah username sudah dipakai atau tidak
+	//output: username tersedia / username sudah dipakai
+	public function validasiusername($id, $return_var=NULL){
+		$datauser = $this->get_specificuser($id,true);
+		if (empty($datauser)) {
+			$response = 'username tersedia';
+		}else{
+			$response = 'username sudah dipakai';
+		}
 
+		if ($return_var == true) {
+			return $response;
+		}else{
+			echo $response;
+		}
 	}
 
 	//untuk mengecek apakah replacement user ada dan kakinya sudah penuh atau belum
 	//output: replacement user tidak ditemukan
-	//output: 0/1/2 (jumlah downline, 2 berarti penuh)
+	//output: 0/1/2 (jumlah kaki downline, 2 berarti penuh)
 	public function validasireplacementuser($id, $return_var=NULL){
 		$datauser = $this->get_specificuser($id,true);
 		if (empty($datauser)) {
