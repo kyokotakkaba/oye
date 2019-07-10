@@ -109,7 +109,6 @@
     				type: 'get',
     				dataType: "json",
     				success: function (response) {
-    					console.log(response);
     					var tr_str;
     					for (var i = 0; i < response.length; i++) {
     						tr_str +=
@@ -127,6 +126,11 @@
     					}
     					$('#datamember').append(tr_str);
     					$("#tablemember").DataTable({
+							order : [[ 1, 'asc' ]],
+							'columnDefs'	: [{
+								'orderable' : false,
+								'targets' : 0
+								}]
     					});
     				}
     			})

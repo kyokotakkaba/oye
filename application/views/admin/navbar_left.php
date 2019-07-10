@@ -14,11 +14,13 @@
             <li class="header">MAIN NAVIGATION</li>
             <li id="member">
             <a href="<?=base_url("/index.php/memberadmin");?>">
+            <i class="fa fa-user"></i>
                 <span>Member</span>
             </a>
             </li>
             <li id="withdraw">
             <a href="<?=base_url("/index.php/withdrawadmin");?>">
+            <i class="fa fa-money"></i>
                  <span>Withdraw</span>
             </a>
             </li>

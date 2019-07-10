@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>Dashboard Member</title>
+		<title>Laporan Bonus Sponsor</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<!-- Tell the browser to be responsive to screen width -->
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -36,48 +36,36 @@
 				<!-- Content Header (Page header) -->
 				<section class="content-header">
 					<h1>
-						Dashboard Member
-						<small>it all starts here</small>
+						Laporan Bonus Sponsor
+						<small>all sponsor bonus here</small>
 					</h1>
 				</section>
 				<!-- Main content -->
 				<section class="content">
 					<!-- Default box -->
-					<div class="col-sm-6">
-						<div class="box">
-							<div class="box-header with-border">
-								<h3 class="box-title">Info Saldo BV </h3>
-							</div>
-							<div class="box-body">
-								<div class="col-sm-6">
-									<h4 class="text-center">BV Kiri</h1>
-										<h1 class="text-center" id="bvkiri">...</h1>
-								</div>
-								<div class="col-sm-6">
-									<h4 class="text-center">BV Kanan</h1>
-										<h1 class="text-center" id="bvkanan">...</h1>
-								</div>
-							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
-
-							</div>
+					<div class="box">
+						<div class="box-header with-border">
+							<h3 class="box-title">Laporan Bonus Sponsor </h3>
 						</div>
-
-					</div>
-					<!-- /.box -->
-					<div class="col-sm-6">
-						<div class="box">
-							<div class="box-header with-border">
-								<h3 class="box-title">Info i-cash</h3>
-							</div>
-							<div class="box-body">
-								<h1 class="text-center" id="icash">...</h1>
-							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
-
-							</div>
+						<div class="box-body">
+							<!-- CONTENT HERE -->
+							<table id="tablebonussponsor" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>Sponsor</th>
+										<th>Replacement User</th>
+										<th>Username</th>
+										<th>Nama</th>
+										<th>Bonus Sponsor</th>
+									</tr>
+								</thead>
+								<tbody id="databonussponsor">
+								</tbody>
+							</table>
+							<!-- /.CONTENT HERE -->
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer">
 						</div>
 					</div>
 					<!-- /.box -->
@@ -108,9 +96,31 @@
 			$(document).ready(function () {
 				userCookie = getCookie("memberCookie");
 				urls = "get_specificuser/";
-				
+
 				$("#dashboard").addClass('active');
 				$("#username").text(userCookie);
+
+				$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
+					type: 'get',
+					dataType: "json",
+						console.log(response);
+    					var tr_str;
+    					for (var i = 0; i < response.length; i++) {
+    						tr_str +=
+    							'<tr class="text-center" >' +
+								'<td>' + response[i].sponsor+ '</td>' +
+								'<td>' + response[i].replacement_user+ '</td>' +
+    							'<td>' + response[i].username + '</td>' +
+    							'<td>' + response[i].nama + '</td>' +
+    							'<td>' + response[i].email + '</td>' +
+    							'</tr>';
+    					}
+    					$('#databonussponsor').append(tr_str);
+    					$("#tablebonussponsor").DataTable({
+    					});
+    				}
+				})
 
 				function getCookie(cname) {
 					var name = cname + "=";
@@ -127,18 +137,6 @@
 					}
 					return "";
 				}
-
-    			$.ajax({
-    				url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
-    				type: 'get',
-    				dataType: "json",
-    				success: function (response) {
-    					console.log(response.bv_kanan);
-						$("#bvkiri").text(response.bv_kiri);
-						$("#bvkanan").text(response.bv_kanan);
-						$("#icash").text(response.icash);
-    				}
-    			})
 			})
 		</script>
 	</body>

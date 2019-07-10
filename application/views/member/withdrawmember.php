@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>Dashboard Member</title>
+		<title>Withdraw</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<!-- Tell the browser to be responsive to screen width -->
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -36,48 +36,24 @@
 				<!-- Content Header (Page header) -->
 				<section class="content-header">
 					<h1>
-						Dashboard Member
+						Withdraw
 						<small>it all starts here</small>
 					</h1>
 				</section>
 				<!-- Main content -->
 				<section class="content">
 					<!-- Default box -->
-					<div class="col-sm-6">
-						<div class="box">
-							<div class="box-header with-border">
-								<h3 class="box-title">Info Saldo BV </h3>
-							</div>
-							<div class="box-body">
-								<div class="col-sm-6">
-									<h4 class="text-center">BV Kiri</h1>
-										<h1 class="text-center" id="bvkiri">...</h1>
-								</div>
-								<div class="col-sm-6">
-									<h4 class="text-center">BV Kanan</h1>
-										<h1 class="text-center" id="bvkanan">...</h1>
-								</div>
-							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
-
-							</div>
+					<div class="box">
+						<div class="box-header with-border">
+							<h3 class="box-title">Withdraw</h3>
 						</div>
+						<div class="box-body">
+							<!-- CONTENT -->
+							<!-- /. CONTENT -->
+						</div>
+						<!-- /.box-body -->
+						<div class="box-footer">
 
-					</div>
-					<!-- /.box -->
-					<div class="col-sm-6">
-						<div class="box">
-							<div class="box-header with-border">
-								<h3 class="box-title">Info i-cash</h3>
-							</div>
-							<div class="box-body">
-								<h1 class="text-center" id="icash">...</h1>
-							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
-
-							</div>
 						</div>
 					</div>
 					<!-- /.box -->
@@ -108,8 +84,8 @@
 			$(document).ready(function () {
 				userCookie = getCookie("memberCookie");
 				urls = "get_specificuser/";
-				
-				$("#dashboard").addClass('active');
+
+				$("#withdrawmember").addClass('active');
 				$("#username").text(userCookie);
 
 				function getCookie(cname) {
@@ -128,17 +104,17 @@
 					return "";
 				}
 
-    			$.ajax({
-    				url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
-    				type: 'get',
-    				dataType: "json",
-    				success: function (response) {
-    					console.log(response.bv_kanan);
+				$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
+					type: 'get',
+					dataType: "json",
+					success: function (response) {
+						console.log(response.bv_kanan);
 						$("#bvkiri").text(response.bv_kiri);
 						$("#bvkanan").text(response.bv_kanan);
 						$("#icash").text(response.icash);
-    				}
-    			})
+					}
+				})
 			})
 		</script>
 	</body>

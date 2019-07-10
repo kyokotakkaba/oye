@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>Dashboard Member</title>
+		<title>Withdraw Member</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<!-- Tell the browser to be responsive to screen width -->
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -36,7 +36,7 @@
 				<!-- Content Header (Page header) -->
 				<section class="content-header">
 					<h1>
-						Dashboard Member
+						Withdraw 
 						<small>it all starts here</small>
 					</h1>
 				</section>
