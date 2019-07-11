@@ -160,6 +160,30 @@ class default_model extends CI_Model {
 		return $return_message;
 	}
 
+	public function update_add_poin($id, $value){
+		$this->db->where('username', $id);
+		$this->db->set('poin', 'poin+'.$value,false);
+		$this->db->update('member');
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+	public function update_subtract_poin($id, $value){
+		$this->db->where('username', $id);
+		$this->db->set('poin', 'poin-'.$value,false);
+		$this->db->update('member');
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
 	public function update_add_bvkiri($id, $value){
 		$this->db->where('username', $id);
 		$this->db->set('bv_kiri', 'bv_kiri+'.$value,false);

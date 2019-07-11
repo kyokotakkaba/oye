@@ -411,8 +411,8 @@ class default_controller extends CI_Controller {
 	//warning: Belum selesai
 	//note: verifikasi member berdasarkan parameter 1 username, untuk mengubah status ke aktif
 	//Termasuk penempatan kaki dan perhitungan bonus sponsor dan BV
-	//output: kaki sudah penuh, silahkan gunakan replacement user yang lain
-	//output: gagal mengubah data / gagal mengubah status / gagal menambah icash sponsor
+	//output: Replacement user tidak bisa digunakan
+	//output: gagal mengubah data / gagal mengubah status / gagal menambah icash sponsor / gagal menambah poin sponsor
 	//output: gagal menambah bv upline $userUpline
 	//output: verifikasi sukses
 	public function update_verifikasi_member($id){
@@ -438,44 +438,49 @@ class default_controller extends CI_Controller {
 
 				//insert bonus sponsor
 				$parameter = $this->get_parameter(true);
+				$nominal = $parameter['bonus_sponsor']*((100-$parameter['persentase_poin'])/100);
+				$poin = $parameter['bonus_sponsor']*($parameter['persentase_poin']/100);
 				$data = array(
 					'sponsor' => $datauser['sponsor'],
 					'username_member' => $id,
-					'nominal' => $parameter['bonus_sponsor']
+					'nominal' => $nominal,
+					'poin' => $poin
 				);
 				$insertStatus = $this->default_model->insert_bonussponsor($data);
 
 				if ($insertStatus == "berhasil mengubah data"){
 					//tambah icash dari bonus sponsor
-					$insertStatus = $this->default_model->update_add_icash($datauser['sponsor'],$parameter['bonus_sponsor']);
+					$insertStatus = $this->default_model->update_add_icash($datauser['sponsor'],$nominal);
 					if ($insertStatus == "berhasil mengubah data"){
-						//tambah bv semua upline
-						$dataupline = $this->get_specificuser($datauser['replacement_user'],true);
-						$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
-						if ($insertStatus == "berhasil mengubah data") {
-							$sukses = true;
-							while (!empty($dataupline['replacement_user'])) {
-								set_time_limit(30);
-								$posisikaki = $dataupline['posisi_kaki'];
-								$dataupline = $this->get_specificuser($dataupline['replacement_user'],true);
-								$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
-								if ($insertStatus == "gagal mengubah data"){
-									$sukses = false;
-									break;
+					//tambah poin dari bonus sponsor
+						$insertStatus = $this->default_model->update_add_poin($datauser['sponsor'],$poin);
+						if ($insertStatus == "berhasil mengubah data"){
+							//tambah bv semua upline
+							$dataupline = $this->get_specificuser($datauser['replacement_user'],true);
+							$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
+							if ($insertStatus == "berhasil mengubah data") {
+								$sukses = true;
+								while (!empty($dataupline['replacement_user'])) {
+									set_time_limit(30);
+									$posisikaki = $dataupline['posisi_kaki'];
+									$dataupline = $this->get_specificuser($dataupline['replacement_user'],true);
+									$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
+									if ($insertStatus == "gagal mengubah data"){
+										$sukses = false;
+										break;
+									}
 								}
-							}
-
-							if ($sukses) {
-								echo "verifikasi sukses";
+								if ($sukses) {
+									echo "verifikasi sukses";
+								}else{
+									echo "gagal menambah bv upline ".$dataupline['username'];
+								}
 							}else{
 								echo "gagal menambah bv upline ".$dataupline['username'];
 							}
 						}else{
-							echo "gagal menambah bv upline ".$dataupline['username'];
+							echo "gagal menambah poin sponsor";
 						}
-						
-						//to be continued
-						
 					}else{
 						echo "gagal menambah icash sponsor";
 					}
@@ -491,7 +496,7 @@ class default_controller extends CI_Controller {
 			}
 			//continue here
 		}else{
-			echo "kaki sudah penuh, silahkan gunakan replacement user yang lain";
+			echo "Replacement user tidak bisa digunakan";
 		}
 	}
 
@@ -610,13 +615,26 @@ class default_controller extends CI_Controller {
 		die();
 	}
 
-	public function validasiusername(){
+	//untuk mengecek apakah username sudah dipakai atau tidak
+	//output: username tersedia / username sudah dipakai
+	public function validasiusername($id, $return_var=NULL){
+		$datauser = $this->get_specificuser($id,true);
+		if (empty($datauser)) {
+			$response = 'username tersedia';
+		}else{
+			$response = 'username sudah dipakai';
+		}
 
+		if ($return_var == true) {
+			return $response;
+		}else{
+			echo $response;
+		}
 	}
 
 	//untuk mengecek apakah replacement user ada dan kakinya sudah penuh atau belum
 	//output: replacement user tidak ditemukan
-	//output: 0/1/2 (jumlah downline, 2 berarti penuh)
+	//output: 0/1/2 (jumlah kaki downline, 2 berarti penuh)
 	public function validasireplacementuser($id, $return_var=NULL){
 		$datauser = $this->get_specificuser($id,true);
 		if (empty($datauser)) {
