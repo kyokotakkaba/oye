@@ -286,34 +286,48 @@ class default_controller extends CI_Controller {
 
 	//register new member
 	//note: registrasi member baru dengan request POST seperti di bawah.
+	//output: username sudah dipakai / replacement user tidak ditemukan / Replacement user tidak bisa digunakan
 	//Output: berhasil mengubah data / gagal mengubah data
 	public function insert_registrasimember(){
-		$parameter = $this->get_parameter(true);
-		$biaya = $parameter['biaya_registrasi'] + rand(500, 999);
-		date_default_timezone_set('Asia/Jakarta');
-		$data = array(
-			'username' => $this->input->post('username'),
-			'password' => md5($this->input->post('password')),
-			'nama' => $this->input->post('nama'),
-			'email' => $this->input->post('email'),
-			'no_telepon' => $this->input->post('no_telepon'),
-			'ktp' => $this->input->post('ktp'),
-			'alamat' => $this->input->post('alamat'),
-			'nama_bank' => $this->input->post('nama_bank'),
-			'no_rekening' => $this->input->post('no_rekening'),
-			'atas_nama_bank' => $this->input->post('atas_nama_bank'),
-			'sponsor' => $this->input->cookie('memberCookie',true),
-			'replacement_user' => $this->input->post('replacement_user'),
-			'icash' => 0,
-			'bv_kanan' => 0,
-			'bv_kiri' => 0,
-			'tanggal_registrasi' => date('Y-m-d H:i:s'),
-			'nominal_pembayaran' => $biaya,
-			'status' => "Pending"
-		);
+		$insertStatus = $this->validasiusername($this->input->post('username'),true);
+		if ($insertStatus == "username tersedia") {
+			$insertStatus = $this->validasireplacementuser($this->input->post('replacement_user'),true);
+			if ($insertStatus === 0 || $insertStatus == 1){ // === untuk memastikan variabel bernilai angka 0
+				$parameter = $this->get_parameter(true);
+				$biaya = $parameter['biaya_registrasi'] + rand(500, 999);
+				date_default_timezone_set('Asia/Jakarta');
+				$data = array(
+					'username' => $this->input->post('username'),
+					'password' => md5($this->input->post('password')),
+					'nama' => $this->input->post('nama'),
+					'email' => $this->input->post('email'),
+					'no_telepon' => $this->input->post('no_telepon'),
+					'ktp' => $this->input->post('ktp'),
+					'alamat' => $this->input->post('alamat'),
+					'nama_bank' => $this->input->post('nama_bank'),
+					'no_rekening' => $this->input->post('no_rekening'),
+					'atas_nama_bank' => $this->input->post('atas_nama_bank'),
+					'sponsor' => $this->input->cookie('memberCookie',true),
+					'replacement_user' => $this->input->post('replacement_user'),
+					'icash' => 0,
+					'bv_kanan' => 0,
+					'bv_kiri' => 0,
+					'tanggal_registrasi' => date('Y-m-d H:i:s'),
+					'nominal_pembayaran' => $biaya,
+					'status' => "Pending"
+				);
 
-		$insertStatus = $this->default_model->insert_member($data);
-		echo $insertStatus;
+				$insertStatus = $this->default_model->insert_member($data);
+				echo $insertStatus;
+
+			}else if ($insertStatus == 2){
+				echo "Replacement user tidak bisa digunakan";
+			}else{
+				echo $insertStatus;
+			}
+		}else{
+			echo $insertStatus;
+		}
 	}
 
 
@@ -408,11 +422,10 @@ class default_controller extends CI_Controller {
 		}
 	}
 
-	//warning: Belum selesai
 	//note: verifikasi member berdasarkan parameter 1 username, untuk mengubah status ke aktif
 	//Termasuk penempatan kaki dan perhitungan bonus sponsor dan BV
 	//output: Replacement user tidak bisa digunakan
-	//output: gagal mengubah data / gagal mengubah status / gagal menambah icash sponsor / gagal menambah poin sponsor
+	//output: gagal mengubah status / gagal menambah icash sponsor / gagal menambah poin sponsor
 	//output: gagal menambah bv upline $userUpline
 	//output: verifikasi sukses
 	public function update_verifikasi_member($id){
@@ -421,7 +434,7 @@ class default_controller extends CI_Controller {
 		$jumlahdownline = $this->validasireplacementuser($datauser['replacement_user'],true);
 		$datadownline= $this->get_filtereduser(array('status'=> 'active','replacement_user'=>$datauser['replacement_user']), true);
 		$posisikaki = 'batal';
-		if ($jumlahdownline == 0) {
+		if ($jumlahdownline === 0) { // === untuk memastikan variabel bernilai angka 0
 			$posisikaki = 'kiri';
 		}else if ($jumlahdownline == 1) {
 			$posisikaki = 'kanan';
