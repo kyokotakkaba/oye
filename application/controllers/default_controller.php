@@ -238,6 +238,20 @@ class default_controller extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	//note: Tidak untuk front end karena datetime format tidak bisa jadi parameter.
+	//Ambil data withdraw spesifik berdasarkan user dan tanggal
+	public function get_specific_withdraw($user, $tanggal, $return_var = NULL){
+		$data = $this->default_model->get_data_withdraw($user, $tanggal);
+		if (empty($data)){
+			$data = [];
+		}
+		if ($return_var == true) {
+			return $data;
+		}else{
+			echo json_encode($data);
+		}
+	}
+
 	//Data Sponsor
 
 	//note: ambil data sponsor dari user yang sedang login
@@ -325,6 +339,33 @@ class default_controller extends CI_Controller {
 			}else{
 				echo $insertStatus;
 			}
+		}else{
+			echo $insertStatus;
+		}
+	}
+
+	//withdraw member
+	//note: lakukan withdraw oleh member dengan request POST nominal withdraw.
+	//output: saldo tidak cukup (setiap penarikan dikenakan biaya administrasi sebesar Rp $admin_fee) / user tidak ditemukan
+	//Output: berhasil mengubah data / gagal mengubah data
+	public function insert_withdraw(){
+		$value = $this->input->post('nominal');
+		$parameter = $this->get_parameter(true);
+		$total = $value + $parameter['admin_fee'];
+		$insertStatus = $this->validasiwithdraw($this->input->cookie('memberCookie',true),$total,true);
+		if ($insertStatus == "bisa melakukan withdraw") {
+			date_default_timezone_set('Asia/Jakarta');
+			$data = array(
+				'username' => $this->input->cookie('memberCookie',true),
+				'tanggal' => date('Y-m-d H:i:s'),
+				'nominal' => $value,
+				'admin_fee' => $parameter['admin_fee'],
+				'total' => $value + $parameter['admin_fee'],
+				'status' => 'Pending'
+			);
+
+			$insertStatus = $this->default_model->insert_withdraw($data);
+			echo $insertStatus;
 		}else{
 			echo $insertStatus;
 		}
@@ -525,6 +566,43 @@ class default_controller extends CI_Controller {
 	}
 
 
+	//note: verifikasi withdraw berdasarkan parameter 1 username, dan post tanggal
+	//post tanggal menggunakan format date time [Y-m-d H:i:s] contoh: 2019-07-13 19:19:47
+	//Mengurangi icash member dan mengubah status withdraw
+	//output: data withdraw tidak ditemukan / user tidak ditemukan
+	//output: saldo tidak cukup (setiap penarikan dikenakan biaya administrasi sebesar Rp $admin_fee)
+	//output: gagal mengubah status withdraw / gagal mengurangi icash member
+	//output: verifikasi sukses
+	public function update_verifikasi_withdraw($id){
+		$tanggal = $this->input->post('tanggal');
+		$datawithdraw = $this->get_specific_withdraw($id,$tanggal,true);
+		if (empty($datawithdraw)) {
+			echo 'data withdraw tidak ditemukan';
+		}else{
+			$response = $this->validasiwithdraw($id,$datawithdraw['total'],true);
+			if ($response == 'bisa melakukan withdraw') {
+				$data = array(
+					'status' => "Done"
+				);
+				$insertStatus = $this->default_model->update_withdraw($id,$tanggal,$data);
+				if ($insertStatus == "berhasil mengubah data") {
+					$insertStatus = $this->default_model->update_subtract_icash($id,$datawithdraw['total']);
+					if ($insertStatus == "berhasil mengubah data"){
+						echo "verifikasi sukses";
+					}else{
+						echo "gagal mengurangi icash member";
+					}
+				}else{
+					echo "gagal mengubah status withdraw";
+				}
+			}else{
+				echo $response;
+			}
+		}
+	}
+
+
+
 
 
 	//DELETE
@@ -534,7 +612,17 @@ class default_controller extends CI_Controller {
 	//Hanya bisa menghapus user yang pending
 	//Output: berhasil menghapus data / gagal menghapus data
 	public function delete_member($id){
-		$insertStatus = $this->main_model->delete_member($id); 
+		$insertStatus = $this->default_model->delete_member($id); 
+		echo $insertStatus;
+	}
+
+	//delete withdraw
+	//note: hapus data withdraw username parameter 1 dan post tanggal
+	//post tanggal menggunakan format date time [Y-m-d H:i:s] contoh: 2019-07-13 19:19:47
+	//Output: berhasil menghapus data / gagal menghapus data
+	public function delete_withdraw($id){
+		$tanggal = $this->input->post('tanggal');
+		$insertStatus = $this->default_model->delete_withdraw($id,$tanggal);
 		echo $insertStatus;
 	}
 
@@ -663,10 +751,37 @@ class default_controller extends CI_Controller {
 			}else{
 				echo count($datadownline);
 			}
-		}
-		
-		
+		}	
 	}
+
+	//untuk mengecek apakah bisa melakukan withdraw berdasarkan saldo user
+	//output: user tidak ditemukan / bisa melakukan withdraw
+	//output: saldo tidak cukup (setiap penarikan dikenakan biaya administrasi sebesar Rp $admin_fee)
+	public function validasiwithdraw($id, $value, $return_var=NULL){
+		$datauser = $this->get_specificuser($id,true);
+		if (empty($datauser)) {
+			if ($return_var == true) {
+				return 'user tidak ditemukan';
+			}else{
+				echo "user tidak ditemukan";
+			}
+		}else{
+			$parameter = $this->get_parameter(true);
+			if ($datauser['icash']>= $value) {
+				$response = 'bisa melakukan withdraw';
+			}else{
+				$response = 'saldo tidak cukup (Setiap penarikan dikenakan biaya administrasi sebesar Rp '.number_format($parameter['admin_fee'],0,",",".").")";
+			}
+
+			if ($return_var == true) {
+				return $response;
+			}else{
+				echo $response;
+			}
+		}	
+	}
+
+
 
 	
 
