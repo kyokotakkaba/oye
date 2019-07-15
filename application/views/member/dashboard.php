@@ -11,8 +11,7 @@
 		<link rel="stylesheet" href="<?=base_url("bower_components/bootstrap/dist/css/bootstrap.min.css");?>">
 		<!-- Font Awesome -->
 		<link rel="stylesheet" href="<?=base_url("bower_components/font-awesome/css/font-awesome.min.css");?>">
-		<!-- Ionicons -->
-		<link rel="stylesheet" href="<?=base_url("bower_components/Ionicons/css/ionicons.min.css");?>">
+
 		<!-- DataTables -->
 		<link rel="stylesheet"
 			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
@@ -46,7 +45,7 @@
 					<div class="col-sm-6">
 						<div class="box">
 							<div class="box-header with-border">
-								<h3 class="box-title">Info Saldo BV </h3>
+								<h3 class="box-title">Info BV </h3>
 							</div>
 							<div class="box-body">
 								<div class="col-sm-6">
@@ -69,10 +68,17 @@
 					<div class="col-sm-6">
 						<div class="box">
 							<div class="box-header with-border">
-								<h3 class="box-title">Info i-cash</h3>
+								<h3 class="box-title">i-cash & Poin</h3>
 							</div>
 							<div class="box-body">
-								<h1 class="text-center" id="icash">...</h1>
+								<div class="col-sm-6">
+									<h4 class="text-center">I-Cash</h1>
+										<h1 class="text-center" id="icash">...</h1>
+								</div>
+								<div class="col-sm-6">
+									<h4 class="text-center">Poin</h1>
+										<h1 class="text-center" id="poin">...</h1>
+								</div>
 							</div>
 							<!-- /.box-body -->
 							<div class="box-footer">
@@ -102,13 +108,18 @@
 		<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
 		<!-- AdminLTE App -->
 		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
-		<!-- AdminLTE for demo purposes -->
-		<script src="<?=base_url("dist/js/demo.js");?>"></script>
+
 		<script>
 			$(document).ready(function () {
+				const formatUang = new Intl.NumberFormat('id-ID', {
+					style: 'currency',
+					currency: 'IDR',
+					minimumFractionDigits: 2
+				});
+
 				userCookie = getCookie("memberCookie");
 				urls = "get_specificuser/";
-				
+
 				$("#dashboard").addClass('active');
 				$("#username").text(userCookie);
 
@@ -128,18 +139,20 @@
 					return "";
 				}
 
-    			$.ajax({
-    				url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
-    				type: 'get',
-    				dataType: "json",
-    				success: function (response) {
-    					console.log(response.bv_kanan);
-						$("#bvkiri").text(response.bv_kiri);
-						$("#bvkanan").text(response.bv_kanan);
-						$("#icash").text(response.icash);
-    				}
-    			})
+				$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
+					type: 'get',
+					dataType: "json",
+					success: function (response) {
+						console.log(response.bv_kanan);
+						$("#bvkiri").text(formatUang.format(response.bv_kiri*2000));
+						$("#bvkanan").text(formatUang.format(response.bv_kanan*2000));
+						$("#icash").text(formatUang.format(response.icash));
+						$("#poin").text(formatUang.format(response.poin));
+					}
+				})
 			})
+
 		</script>
 	</body>
 

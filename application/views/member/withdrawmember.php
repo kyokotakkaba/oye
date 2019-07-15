@@ -11,8 +11,6 @@
 		<link rel="stylesheet" href="<?=base_url("bower_components/bootstrap/dist/css/bootstrap.min.css");?>">
 		<!-- Font Awesome -->
 		<link rel="stylesheet" href="<?=base_url("bower_components/font-awesome/css/font-awesome.min.css");?>">
-		<!-- Ionicons -->
-		<link rel="stylesheet" href="<?=base_url("bower_components/Ionicons/css/ionicons.min.css");?>">
 		<!-- DataTables -->
 		<link rel="stylesheet"
 			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
@@ -49,6 +47,32 @@
 						</div>
 						<div class="box-body">
 							<!-- CONTENT -->
+							<form class="form-horizontal" id="withdrawmember" onsubmit="insertfunction(event)">
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Saldo i-cash</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<div class="input-group-addon">Rp</div>
+											<input class="form-control" id="icash"  readonly>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label">Nominal Penarikan</label>
+									<div class="col-sm-9">
+										<div class="input-group">
+											<div class="input-group-addon">Rp</div>
+											<input class="form-control" id="nominal" type="text" name="nominal">
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-12 text-center">
+										<button type="submit" id="submitButton" class="btn btn-primary btn-md">
+											<span id="submit">Submit</span></button>
+									</div>
+								</div>
+							</form>
 							<!-- /. CONTENT -->
 						</div>
 						<!-- /.box-body -->
@@ -78,10 +102,14 @@
 		<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
 		<!-- AdminLTE App -->
 		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
-		<!-- AdminLTE for demo purposes -->
-		<script src="<?=base_url("dist/js/demo.js");?>"></script>
+		
 		<script>
 			$(document).ready(function () {
+				const formatUang = new Intl.NumberFormat('id-ID', {
+					style: 'currency',
+					currency: 'IDR',
+					minimumFractionDigits: 2
+				});
 				userCookie = getCookie("memberCookie");
 				urls = "get_specificuser/";
 
@@ -109,13 +137,38 @@
 					type: 'get',
 					dataType: "json",
 					success: function (response) {
-						console.log(response.bv_kanan);
-						$("#bvkiri").text(response.bv_kiri);
-						$("#bvkanan").text(response.bv_kanan);
-						$("#icash").text(response.icash);
+						$("#icash").val(formatUang.format(response.icash));
 					}
 				})
 			})
+
+			function insertfunction(e) {
+				e.preventDefault(); // will stop the form submission						
+				urls = "insert_withdraw";
+				var nominal = $("#nominal").val();
+
+				$("#submitButton").prop("disabled", true);
+				$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urls,
+					type: 'POST',
+					data: {nominal:nominal},
+					success: function (response) {
+						$("#submit").html("tunggu..");
+						if (response == "berhasil mengubah data") {
+							alert("Berhasil");
+							location.reload();
+						} else {
+							alert(response);
+							$("#submit").html("Submit");
+							$("#submitButton").prop("disabled", false);
+						}
+					},
+					error: function () {
+						alert('Gagal');
+						$("#submitButton").prop("disabled", false);
+					}
+				});
+			}
 		</script>
 	</body>
 
