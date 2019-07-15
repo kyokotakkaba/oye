@@ -11,8 +11,7 @@
 		<link rel="stylesheet" href="<?=base_url("bower_components/bootstrap/dist/css/bootstrap.min.css");?>">
 		<!-- Font Awesome -->
 		<link rel="stylesheet" href="<?=base_url("bower_components/font-awesome/css/font-awesome.min.css");?>">
-		<!-- Ionicons -->
-		<link rel="stylesheet" href="<?=base_url("bower_components/Ionicons/css/ionicons.min.css");?>">
+		
 		<!-- DataTables -->
 		<link rel="stylesheet"
 			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
@@ -148,15 +147,13 @@
 		<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
 		<!-- AdminLTE App -->
 		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
-		<!-- AdminLTE for demo purposes -->
-		<script src="<?=base_url("dist/js/demo.js");?>"></script>
+		
 		<script>
 			$(document).ready(function () {
-				userCookie = getCookie("memberCookie");
+				var userCookie = getCookie("memberCookie");
 
 				$("#registrasimember").addClass('active');
 				$("#username").text(userCookie);
-				
 
 				function getCookie(cname) {
 					var name = cname + "=";
@@ -173,40 +170,48 @@
 					}
 					return "";
 				}
+
+				function setCookie(name, value) {
+					var expires = "";
+					if (days) {
+						var date = new Date();
+						date.setTime(date.getTime() + (5 * 60 * 1000));
+						expires = "; expires=" + date.toUTCString();
+					}
+					document.cookie = name + "=" + (value || "") + expires + "; path=/";
+				}
 			})
 
 			function insertfunction(e) {
-					e.preventDefault(); // will stop the form submission						
-					urls = "insert_registrasimember";
-					var dataString = $("#insert_member").serialize();
-					console.log(dataString);
-					
-					
-					$("#submitButton").prop("disabled", true);
-					$.ajax({
-						url: "<?php echo base_url() ?>index.php/" + urls,
-						type: 'POST',
-						data: dataString,
-						success: function (response) {
-							$("#submit").html("tunggu..");
-							if (response == "berhasil mengubah data") {
-								alert("Sukses");
-								window.location.href = "<?php echo base_url() ?>index.php/dashboardmember";
-							} else {
-								alert("Gagal");
-								$("#submit").html("Submit");
-								$("#submitButton").prop("disabled", false);
-							}
-						},
-						error: function () {
-							alert('Gagal');
+				e.preventDefault(); // will stop the form submission						
+				urls = "insert_registrasimember";
+				var value = $('#username').val();
+
+				var dataString = $("#insert_member").serialize();
+				console.log(dataString);
+
+				$("#submitButton").prop("disabled", true);
+				$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urls,
+					type: 'POST',
+					data: dataString,
+					success: function (response) {
+						$("#submit").html("tunggu..");
+						if (response == "berhasil mengubah data") {
+							setCookie(memberBaru, value);
+							window.location.href = "<?php echo base_url() ?>index.php/dashboardmember";
+						} else {
+							alert("Gagal");
+							$("#submit").html("Submit");
 							$("#submitButton").prop("disabled", false);
 						}
-					});
-
-
-				}
+					},
+					error: function () {
+						alert('Gagal');
+						$("#submitButton").prop("disabled", false);
+					}
+				});
+			}
 		</script>
 	</body>
-
 	</html>

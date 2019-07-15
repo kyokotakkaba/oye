@@ -11,8 +11,7 @@
 		<link rel="stylesheet" href="<?=base_url("bower_components/bootstrap/dist/css/bootstrap.min.css");?>">
 		<!-- Font Awesome -->
 		<link rel="stylesheet" href="<?=base_url("bower_components/font-awesome/css/font-awesome.min.css");?>">
-		<!-- Ionicons -->
-		<link rel="stylesheet" href="<?=base_url("bower_components/Ionicons/css/ionicons.min.css");?>">
+		
 		<!-- DataTables -->
 		<link rel="stylesheet"
 			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
@@ -102,8 +101,7 @@
 		<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
 		<!-- AdminLTE App -->
 		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
-		<!-- AdminLTE for demo purposes -->
-		<script src="<?=base_url("dist/js/demo.js");?>"></script>
+		
 		<script>
 			function insertfunction(e) {
 					e.preventDefault(); // will stop the form submission						

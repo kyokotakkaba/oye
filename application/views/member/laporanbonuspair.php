@@ -11,8 +11,7 @@
 		<link rel="stylesheet" href="<?=base_url("bower_components/bootstrap/dist/css/bootstrap.min.css");?>">
 		<!-- Font Awesome -->
 		<link rel="stylesheet" href="<?=base_url("bower_components/font-awesome/css/font-awesome.min.css");?>">
-		<!-- Ionicons -->
-		<link rel="stylesheet" href="<?=base_url("bower_components/Ionicons/css/ionicons.min.css");?>">
+		
 		<!-- DataTables -->
 		<link rel="stylesheet"
 			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
@@ -54,11 +53,13 @@
 							<table id="tablebonussponsor" class="table table-bordered table-striped">
 								<thead>
 									<tr>
-										<th>Sponsor</th>
-										<th>Replacement User</th>
 										<th>Username</th>
-										<th>Nama</th>
-										<th>Bonus Pairing</th>
+										<th>Tanggal</th>
+										<th>Harga Pair</th>
+										<th>Jumlah Pair</th>
+										<th>Total</th>
+										<th>I-cash</th>
+										<th>Poin</th>
 									</tr>
 								</thead>
 								<tbody id="databonussponsor">
@@ -90,19 +91,18 @@
 		<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
 		<!-- AdminLTE App -->
 		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
-		<!-- AdminLTE for demo purposes -->
-		<script src="<?=base_url("dist/js/demo.js");?>"></script>
+		
 		<script>
 			$(document).ready(function () {
 				userCookie = getCookie("memberCookie");
-				urls = "get_specificuser/";
+				urls = "get_currentuser_bonuspair";
 
 				$("#reporting").addClass('active');
 				$("#laporanbonuspair").addClass('active');
 				$("#username").text(userCookie);
 
 				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
+					url: "<?php echo base_url() ?>index.php/" + urls,
 					type: 'get',
 					dataType: "json",
 					success: function (response) {
@@ -111,11 +111,13 @@
     					for (var i = 0; i < response.length; i++) {
     						tr_str +=
     							'<tr class="text-center" >' +
-								'<td>' + response[i].sponsor+ '</td>' +
-								'<td>' + response[i].replacement_user+ '</td>' +
-    							'<td>' + response[i].username + '</td>' +
-    							'<td>' + response[i].nama + '</td>' +
-    							'<td>' + response[i].email + '</td>' +
+								'<td>' + response[i].username+ '</td>' +
+								'<td>' + response[i].tanggal+ '</td>' +
+    							'<td>' + response[i].harga_pair + '</td>' +
+    							'<td>' + response[i].jumlah_pair+ '</td>' +
+    							'<td>' + response[i].total+ '</td>' +
+								'<td>' + response[i].icash+ '</td>' +
+								'<td>' + response[i].poin+ '</td>' +
     							'</tr>';
     					}
     					$('#databonussponsor').append(tr_str);

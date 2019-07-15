@@ -108,6 +108,16 @@ class default_controller extends CI_Controller {
 		}
 	}
 
+	//registrasi sukses
+	public function registrasisukses(){
+		if ($this->checkcookiememberbaru()) {
+			$this->load->view('member/registrasisukses');
+		}else{
+			header("Location: ".base_url()."index.php/login");
+			die();
+		}
+	}
+
 	//laporan bonus sponsor
 	public function laporanbonussponsor(){
 		if ($this->checkcookiemember()) {
@@ -207,6 +217,19 @@ class default_controller extends CI_Controller {
 	//note: tidak untuk front end, ambil data user dengan parameter filter array
 	public function get_filtereduser($filter, $return_var = NULL){
 		$data = $this->default_model->get_data_member_filter($filter);
+		if (empty($data)){
+			$data = [];
+		}
+		if ($return_var == true) {
+			return $data;
+		}else{
+			echo json_encode($data);
+		}
+	}
+
+	//note: menagambil semua downline user, belum selesai
+	public function get_downlineuser($id, $return_var = NULL){
+		$data = $this->default_model->get_data_member_filter(array('status'=> 'active','replacement_user'=>$id));
 		if (empty($data)){
 			$data = [];
 		}
@@ -692,6 +715,16 @@ class default_controller extends CI_Controller {
 		$this->load->helper('cookie');
 		if ($this->input->cookie('memberCookie',true)!=NULL) {
 			// echo $this->input->cookie('memberCookie'); //to output cookie
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	//note: untuk front end
+	public function checkcookiememberbaru(){
+		$this->load->helper('cookie');
+		if ($this->input->cookie('memberBaru',true)!=NULL) {
 			return true;
 		}else{
 			return false;
