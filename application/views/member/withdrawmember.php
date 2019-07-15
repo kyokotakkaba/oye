@@ -105,6 +105,11 @@
 		
 		<script>
 			$(document).ready(function () {
+				const formatUang = new Intl.NumberFormat('id-ID', {
+					style: 'currency',
+					currency: 'IDR',
+					minimumFractionDigits: 2
+				});
 				userCookie = getCookie("memberCookie");
 				urls = "get_specificuser/";
 
@@ -132,7 +137,7 @@
 					type: 'get',
 					dataType: "json",
 					success: function (response) {
-						$("#icash").val(response.icash);
+						$("#icash").val(formatUang.format(response.icash));
 					}
 				})
 			})

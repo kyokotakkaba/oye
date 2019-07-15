@@ -94,6 +94,12 @@
 		
 		<script>
 			$(document).ready(function () {
+				const formatUang = new Intl.NumberFormat('id-ID', {
+					style: 'currency',
+					currency: 'IDR',
+					minimumFractionDigits: 2
+				});
+
 				userCookie = getCookie("memberCookie");
 				urls = "get_currentuser_bonuspair";
 
@@ -115,9 +121,9 @@
 								'<td>' + response[i].tanggal+ '</td>' +
     							'<td>' + response[i].harga_pair + '</td>' +
     							'<td>' + response[i].jumlah_pair+ '</td>' +
-    							'<td>' + response[i].total+ '</td>' +
-								'<td>' + response[i].icash+ '</td>' +
-								'<td>' + response[i].poin+ '</td>' +
+    							'<td>' + formatUang.format(response[i].total)+ '</td>' +
+								'<td>' + formatUang.format(response[i].icash)+ '</td>' +
+								'<td>' + formatUang.format(response[i].poin)+ '</td>' +
     							'</tr>';
     					}
     					$('#databonussponsor').append(tr_str);

@@ -53,13 +53,14 @@
     								<table id="tablwithdraw" class="table table-bordered table-striped">
     									<thead>
     										<tr>
-												<th>Option</th>
-												<th>Username</th>
+    											<th>Hapus</th>
+    											<th>Username</th>
     											<th>Tanggal</th>
     											<th>Nominal</th>
     											<th>Admin Fee</th>
     											<th>Total</th>
     											<th>Status</th>
+    											<th>Verifikasi</th>
     										</tr>
     									</thead>
     									<tbody id="datawithdraw">
@@ -91,7 +92,7 @@
     	<!-- DataTables -->
     	<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
     	<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
-       <script src="<?=base_url("bower_components/datatables_button.min.js");?>"></script>
+    	<script src="<?=base_url("bower_components/datatables_button.min.js");?>"></script>
     	<!-- AdminLTE App -->
     	<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
     	<!-- AdminLTE for demo purposes -->
@@ -110,32 +111,75 @@
     					var tr_str;
     					for (var i = 0; i < response.length; i++) {
     						tr_str +=
-    							'<tr class="text-center" >' +
-    							'<td><button class="btn btn-sm btn-primary">Detail</button></td>' +
+    							'<tr class="text-center">' +
+    							'<td><button class="btn btn-sm btn-danger" onclick="hapusWithdraw(&quot;'+response[i].username+'&quot;,&quot;'+response[i].tanggal.toString()+'&quot;)">Hapus</button></td>' +
     							'<td>' + response[i].username + '</td>' +
     							'<td>' + response[i].tanggal + '</td>' +
     							'<td>' + response[i].nominal + '</td>' +
     							'<td>' + response[i].admin_fee + '</td>' +
-								'<td>' + response[i].total + '</td>' +
-								'<td>' + response[i].status + '</td>' +
+    							'<td>' + response[i].total + '</td>' +
+    							'<td>' + response[i].status + '</td>' +
+    							'<td><button class="btn btn-sm btn-warning" onclick="verifikasiWithdraw(&quot;'+response[i].username+'&quot;,&quot;'+response[i].tanggal.toString()+'&quot;)">Verifikasi</button></td>' +
     							'</tr>';
     					}
     					$('#datawithdraw').append(tr_str);
     					$("#tablemember").DataTable({
-                     		'pageLength': 25,
+    						'pageLength': 25,
     						'scrollX': true,
-                      		dom: 'Bfrtip',
+    						dom: 'Bfrtip',
     						buttons: [{
-                        		className: 'btn btn-success',
+    							className: 'btn btn-success',
     							text: 'New Member',
     							action: function (e, dt, node, config) {
-
     							}
     						}]
     					});
     				}
     			})
     		});
+
+    		function hapusWithdraw(username,tanggal) {
+				urls = "delete_withdraw/";
+    			$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urls + username,
+					type: 'POST',
+					data: {tanggal:tanggal},
+					success: function (response) {
+						$("#submit").html("tunggu..");
+						if (response == "berhasil menghapus data") {
+							alert("Berhasil Verifikasi");
+							location.reload();
+						} else {
+							alert(response);
+						}
+					},
+					error: function () {
+						alert('Gagal Verifikasi');
+					}
+				});
+    		}
+
+			function verifikasiWithdraw(username,tanggal) {
+				urls = "update_verifikasi_withdraw/";
+    			$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urls + username,
+					type: 'POST',
+					data: {tanggal:tanggal},
+					success: function (response) {
+						$("#submit").html("tunggu..");
+						if (response == "verifikasi sukses") {
+							alert("Berhasil Verifikasi");
+							location.reload();
+						} else {
+							alert(response);
+						}
+					},
+					error: function () {
+						alert('Gagal');
+					}
+				});
+    		}
+
     	</script>
     </body>
 

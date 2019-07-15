@@ -111,6 +111,12 @@
 
 		<script>
 			$(document).ready(function () {
+				const formatUang = new Intl.NumberFormat('id-ID', {
+					style: 'currency',
+					currency: 'IDR',
+					minimumFractionDigits: 2
+				});
+
 				userCookie = getCookie("memberCookie");
 				urls = "get_specificuser/";
 
@@ -139,10 +145,10 @@
 					dataType: "json",
 					success: function (response) {
 						console.log(response.bv_kanan);
-						$("#bvkiri").text(response.bv_kiri);
-						$("#bvkanan").text(response.bv_kanan);
-						$("#icash").text(response.icash);
-						$("#poin").text(response.poin);
+						$("#bvkiri").text(formatUang.format(response.bv_kiri*2000));
+						$("#bvkanan").text(formatUang.format(response.bv_kanan*2000));
+						$("#icash").text(formatUang.format(response.icash));
+						$("#poin").text(formatUang.format(response.poin));
 					}
 				})
 			})

@@ -91,6 +91,11 @@
 		
 		<script>
 			$(document).ready(function () {
+				const formatUang = new Intl.NumberFormat('id-ID', {
+					style: 'currency',
+					currency: 'IDR',
+					minimumFractionDigits: 2
+				});
 				userCookie = getCookie("memberCookie");
 				urls = "get_currentuser_bonussponsor";
 
@@ -110,8 +115,8 @@
     							'<tr class="text-center" >' +
 								'<td>' + response[i].sponsor+ '</td>' +
     							'<td>' + response[i].username_member+ '</td>' +
-    							'<td>' + response[i].nominal+'</td>' +
-								'<td>' + response[i].poin+'</td>' +
+    							'<td>' + formatUang.format(response[i].nominal)+'</td>' +
+								'<td>' + formatUang.format(response[i].poin)+'</td>' +
     							'</tr>';
     					}
     					$('#databonussponsor').append(tr_str);
