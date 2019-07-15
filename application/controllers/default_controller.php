@@ -227,7 +227,27 @@ class default_controller extends CI_Controller {
 		}
 	}
 
-	//note: menagambil semua downline user, belum selesai
+	//note: mengambil semua downline user dengan parameter username
+	public function get_alldownlineuser($id, $return_var = NULL){
+		$childrentemp = $this->get_downlineuser($id,true); //get first level children
+		$children = []; //initialize main children data
+		while (!empty($childrentemp)) {
+			$nextlevelchildren = []; //initialize next level children data
+			foreach ($childrentemp as $child) {
+				set_time_limit(30); //reset timeout
+				$children[]=$child; //store all child to main children data
+				$nextlevelchildren = array_merge($nextlevelchildren,$this->get_downlineuser($child['username'],true));
+			}
+			$childrentemp = $nextlevelchildren;
+		}
+		if ($return_var == true) {
+			return $children;
+		}else{
+			echo json_encode($children);
+		}
+	}
+
+	//note: mengambil satu level downline user dengan parameter username
 	public function get_downlineuser($id, $return_var = NULL){
 		$data = $this->default_model->get_data_member_filter(array('status'=> 'active','replacement_user'=>$id));
 		if (empty($data)){
@@ -393,8 +413,6 @@ class default_controller extends CI_Controller {
 			echo $insertStatus;
 		}
 	}
-
-
 
 
 
@@ -626,6 +644,113 @@ class default_controller extends CI_Controller {
 
 
 
+	//note: payout bonus pair semua member
+	//
+	//output: data member kosong / gagal menginput bonus pair $member / gagal menginput bonus pair kedua $member
+	//output: gagal menambah icash $member / gagal menambah poin $member / gagal mengurangi bv $member 
+	//output: payout bonus pair $member sukses 
+	public function update_payout_bonuspair(){
+		//ambil member yang memiliki bv kiri dan kanan
+		$allActiveMember= $this->get_filtereduser(array('status'=> 'active','bv_kiri >'=>0, 'bv_kanan >'=>0), true);
+		if (empty($allActiveMember)) {
+			echo 'data member kosong';
+		}else{
+			$parameter = $this->get_parameter(true);
+			foreach ($allActiveMember as $member) {
+				set_time_limit(30); //reset timeout tiap member
+
+				//hitung payout BV
+				if ($member['bv_kiri']<$member['bv_kanan']) {
+					$payoutBV = $member['bv_kiri'];
+				}else{
+					$payoutBV = $member['bv_kanan'];
+				}
+
+				//cek apakah bv melebihi batas payout
+				if ($payoutBV>$parameter['batas_pairing_pertama']) {
+					$payoutBV2 = $payoutBV-$parameter['batas_pairing_pertama'];
+					$payoutBV = $parameter['batas_pairing_pertama'];
+				}else{
+					$payoutBV2 = 0;
+				}
+
+				date_default_timezone_set('Asia/Jakarta');
+				$tanggal = date('Y-m-d H:i:s');
+				$total = $payoutBV*$parameter['bonus_pairing_pertama'];
+				$icash = $total*((100-$parameter['persentase_poin'])/100);
+				$poin = $total*($parameter['persentase_poin']/100);
+				//insert tabel bonus pair
+				$data = array(
+					'username' => $member['username'],
+					'tanggal' => $tanggal,
+					'harga_pair' => $parameter['bonus_pairing_pertama'],
+					'jumlah_pair' => $payoutBV,
+					'total' => $total,
+					'icash' => $icash,
+					'poin' => $poin
+				);
+				$insertStatus = $this->default_model->insert_bonuspair($data);
+
+				if ($insertStatus == "berhasil mengubah data"){
+					if ($payoutBV2>0) {
+						//bonus pairing kedua bila melebihi batas
+						$total2 = $payoutBV2*$parameter['bonus_pairing_kedua'];
+						$icash2 = $total2*((100-$parameter['persentase_poin'])/100);
+						$poin2 = $total2*($parameter['persentase_poin']/100);
+						//insert tabel bonus pair
+						$data = array(
+							'username' => $member['username'],
+							'tanggal' => $tanggal,
+							'harga_pair' => $parameter['bonus_pairing_kedua'],
+							'jumlah_pair' => $payoutBV2,
+							'total' => $total2,
+							'icash' => $icash2,
+							'poin' => $poin2
+						);
+						$insertStatus = $this->default_model->insert_bonuspair($data);
+						if ($insertStatus != "berhasil mengubah data") {
+							echo "gagal menginput bonus pair kedua ".$member['username']."<br>";
+						}
+					}else{
+						$total2 = 0;
+						$icash2 = 0;
+						$poin2 = 0;
+					}
+
+					//update icash, poin, dan bv member
+					$icash = $icash+$icash2;
+					$poin = $poin+$poin2;
+					$payoutBV = $payoutBV+$payoutBV2;
+
+
+
+					//tambah icash member
+					$insertStatus = $this->default_model->update_add_icash($member['username'],$icash);
+					if ($insertStatus == "berhasil mengubah data"){
+					//tambah poin member
+						$insertStatus = $this->default_model->update_add_poin($member['username'],$poin);
+						if ($insertStatus == "berhasil mengubah data"){
+							//kurangi bv member
+							$insertStatus = $this->default_model->update_subtract_bv($member['username'],$payoutBV);
+							if ($insertStatus == "berhasil mengubah data"){
+								echo "payout bonus pair ".$member['username']." sukses <br>";
+							}else{
+								echo "gagal mengurangi bv ".$member['username']."<br>";
+							}
+						}else{
+							echo "gagal menambah poin ".$member['username']."<br>";
+						}
+					}else{
+						echo "gagal menambah icash ".$member['username']."<br>";
+					}
+				}else{
+					echo "gagal menginput bonus pair ".$member['username']."<br>";
+				}
+			}
+		}
+	}
+
+
 
 
 	//DELETE
@@ -816,7 +941,7 @@ class default_controller extends CI_Controller {
 
 
 
-	
+
 
 
 }

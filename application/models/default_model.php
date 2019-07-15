@@ -116,6 +116,16 @@ class default_model extends CI_Model {
 		return $return_message;
 	}
 
+	public function insert_bonuspair($data){
+		$this->db->insert('bonus_pair', $data);
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
 	public function insert_withdraw($data){
 		$this->db->insert('withdraw', $data);
 		if ($this->db->affected_rows() > 0 ) {
@@ -225,18 +235,6 @@ class default_model extends CI_Model {
 		return $return_message;
 	}
 
-	public function update_subtract_bvkiri($id, $value){
-		$this->db->where('username', $id);
-		$this->db->set('bv_kiri', 'bv_kiri-'.$value,false);
-		$this->db->update('member');
-		if ($this->db->affected_rows() > 0 ) {
-			$return_message = 'berhasil mengubah data';
-		}else{
-			$return_message = 'gagal mengubah data';
-		}
-		return $return_message;
-	}
-
 	public function update_add_bvkanan($id, $value){
 		$this->db->where('username', $id);
 		$this->db->set('bv_kanan', 'bv_kanan+'.$value,false);
@@ -249,9 +247,10 @@ class default_model extends CI_Model {
 		return $return_message;
 	}
 
-	public function update_subtract_bvkanan($id, $value){
+	public function update_subtract_bv($id, $value){
 		$this->db->where('username', $id);
 		$this->db->set('bv_kanan', 'bv_kanan-'.$value,false);
+		$this->db->set('bv_kiri', 'bv_kiri-'.$value,false);
 		$this->db->update('member');
 		if ($this->db->affected_rows() > 0 ) {
 			$return_message = 'berhasil mengubah data';
