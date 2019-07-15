@@ -32,19 +32,26 @@ class default_model extends CI_Model {
 		return $query->result_array();
 	}
 
-	public function get_data_withdraw($id = NULL){
+	public function get_data_withdraw($id = NULL, $tanggal = NULL){
 		$this->db->select('withdraw.*, member.nama');
 		$this->db->from('withdraw');
 		$this->db->join('member', 'withdraw.username = member.username', 'left');
 		if ($id == NULL){
 			$query = $this->db->get();
 			return $query->result_array();
-		}else{
+		}else if ($tanggal == NULL) {
 			$this->db->where('withdraw.username',$id);
 			$query = $this->db->get();
 			return $query->result_array();
+		}else{
+			$this->db->where('withdraw.username',$id);
+			$this->db->where('withdraw.tanggal',$tanggal);
+			$query = $this->db->get();
+			return $query->row_array();
 		}
 	}
+
+
 
 	public function get_data_bonussponsor($id = NULL){
 		if ($id == NULL){
@@ -109,6 +116,16 @@ class default_model extends CI_Model {
 		return $return_message;
 	}
 
+	public function insert_withdraw($data){
+		$this->db->insert('withdraw', $data);
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
 
 
 
@@ -128,6 +145,18 @@ class default_model extends CI_Model {
 	public function update_member($id, $data){
 		$this->db->where('username', $id);
 		$this->db->update('member', $data);
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+	public function update_withdraw($id, $tanggal, $data){
+		$this->db->where('username', $id);
+		$this->db->where('tanggal', $tanggal);
+		$this->db->update('withdraw', $data);
 		if ($this->db->affected_rows() > 0 ) {
 			$return_message = 'berhasil mengubah data';
 		}else{
@@ -239,6 +268,18 @@ class default_model extends CI_Model {
 		$this->db->where('username', $id);
 		$this->db->where('status', 'Pending');
 		$this->db->delete('member'); 
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil menghapus data';
+		}else{
+			$return_message = 'gagal menghapus data';
+		}
+		return $return_message;
+	}
+
+	public function delete_withdraw($id,$tanggal){
+		$this->db->where('username', $id);
+		$this->db->where('tanggal', $tanggal);
+		$this->db->delete('withdraw'); 
 		if ($this->db->affected_rows() > 0 ) {
 			$return_message = 'berhasil menghapus data';
 		}else{
