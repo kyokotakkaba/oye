@@ -50,7 +50,7 @@
     							</div>
     							<!-- /.box-header -->
     							<div class="box-body">
-    								<table id="tablwithdraw" class="table table-bordered table-striped">
+    								<table id="tablewithdraw" class="table table-bordered table-striped">
     									<thead>
     										<tr>
     											<th>Hapus</th>
@@ -112,72 +112,75 @@
     					for (var i = 0; i < response.length; i++) {
     						tr_str +=
     							'<tr class="text-center">' +
-    							'<td><button class="btn btn-sm btn-danger" onclick="hapusWithdraw(&quot;'+response[i].username+'&quot;,&quot;'+response[i].tanggal.toString()+'&quot;)">Hapus</button></td>' +
+    							'<td><button class="btn btn-sm btn-danger" onclick="hapusWithdraw(&quot;' +
+    							response[i].username + '&quot;,&quot;' + response[i].tanggal.toString() +
+    							'&quot;)">Hapus</button></td>' +
     							'<td>' + response[i].username + '</td>' +
     							'<td>' + response[i].tanggal + '</td>' +
     							'<td>' + response[i].nominal + '</td>' +
     							'<td>' + response[i].admin_fee + '</td>' +
     							'<td>' + response[i].total + '</td>' +
-    							'<td>' + response[i].status + '</td>' +
-    							'<td><button class="btn btn-sm btn-warning" onclick="verifikasiWithdraw(&quot;'+response[i].username+'&quot;,&quot;'+response[i].tanggal.toString()+'&quot;)">Verifikasi</button></td>' +
-    							'</tr>';
+    							'<td>' + response[i].status + '</td>';
+    						if (response[i].status != "Done") {
+    							tr_str +='<td><button class="btn btn-sm btn-warning" onclick="verifikasiWithdraw(&quot;' +response[i].username + '&quot;,&quot;' + response[i].tanggal.toString() + '&quot;)">Verifikasi</button></td>' ;
+    						} else {
+    							tr_str += '<td></td>';
+    						}
+
+    						tr_str +='</tr>';
     					}
     					$('#datawithdraw').append(tr_str);
-    					$("#tablemember").DataTable({
+    					$("#tablewithdraw").DataTable({
     						'pageLength': 25,
-    						'scrollX': true,
-    						dom: 'Bfrtip',
-    						buttons: [{
-    							className: 'btn btn-success',
-    							text: 'New Member',
-    							action: function (e, dt, node, config) {
-    							}
-    						}]
     					});
     				}
     			})
     		});
 
-    		function hapusWithdraw(username,tanggal) {
-				urls = "delete_withdraw/";
+    		function hapusWithdraw(username, tanggal) {
+    			urls = "delete_withdraw/";
     			$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls + username,
-					type: 'POST',
-					data: {tanggal:tanggal},
-					success: function (response) {
-						$("#submit").html("tunggu..");
-						if (response == "berhasil menghapus data") {
-							alert("Berhasil Verifikasi");
-							location.reload();
-						} else {
-							alert(response);
-						}
-					},
-					error: function () {
-						alert('Gagal Verifikasi');
-					}
-				});
+    				url: "<?php echo base_url() ?>index.php/" + urls + username,
+    				type: 'POST',
+    				data: {
+    					tanggal: tanggal
+    				},
+    				success: function (response) {
+    					$("#submit").html("tunggu..");
+    					if (response == "berhasil menghapus data") {
+    						alert("Berhasil Verifikasi");
+    						location.reload();
+    					} else {
+    						alert(response);
+    					}
+    				},
+    				error: function () {
+    					alert('Gagal Verifikasi');
+    				}
+    			});
     		}
 
-			function verifikasiWithdraw(username,tanggal) {
-				urls = "update_verifikasi_withdraw/";
+    		function verifikasiWithdraw(username, tanggal) {
+    			urls = "update_verifikasi_withdraw/";
     			$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls + username,
-					type: 'POST',
-					data: {tanggal:tanggal},
-					success: function (response) {
-						$("#submit").html("tunggu..");
-						if (response == "verifikasi sukses") {
-							alert("Berhasil Verifikasi");
-							location.reload();
-						} else {
-							alert(response);
-						}
-					},
-					error: function () {
-						alert('Gagal');
-					}
-				});
+    				url: "<?php echo base_url() ?>index.php/" + urls + username,
+    				type: 'POST',
+    				data: {
+    					tanggal: tanggal
+    				},
+    				success: function (response) {
+    					$("#submit").html("tunggu..");
+    					if (response == "verifikasi sukses") {
+    						alert("Berhasil Verifikasi");
+    						location.reload();
+    					} else {
+    						alert(response);
+    					}
+    				},
+    				error: function () {
+    					alert('Gagal');
+    				}
+    			});
     		}
 
     	</script>
