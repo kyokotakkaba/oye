@@ -48,10 +48,10 @@ class default_controller extends CI_Controller {
 		}
 	}
 
-	//New Member Admin
-	public function new_memberadmin(){
+	//Edit Member Admin
+	public function editmember(){
 		if ($this->checkcookieadmin()) {
-			$this->load->view('admin/new_memberadmin');
+			$this->load->view('admin/editmember');
 		}else{
 			header("Location: ".base_url()."index.php/login");
 			die();

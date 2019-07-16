@@ -54,14 +54,14 @@
     									<thead>
     										<tr>
     											<th>Option</th>
-												<th>Sponsor</th>
-												<th>Replacement User</th>
+    											<th>Sponsor</th>
+    											<th>Replacement User</th>
     											<th>Username</th>
     											<th>Nama</th>
     											<th>Email</th>
     											<th>No Telepon</th>
-												<th>Alamat</th>
-												<th>i-cash</th>
+    											<th>Alamat</th>
+    											<th>i-cash</th>
     										</tr>
     									</thead>
     									<tbody id="datamember">
@@ -93,7 +93,7 @@
     	<!-- DataTables -->
     	<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
     	<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
-       <script src="<?=base_url("bower_components/datatables_button.min.js");?>"></script>
+    	<script src="<?=base_url("bower_components/datatables_button.min.js");?>"></script>
     	<!-- AdminLTE App -->
     	<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
     	<!-- AdminLTE for demo purposes -->
@@ -101,8 +101,8 @@
     	<script>
     		$(document).ready(function () {
     			$("#member").addClass('active');
-             urls = "get_alluser";
-             new_member_url = "<?=base_url('/index.php/new_memberadmin');?>";
+    			urls = "get_alluser";
+    			new_member_url = "<?=base_url('/index.php/new_memberadmin');?>";
 
     			$.ajax({
     				url: "<?php echo base_url() ?>index.php/" + urls,
@@ -113,29 +113,37 @@
     					for (var i = 0; i < response.length; i++) {
     						tr_str +=
     							'<tr class="text-center" >' +
-								'<td><button class="btn btn-sm btn-primary">Detail</button></td>' +
-								'<td>' + response[i].sponsor+ '</td>' +
-								'<td>' + response[i].replacement_user+ '</td>' +
+    							'<td><button class="btn btn-sm btn-primary" onclick="halamanEdit(&quot;' +
+    							response[i].username + '&quot;)">Detail</button></td>' +
+    							'<td>' + response[i].sponsor + '</td>' +
+    							'<td>' + response[i].replacement_user + '</td>' +
     							'<td>' + response[i].username + '</td>' +
     							'<td>' + response[i].nama + '</td>' +
     							'<td>' + response[i].email + '</td>' +
-								'<td>' + response[i].no_telepon + '</td>' +
-								'<td>' + response[i].alamat + '</td>' +
-								'<td>' + response[i].icash+ '</td>' +
+    							'<td>' + response[i].no_telepon + '</td>' +
+    							'<td>' + response[i].alamat + '</td>' +
+    							'<td>' + response[i].icash + '</td>' +
     							'</tr>';
     					}
     					$('#datamember').append(tr_str);
     					$("#tablemember").DataTable({
-							order : [[ 1, 'asc' ]],
-							'columnDefs'	: [{
-								'orderable' : false,
-								'targets' : 0
-								}]
+    						order: [
+    							[1, 'asc']
+    						],
+    						'columnDefs': [{
+    							'orderable': false,
+    							'targets': 0
+    						}]
     					});
     				}
     			})
     		});
+
+    		function halamanEdit(username) {
+				var myPath = "/oye/index.php/editmember";
+    			document.cookie = "editMember=" + username + ";path="+myPath;
+				window.location = "<?php echo base_url() ?>index.php/editmember";
+    		}
     	</script>
     </body>
-
     </html>
