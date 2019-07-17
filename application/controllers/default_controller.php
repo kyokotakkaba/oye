@@ -475,6 +475,7 @@ class default_controller extends CI_Controller {
 	//Jika POST password kosong atau tidak ada, password tidak diupdate. Ini untuk fitur reset password oleh admin.
 	//Output: berhasil mengubah data / gagal mengubah data
 	public function update_profilmember_admin($id,$return_var = NULL){
+		$datauser = $this->get_specificuser($id,true);
 		$data = array(
 			'nama' => $this->input->post('nama'),
 			'email' => $this->input->post('email'),
@@ -485,13 +486,11 @@ class default_controller extends CI_Controller {
 			'no_rekening' => $this->input->post('no_rekening'),
 			'atas_nama_bank' => $this->input->post('atas_nama_bank'),
 			'sponsor' => $this->input->post('sponsor'),
-			'replacement_user' => $this->input->post('replacement_user'),
-			'icash' => 0,
-			'bv_kanan' => 0,
-			'bv_kiri' => 0,
-			'status' => "Pending"
 		);
 
+		if ($datauser['status']=="Pending") {
+			$data['replacement_user'] = $this->input->post('replacement_user');
+		}
 		if (!empty($this->input->post('password'))) {
 			$data['password'] = md5($this->input->post('password'));//password reset
 		}
@@ -561,8 +560,9 @@ class default_controller extends CI_Controller {
 									$dataupline = $this->get_specificuser($dataupline['replacement_user'],true);
 									$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
 									if ($insertStatus == "gagal mengubah data"){
-										$sukses = false;
-										break;
+										// $sukses = false; //comment untuk tetap jalankan program walau gagal
+										// break;
+										echo "gagal menambah bv upline ".$dataupline['username'];
 									}
 								}
 								if ($sukses) {
@@ -602,6 +602,8 @@ class default_controller extends CI_Controller {
 			$insertStatus = $this->default_model->update_add_bvkiri($idupline,1);
 		}else if ($kakidownline == 'kanan'){
 			$insertStatus = $this->default_model->update_add_bvkanan($idupline,1);
+		}else{
+			$insertStatus = "gagal mengubah data";
 		}
 		return $insertStatus;
 	}
@@ -821,6 +823,22 @@ class default_controller extends CI_Controller {
 			}
 		}
 
+	}
+
+	//Security code
+	//note: cek security code sebelum withdraw dengan request POST seperti di bawah. 
+	//Output: security code belum dibuat. Silahkan buat di halaman edit profil.
+	//Output: security code salah / security code benar
+	public function ceksecuritycode(){
+		$code = $this->input->post('security_code');
+		$data = $this->get_currentuser(true);
+		if (empty($data['security_code'])) {
+			echo "security code belum dibuat. Silahkan buat di halaman edit profil.";
+		}else if ($code == $data['security_code']){
+			echo "security code benar";
+		}else{
+			echo "security code salah";
+		}
 	}
 
 	//Check cookie
