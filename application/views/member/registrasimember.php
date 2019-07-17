@@ -60,7 +60,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Username</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="username" type="text" name="username">
+										<input class="form-control" id="usernamebaru" type="text" name="username">
 									</div>
 								</div>
 								<div class="form-group">
@@ -153,7 +153,7 @@
 				var userCookie = getCookie("memberCookie");
 
 				$("#registrasimember").addClass('active');
-				$("#username").text(userCookie);
+				// $("#usernamebaru").text(userCookie);
 
 				function getCookie(cname) {
 					var name = cname + "=";
@@ -171,35 +171,35 @@
 					return "";
 				}
 
-				function setCookie(name, value) {
-					var expires = "";
-					if (days) {
-						var date = new Date();
-						date.setTime(date.getTime() + (5 * 60 * 1000));
-						expires = "; expires=" + date.toUTCString();
-					}
-					document.cookie = name + "=" + (value || "") + expires + "; path=/";
-				}
+				
 			})
+
+			function setCookie(value) {
+					var expires = "";
+					var date = new Date();
+					date.setTime(date.getTime() + (5 * 60 * 1000));
+					expires = "; expires=" + date.toUTCString();
+					document.cookie =  "memberBaru =" + (value || "") + expires + "; path=/oye/index.php/registrasisukses";
+				}
 
 			function insertfunction(e) {
 				e.preventDefault(); // will stop the form submission						
 				urls = "insert_registrasimember";
-				var value = $('#username').val();
-
+				var value = $('#usernamebaru').val();
+				
 				var dataString = $("#insert_member").serialize();
 				console.log(dataString);
-
+				$("#submit").html("tunggu..");
 				$("#submitButton").prop("disabled", true);
 				$.ajax({
 					url: "<?php echo base_url() ?>index.php/" + urls,
 					type: 'POST',
 					data: dataString,
 					success: function (response) {
-						$("#submit").html("tunggu..");
+						console.log(value);
 						if (response == "berhasil mengubah data") {
-							setCookie(memberBaru, value);
-							window.location.href = "<?php echo base_url() ?>index.php/dashboardmember";
+							setCookie(value);
+							window.location = "<?php echo base_url() ?>index.php/registrasisukses";
 						} else {
 							alert("Gagal");
 							$("#submit").html("Submit");
