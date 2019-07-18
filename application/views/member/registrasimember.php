@@ -11,7 +11,7 @@
 		<link rel="stylesheet" href="<?=base_url("bower_components/bootstrap/dist/css/bootstrap.min.css");?>">
 		<!-- Font Awesome -->
 		<link rel="stylesheet" href="<?=base_url("bower_components/font-awesome/css/font-awesome.min.css");?>">
-		
+
 		<!-- DataTables -->
 		<link rel="stylesheet"
 			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
@@ -46,9 +46,13 @@
 					<!-- Default box -->
 					<div class="box">
 						<div class="box-header with-border">
-							<h3 class="box-title">Registrasi Member</h3>
 						</div>
 						<div class="box-body">
+							<div class="col-sm-12">
+								<h3 class="box-title">Data Diri</h3>
+								<hr>
+							</div>
+
 							<form class="form-horizontal" id="insert_member" onsubmit="insertfunction(event)">
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Replacement User</label>
@@ -60,7 +64,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Username</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="username" type="text" name="username">
+										<input class="form-control" id="usernamebaru" type="text" name="username">
 									</div>
 								</div>
 								<div class="form-group">
@@ -147,7 +151,7 @@
 		<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
 		<!-- AdminLTE App -->
 		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
-		
+
 		<script>
 			$(document).ready(function () {
 				var userCookie = getCookie("memberCookie");
@@ -170,36 +174,34 @@
 					}
 					return "";
 				}
-
-				function setCookie(name, value) {
-					var expires = "";
-					if (days) {
-						var date = new Date();
-						date.setTime(date.getTime() + (5 * 60 * 1000));
-						expires = "; expires=" + date.toUTCString();
-					}
-					document.cookie = name + "=" + (value || "") + expires + "; path=/";
-				}
 			})
+
+			function setCookie(value) {
+				var expires = "";
+				var date = new Date();
+				date.setTime(date.getTime() + (5 * 60 * 1000));
+				expires = "; expires=" + date.toUTCString();
+				document.cookie = "memberBaru =" + (value || "") + expires + "; path=/oye/index.php/registrasisukses";
+			}
 
 			function insertfunction(e) {
 				e.preventDefault(); // will stop the form submission						
 				urls = "insert_registrasimember";
-				var value = $('#username').val();
+				var value = $('#usernamebaru').val();
 
 				var dataString = $("#insert_member").serialize();
 				console.log(dataString);
-
+				$("#submit").html("tunggu..");
 				$("#submitButton").prop("disabled", true);
 				$.ajax({
 					url: "<?php echo base_url() ?>index.php/" + urls,
 					type: 'POST',
 					data: dataString,
 					success: function (response) {
-						$("#submit").html("tunggu..");
+						console.log(value);
 						if (response == "berhasil mengubah data") {
-							setCookie(memberBaru, value);
-							window.location.href = "<?php echo base_url() ?>index.php/dashboardmember";
+							setCookie(value);
+							window.location = "<?php echo base_url() ?>index.php/registrasisukses";
 						} else {
 							alert("Gagal");
 							$("#submit").html("Submit");
@@ -212,6 +214,8 @@
 					}
 				});
 			}
+
 		</script>
 	</body>
+
 	</html>

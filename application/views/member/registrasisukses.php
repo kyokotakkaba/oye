@@ -132,7 +132,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<button class="btn btn-primary" onclick="deleteCookie()">Tutup</button>
+								<button class="btn btn-primary" onclick="deleteCookie(memberBaru)">Tutup</button>
 							</div>
 
 						</div>
@@ -172,7 +172,7 @@
 				var urls = "get_specificuser/";
 
 				$("#registrasimember").addClass('active');
-				$("#username").text(": " + userCookie);
+				$("#username").text(userCookie);
 
 				function getCookie(cname) {
 					var name = cname + "=";
@@ -211,8 +211,8 @@
 				})
 			})
 			
-			function deleteCookie(){
-				document.cookie = 'memberBaru=;Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+			function deleteCookie(name){
+				document.cookie = "memberBaru=?; Path=/; Expires=Thu, 01 Jan 1970 00:00:01"
 				window.location = "<?php echo base_url() ?>index.php/registrasimember";
 			}
 		</script>
