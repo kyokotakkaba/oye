@@ -27,7 +27,7 @@
                 <!-- Menu Footer-->
                 <li class="user-footer">
                     <div class="pull-left">
-                    <a href="<?=base_url("/index.php/changepasswordmember");?>" class="btn btn-default btn-flat">Ubah Password</a>
+                    <a href="<?=base_url("/index.php/editprofilemember");?>" class="btn btn-default btn-flat">Edit Profile</a>
                     </div>
                     <div class="pull-right">
                     <a href="<?=base_url("index.php/logoutmember");?>" class="btn btn-default btn-flat">Sign out</a>

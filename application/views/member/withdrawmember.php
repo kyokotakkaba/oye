@@ -53,7 +53,7 @@
 									<div class="col-sm-9">
 										<div class="input-group">
 											<div class="input-group-addon">Rp</div>
-											<input class="form-control" id="icash"  readonly>
+											<input class="form-control" id="icash" readonly>
 										</div>
 									</div>
 								</div>
@@ -64,6 +64,14 @@
 											<div class="input-group-addon">Rp</div>
 											<input class="form-control" id="nominal" type="text" name="nominal">
 										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label"><label style="color:red">*</label>Security
+										Code</label>
+									<div class="col-sm-9">
+										<input class="form-control" id="security_code" type="password" name="security_code"
+											placeholder="Masukkan security code anda">
 									</div>
 								</div>
 								<div class="form-group">
@@ -102,7 +110,7 @@
 		<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
 		<!-- AdminLTE App -->
 		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
-		
+
 		<script>
 			$(document).ready(function () {
 				const formatUang = new Intl.NumberFormat('id-ID', {
@@ -144,19 +152,19 @@
 
 			function insertfunction(e) {
 				e.preventDefault(); // will stop the form submission						
-				urls = "insert_withdraw";
-				var nominal = $("#nominal").val();
-
-				$("#submitButton").prop("disabled", true);
+				var urlsSecuritycode = "ceksecuritycode";
+				var security_code = $("#security_code").val();
+				console.log("ins sec")
 				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls,
+					url: "<?php echo base_url() ?>index.php/" + urlsSecuritycode,
 					type: 'POST',
-					data: {nominal:nominal},
+					data: {
+						security_code: security_code
+					},
 					success: function (response) {
 						$("#submit").html("tunggu..");
-						if (response == "berhasil mengubah data") {
-							alert("Berhasil");
-							location.reload();
+						if (response == "security code benar") {
+							withdrawmember();
 						} else {
 							alert(response);
 							$("#submit").html("Submit");
@@ -168,7 +176,40 @@
 						$("#submitButton").prop("disabled", false);
 					}
 				});
+
+
+
 			}
+
+			function withdrawmember() {
+				var urls = "insert_withdraw";
+				var nominal = $("#nominal").val();
+
+				$("#submitButton").prop("disabled", true);
+				$.ajax({
+						url: "<?php echo base_url() ?>index.php/" + urls,
+						type: 'POST',
+						data: {
+							nominal: nominal
+						},
+						success: function (response) {
+							$("#submit").html("tunggu..");
+							if (response == "berhasil mengubah data") {
+								alert("Berhasil");
+								location.reload();
+							} else {
+								alert(response);
+								$("#submit").html("Submit");
+								$("#submitButton").prop("disabled", false);
+							}
+						},
+						error: function () {
+							alert('Gagal');
+							$("#submitButton").prop("disabled", false);
+						}
+					});
+				}
+
 		</script>
 	</body>
 

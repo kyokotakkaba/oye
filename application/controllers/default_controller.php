@@ -89,9 +89,9 @@ class default_controller extends CI_Controller {
 	}
 
 	//profile
-	public function editprofile(){
+	public function editprofilemember(){
 		if ($this->checkcookiemember()) {
-			$this->load->view('member/edit_profile');
+			$this->load->view('member/editprofilemember');
 		}else{
 			header("Location: ".base_url()."index.php/login");
 			die();
