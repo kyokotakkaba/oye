@@ -83,14 +83,40 @@
 							</form>
 							<!-- /. CONTENT -->
 						</div>
-						<!-- /.box-body -->
 						<div class="box-footer">
 
 						</div>
 					</div>
-					<!-- /.box -->
-				</section>
-				<!-- /.content -->
+
+					<section class="content">
+						<div class="box">
+							<div class="box-header with-border">
+								<h3 class="box-title">History Withdraw</h3>
+							</div>
+							<div class="box-body">
+								<table id="tablewithdraw" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>Username</th>
+											<th>Tanggal</th>
+											<th>Nominal</th>
+											<th>Admin Fee</th>
+											<th>Total</th>
+											<th>Status</th>
+										</tr>
+									</thead>
+									<tbody id="datawithdraw">
+									</tbody>
+								</table>
+							</div>
+							<!-- /.box-body -->
+							<div class="box-footer">
+
+							</div>
+						</div>
+						<!-- /.box -->
+					</section>
+					<!-- /.content -->
 			</div>
 			<!-- /.content-wrapper -->
 			<?php $this->load->view("member/footer");?>
@@ -120,6 +146,7 @@
 				});
 				userCookie = getCookie("memberCookie");
 				urls = "get_specificuser/";
+				urlwithdraw = "get_currentuser_withdraw";
 
 				$("#withdrawmember").addClass('active');
 				$("#username").text(userCookie);
@@ -148,6 +175,31 @@
 						$("#icash").val(formatUang.format(response.icash));
 					}
 				})
+
+				$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urlwithdraw,
+					type: 'get',
+					dataType: "json",
+					success: function (response) {
+						console.log(response);
+						var tr_str;
+						for (var i = 0; i < response.length; i++) {
+							tr_str +=
+								'<tr class="text-center">' +
+								'<td>' + response[i].username + '</td>' +
+								'<td>' + response[i].tanggal + '</td>' +
+								'<td>' + response[i].nominal + '</td>' +
+								'<td>' + response[i].admin_fee + '</td>' +
+								'<td>' + response[i].total + '</td>' +
+								'<td>' + response[i].status + '</td>' +
+								'</tr>';
+						}
+						$('#datawithdraw').append(tr_str);
+						$("#tablewithdraw").DataTable({
+							'pageLength': 25,
+						});
+					}
+				});
 			})
 
 			function insertfunction(e) {
@@ -176,9 +228,6 @@
 						$("#submitButton").prop("disabled", false);
 					}
 				});
-
-
-
 			}
 
 			function withdrawmember() {
@@ -187,28 +236,28 @@
 
 				$("#submitButton").prop("disabled", true);
 				$.ajax({
-						url: "<?php echo base_url() ?>index.php/" + urls,
-						type: 'POST',
-						data: {
-							nominal: nominal
-						},
-						success: function (response) {
-							$("#submit").html("tunggu..");
-							if (response == "berhasil mengubah data") {
-								alert("Berhasil");
-								location.reload();
-							} else {
-								alert(response);
-								$("#submit").html("Submit");
-								$("#submitButton").prop("disabled", false);
-							}
-						},
-						error: function () {
-							alert('Gagal');
+					url: "<?php echo base_url() ?>index.php/" + urls,
+					type: 'POST',
+					data: {
+						nominal: nominal
+					},
+					success: function (response) {
+						$("#submit").html("tunggu..");
+						if (response == "berhasil mengubah data") {
+							alert("Berhasil");
+							location.reload();
+						} else {
+							alert(response);
+							$("#submit").html("Submit");
 							$("#submitButton").prop("disabled", false);
 						}
-					});
-				}
+					},
+					error: function () {
+						alert('Gagal');
+						$("#submitButton").prop("disabled", false);
+					}
+				});
+			}
 
 		</script>
 	</body>

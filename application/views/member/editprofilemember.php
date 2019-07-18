@@ -203,7 +203,6 @@
 						$("#replacement_user").val(response.replacement_user);
 						$("#sponsor").val(response.sponsor);
 						$("#usernamebaru").val(response.username);
-						$("#password").val(response.password);
 						$("#nama").val(response.nama);
 						$("#email").val(response.email);
 						$("#no_telepon").val(response.no_telepon);
