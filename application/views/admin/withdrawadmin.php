@@ -11,14 +11,11 @@
     	<link rel="stylesheet" href="<?=base_url("bower_components/bootstrap/dist/css/bootstrap.min.css");?>">
     	<!-- Font Awesome -->
     	<link rel="stylesheet" href="<?=base_url("bower_components/font-awesome/css/font-awesome.min.css");?>">
-    	<!-- Ionicons -->
-    	<link rel="stylesheet" href="<?=base_url("bower_components/Ionicons/css/ionicons.min.css");?>">
     	<!-- Theme style -->
     	<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
     	<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
-    	<link rel="stylesheet"
-    		href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
-
+    	<link rel="stylesheet"href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
+		<link rel="stylesheet"href="<?=base_url("bower_components/datatables.net-bs/css/responsive.dataTables.min.css");?>">
     	<!-- Google Font -->
     	<link rel="stylesheet"
     		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -50,17 +47,16 @@
     							</div>
     							<!-- /.box-header -->
     							<div class="box-body">
-    								<table id="tablewithdraw" class="table table-bordered table-striped">
+    								<table id="tablewithdraw" class="table table-bordered table-striped" width="100%"> 
     									<thead>
     										<tr>
-    											<th>Hapus</th>
-    											<th>Username</th>
+												<th>Username</th>
+												<th>Status</th>
     											<th>Tanggal</th>
     											<th>Nominal</th>
     											<th>Admin Fee</th>
     											<th>Total</th>
-    											<th>Status</th>
-    											<th>Verifikasi</th>
+												<th>Verifikasi</th>
     										</tr>
     									</thead>
     									<tbody id="datawithdraw">
@@ -92,11 +88,9 @@
     	<!-- DataTables -->
     	<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
     	<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
+    	<script src="<?=base_url("bower_components/datatables.net/js/dataTables.responsive.min.js");?>"></script>
     	<script src="<?=base_url("bower_components/datatables_button.min.js");?>"></script>
-    	<!-- AdminLTE App -->
-    	<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
-    	<!-- AdminLTE for demo purposes -->
-    	<script src="<?=base_url("dist/js/demo.js");?>"></script>
+
     	<script>
     		$(document).ready(function () {
     			$("#withdraw").addClass('active');
@@ -110,25 +104,29 @@
     					console.log(response);
     					var tr_str;
     					for (var i = 0; i < response.length; i++) {
-    						tr_str +=
-    							'<tr class="text-center">' +
-    							'<td><button class="btn btn-sm btn-danger" onclick="hapusWithdraw(&quot;' +
-    							response[i].username + '&quot;,&quot;' + response[i].tanggal.toString() +
-    							'&quot;)">Hapus</button></td>' +
-    							'<td>' + response[i].username + '</td>' +
+							tr_str += 
+								'<tr class="text-center">'+
+								'<td>' + response[i].username + '</td>' +
+								'<td>' + response[i].status + '</td>' +
+								'<td>' + response[i].nominal + '</td>' +
     							'<td>' + response[i].tanggal + '</td>' +
-    							'<td>' + response[i].nominal + '</td>' +
     							'<td>' + response[i].admin_fee + '</td>' +
-    							'<td>' + response[i].total + '</td>' +
-    							'<td>' + response[i].status + '</td>';
-    						if (response[i].status != "Done") {
-    							tr_str +='<td><button class="btn btn-sm btn-warning" onclick="verifikasiWithdraw(&quot;' +response[i].username + '&quot;,&quot;' + response[i].tanggal.toString() + '&quot;)">Verifikasi</button></td>' ;
+    							'<td>' + response[i].total + '</td>' ;
+    							;
+								if (response[i].status != "Done") {
+    							tr_str +=
+    								'<td><button class="btn btn-sm btn-warning" onclick="verifikasiWithdraw(&quot;' +
+    								response[i].username + '&quot;,&quot;' + response[i].tanggal
+    								.toString() + '&quot;)">Verifikasi</button></td>';
     						} else {
-    							tr_str += '<td></td>';
+    							tr_str += '<td><button class="btn btn-default" disabled>Verifikasi</button></td>';
     						}
-
-    						tr_str +='</tr>';
+    						tr_str += '</tr>';
     					}
+    					$.extend($.fn.dataTable.defaults, {
+    						responsive: true
+    					});
+
     					$('#datawithdraw').append(tr_str);
     					$("#tablewithdraw").DataTable({
     						'pageLength': 25,

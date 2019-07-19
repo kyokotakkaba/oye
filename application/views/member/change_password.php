@@ -55,14 +55,14 @@
 									<label class="col-sm-3 control-label">Password Lama</label>
 									<div class="col-sm-9">
 										<input class="form-control" id="oldpassword" type="password"
-											name="oldpassword">
+											name="oldpassword" minlength="8" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Password Baru</label>
 									<div class="col-sm-9">
 										<input class="form-control" id="newpassword" type="password"
-											name="newpassword">
+											name="newpassword" minlength="8" required>
 									</div>
 								</div>
 								<div class="form-group">
