@@ -33,7 +33,7 @@ class default_model extends CI_Model {
 	}
 
 	public function get_data_withdraw($id = NULL, $tanggal = NULL){
-		$this->db->select('withdraw.*, member.nama');
+		$this->db->select('withdraw.*, member.nama, member.nama_bank, member.no_rekening, member.atas_nama_bank');
 		$this->db->from('withdraw');
 		$this->db->join('member', 'withdraw.username = member.username', 'left');
 		if ($id == NULL){
