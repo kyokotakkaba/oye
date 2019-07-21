@@ -58,67 +58,67 @@
 									<label class="col-sm-3 control-label">Replacement User</label>
 									<div class="col-sm-9">
 										<input class="form-control" id="replacement_user" type="text"
-											name="replacement_user">
+											name="replacement_user" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Username</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="usernamebaru" type="text" name="username">
+										<input class="form-control" id="usernamebaru" type="text" name="username" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Password</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="password" type="password" name="password">
+										<input class="form-control" id="password" type="password" name="password" minlength="8" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nama Lengkap</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="nama" type="text" name="nama">
+										<input class="form-control" id="nama" type="text" name="nama" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Email</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="email" type="email" name="email">
+										<input class="form-control" id="email" type="email" name="email" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nomor Telepon</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="no_telepon" type="text" name="no_telepon">
+										<input class="form-control" id="no_telepon" type="text" name="no_telepon" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">KTP</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="ktp" type="text" name="ktp">
+										<input class="form-control" id="ktp" type="text" name="ktp" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Alamat</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="alamat" type="text" name="alamat">
+										<input class="form-control" id="alamat" type="text" name="alamat" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nama Bank</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="nama_bank" type="text" name="nama_bank">
+										<input class="form-control" id="nama_bank" type="text" name="nama_bank" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nomor Rekening</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="no_rekening" type="text" name="no_rekening">
+										<input class="form-control" id="no_rekening" type="text" name="no_rekening" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Atas Nama Bank</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank">
+										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank" required>
 									</div>
 								</div>
 								<div class="form-group">

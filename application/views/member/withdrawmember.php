@@ -14,6 +14,8 @@
 		<!-- DataTables -->
 		<link rel="stylesheet"
 			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
+			<link rel="stylesheet"
+			href="<?=base_url("bower_components/datatables.net-bs/css/responsive.dataTables.min.css");?>">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
 		<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
@@ -62,7 +64,8 @@
 									<div class="col-sm-9">
 										<div class="input-group">
 											<div class="input-group-addon">Rp</div>
-											<input class="form-control" id="nominal" type="text" name="nominal">
+											<input class="form-control" id="nominal" type="text" name="nominal"
+												placeholder="Minimal Penarikan Rp 100.000" onchange="checknominal()">
 										</div>
 									</div>
 								</div>
@@ -94,7 +97,7 @@
 								<h3 class="box-title">History Withdraw</h3>
 							</div>
 							<div class="box-body">
-								<table id="tablewithdraw" class="table table-bordered table-striped">
+								<table id="tablewithdraw" class="table table-bordered table-striped" width="100%">
 									<thead>
 										<tr>
 											<th>Username</th>
@@ -134,6 +137,7 @@
 		<!-- DataTables -->
 		<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
 		<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
+		<script src="<?=base_url("bower_components/datatables.net/js/dataTables.responsive.min.js");?>"></script>
 		<!-- AdminLTE App -->
 		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
 
@@ -194,6 +198,9 @@
 								'<td>' + response[i].status + '</td>' +
 								'</tr>';
 						}
+						$.extend($.fn.dataTable.defaults, {
+							responsive: true
+						});
 						$('#datawithdraw').append(tr_str);
 						$("#tablewithdraw").DataTable({
 							'pageLength': 25,
@@ -204,30 +211,38 @@
 
 			function insertfunction(e) {
 				e.preventDefault(); // will stop the form submission						
-				var urlsSecuritycode = "ceksecuritycode";
-				var security_code = $("#security_code").val();
-				console.log("ins sec")
-				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urlsSecuritycode,
-					type: 'POST',
-					data: {
-						security_code: security_code
-					},
-					success: function (response) {
-						$("#submit").html("tunggu..");
-						if (response == "security code benar") {
-							withdrawmember();
-						} else {
-							alert(response);
-							$("#submit").html("Submit");
+
+				var nominal = $("#nominal").val();
+				var intnominal = parseInt(nominal);
+				if (intnominal > 0 && intnominal >= 100000) {
+					var urlsSecuritycode = "ceksecuritycode";
+					var security_code = $("#security_code").val();
+					console.log("ins sec")
+					$.ajax({
+						url: "<?php echo base_url() ?>index.php/" + urlsSecuritycode,
+						type: 'POST',
+						data: {
+							security_code: security_code
+						},
+						success: function (response) {
+							$("#submit").html("tunggu..");
+							if (response == "security code benar") {
+								withdrawmember();
+							} else {
+								alert(response);
+								$("#submit").html("Submit");
+								$("#submitButton").prop("disabled", false);
+							}
+						},
+						error: function () {
+							alert('Gagal');
 							$("#submitButton").prop("disabled", false);
 						}
-					},
-					error: function () {
-						alert('Gagal');
-						$("#submitButton").prop("disabled", false);
-					}
-				});
+					});
+				}else{
+					alert('Nominal harus lebih dari Rp 100.000');
+				}
+
 			}
 
 			function withdrawmember() {

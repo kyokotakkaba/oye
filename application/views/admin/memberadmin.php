@@ -11,13 +11,11 @@
     	<link rel="stylesheet" href="<?=base_url("bower_components/bootstrap/dist/css/bootstrap.min.css");?>">
     	<!-- Font Awesome -->
     	<link rel="stylesheet" href="<?=base_url("bower_components/font-awesome/css/font-awesome.min.css");?>">
-    	<!-- Ionicons -->
-    	<link rel="stylesheet" href="<?=base_url("bower_components/Ionicons/css/ionicons.min.css");?>">
     	<!-- Theme style -->
     	<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
     	<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
-    	<link rel="stylesheet"
-    		href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
+    	<link rel="stylesheet"href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
+		<link rel="stylesheet"href="<?=base_url("bower_components/datatables.net-bs/css/responsive.dataTables.min.css");?>">
 
     	<!-- Google Font -->
     	<link rel="stylesheet"
@@ -50,7 +48,7 @@
     							</div>
     							<!-- /.box-header -->
     							<div class="box-body">
-    								<table id="tablemember" class="table table-bordered table-striped">
+    								<table id="tablemember" class="table table-bordered table-striped" width="100%">
     									<thead>
     										<tr>
     											<th>Option</th>
@@ -93,6 +91,7 @@
     	<!-- DataTables -->
     	<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
     	<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
+		<script src="<?=base_url("bower_components/datatables.net/js/dataTables.responsive.min.js");?>"></script>
     	<script src="<?=base_url("bower_components/datatables_button.min.js");?>"></script>
     	<!-- AdminLTE App -->
     	<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
@@ -124,7 +123,10 @@
     							'<td>' + response[i].alamat + '</td>' +
     							'<td>' + response[i].icash + '</td>' +
     							'</tr>';
-    					}
+						}
+						$.extend($.fn.dataTable.defaults, {
+    						responsive: true
+    					});
     					$('#datamember').append(tr_str);
     					$("#tablemember").DataTable({
     						order: [
