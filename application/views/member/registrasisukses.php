@@ -122,12 +122,27 @@
 										</tr>
 										<tr>
 											<td>
+												<span>Alamat Pengiriman :<b id="bank_admin"> </b></span>
+											</td>
+										</tr>
+										<tr>
+											<td>
 												<span>Biaya<b id="nominal">Rp 100.000</b></span>
 											</td>
 										</tr>
 										<tr>
 											<td>
+												<span>====================================</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
 												<span><b>*Nominal Transfer harus sesuai dengan yang tertera</b></span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<span><b>*Segera catat, dalam 5 menit halaman ini tidak bisa di akses kembali</b></span>
 											</td>
 										</tr>
 									</tbody>
@@ -195,7 +210,7 @@
 					type: 'get',
 					dataType: "json",
 					success: function (response) {
-						console.log(response);
+						// console.log(response);
 						$("#replacement_user").text(": " + response.replacement_user);
 						$("#usernameBaru").text(": " + response.username);
 						$("#nama").text(": " + response.nama);
@@ -207,6 +222,15 @@
 						$("#no_rekening").text(": " + response.no_rekening);
 						$("#atas_nama_bank").text(": " + response.atas_nama_bank);
 						$("#nominal").text(": " + formatUang.format(response.nominal_pembayaran));
+					}
+				})
+
+				$.ajax({
+					url: "<?php echo base_url() ?>index.php/get_parameter",
+					type: 'get',
+					dataType: "json",
+					success: function (response) {
+						$("#bank_admin").text(" "+response.nama_bank+" "+response.no_rekening);
 					}
 				})
 			})

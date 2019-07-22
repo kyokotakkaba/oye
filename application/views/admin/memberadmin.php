@@ -52,14 +52,13 @@
     									<thead>
     										<tr>
     											<th>Option</th>
-    											<th>Sponsor</th>
-    											<th>Replacement User</th>
     											<th>Username</th>
-    											<th>Nama</th>
+												<th>Nama</th>
+												<th>Replacement User</th>
     											<th>Email</th>
     											<th>No Telepon</th>
-    											<th>Alamat</th>
     											<th>i-cash</th>
+												<th>Poin</th>
     										</tr>
     									</thead>
     									<tbody id="datamember">
@@ -108,20 +107,20 @@
     				type: 'get',
     				dataType: "json",
     				success: function (response) {
+						console.log(response);
     					var tr_str;
     					for (var i = 0; i < response.length; i++) {
     						tr_str +=
     							'<tr class="text-center" >' +
     							'<td><button class="btn btn-sm btn-primary" onclick="halamanEdit(&quot;' +
     							response[i].username + '&quot;)">Detail</button></td>' +
-    							'<td>' + response[i].sponsor + '</td>' +
-    							'<td>' + response[i].replacement_user + '</td>' +
     							'<td>' + response[i].username + '</td>' +
     							'<td>' + response[i].nama + '</td>' +
+								'<td>' + response[i].replacement_user + '</td>' +
     							'<td>' + response[i].email + '</td>' +
     							'<td>' + response[i].no_telepon + '</td>' +
-    							'<td>' + response[i].alamat + '</td>' +
     							'<td>' + response[i].icash + '</td>' +
+								'<td>' + response[i].poin + '</td>' +
     							'</tr>';
 						}
 						$.extend($.fn.dataTable.defaults, {

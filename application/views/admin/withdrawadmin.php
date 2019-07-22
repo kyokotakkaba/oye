@@ -110,11 +110,11 @@
     							'<tr class="text-center">' +
     							'<td>' + response[i].username + '</td>' +
     							'<td>' + response[i].status + '</td>' +
+								'<td>' + response[i].tanggal + '</td>' +
     							'<td>' + response[i].nominal + '</td>' +
-    							'<td>' + response[i].tanggal + '</td>' +
     							'<td>' + response[i].admin_fee + '</td>' +
     							'<td>' + response[i].total + '</td>';;
-    						if (response[i].status != "Done") {
+    						if (response[i].status != "Success") {
     							tr_str +=
     								'<td><button class="btn btn-sm btn-warning" onclick="verifikasiWithdraw(&quot;' +
     								response[i].username + '&quot;,&quot;' + response[i].tanggal

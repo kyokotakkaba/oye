@@ -71,7 +71,7 @@
 									<label class="col-sm-3 control-label">Password</label>
 									<div class="col-sm-9">
 										<input class="form-control" id="password" type="password" name="password"
-											minlength="8" required>
+											minlength="6" required>
 									</div>
 								</div>
 								<div class="form-group">
@@ -218,7 +218,6 @@
 						}
 					});
 				} else {
-
 				}
 			}
 

@@ -37,7 +37,7 @@
         <!-- Header starts here -->
         <header id="Header">
             <nav class="main-navigation">
-                <div class="container clearfix">
+                <div class="container treclearfix">
                     <div class="site-logo-wrap">
                         <a class="logo" href="#"><img src="<?=base_url("dist/images/ds-logo.svg");?>" alt="Design Studio"></a>
                     </div>
