@@ -14,7 +14,7 @@
 		<!-- DataTables -->
 		<link rel="stylesheet"
 			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
-			<link rel="stylesheet"
+		<link rel="stylesheet"
 			href="<?=base_url("bower_components/datatables.net-bs/css/responsive.dataTables.min.css");?>">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
@@ -210,39 +210,41 @@
 			})
 
 			function insertfunction(e) {
-				e.preventDefault(); // will stop the form submission						
-
-				var nominal = $("#nominal").val();
-				var intnominal = parseInt(nominal);
-				if (intnominal > 0 && intnominal >= 100000) {
-					var urlsSecuritycode = "ceksecuritycode";
-					var security_code = $("#security_code").val();
-					console.log("ins sec")
-					$.ajax({
-						url: "<?php echo base_url() ?>index.php/" + urlsSecuritycode,
-						type: 'POST',
-						data: {
-							security_code: security_code
-						},
-						success: function (response) {
-							$("#submit").html("tunggu..");
-							if (response == "security code benar") {
-								withdrawmember();
-							} else {
-								alert(response);
-								$("#submit").html("Submit");
+				if (confirm("Apakah anda yakin ?")) {
+					e.preventDefault(); // will stop the form submission						
+					var nominal = $("#nominal").val();
+					var intnominal = parseInt(nominal);
+					if (intnominal > 0 && intnominal >= 100000) {
+						var urlsSecuritycode = "ceksecuritycode";
+						var security_code = $("#security_code").val();
+						console.log("ins sec")
+						$.ajax({
+							url: "<?php echo base_url() ?>index.php/" + urlsSecuritycode,
+							type: 'POST',
+							data: {
+								security_code: security_code
+							},
+							success: function (response) {
+								$("#submit").html("tunggu..");
+								if (response == "security code benar") {
+									withdrawmember();
+								} else {
+									alert(response);
+									$("#submit").html("Submit");
+									$("#submitButton").prop("disabled", false);
+								}
+							},
+							error: function () {
+								alert('Gagal');
 								$("#submitButton").prop("disabled", false);
 							}
-						},
-						error: function () {
-							alert('Gagal');
-							$("#submitButton").prop("disabled", false);
-						}
-					});
-				}else{
-					alert('Nominal harus lebih dari Rp 100.000');
-				}
+						});
+					} else {
+						alert('Nominal harus lebih dari Rp 100.000');
+					}
+				} else {
 
+				}
 			}
 
 			function withdrawmember() {

@@ -70,7 +70,8 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Password</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="password" type="password" name="password" minlength="8" required>
+										<input class="form-control" id="password" type="password" name="password"
+											minlength="8" required>
 									</div>
 								</div>
 								<div class="form-group">
@@ -112,13 +113,15 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nomor Rekening</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="no_rekening" type="text" name="no_rekening" required>
+										<input class="form-control" id="no_rekening" type="text" name="no_rekening"
+											required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Atas Nama Bank</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank" required>
+										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank"
+											required>
 									</div>
 								</div>
 								<div class="form-group">
@@ -185,34 +188,38 @@
 			}
 
 			function insertfunction(e) {
-				e.preventDefault(); // will stop the form submission						
-				urls = "insert_registrasimember";
-				var value = $('#usernamebaru').val();
+				if (confirm("Apakah anda yakin ?")) {
+					e.preventDefault(); // will stop the form submission						
+					urls = "insert_registrasimember";
+					var value = $('#usernamebaru').val();
+					var dataString = $("#insert_member").serialize();
 
-				var dataString = $("#insert_member").serialize();
-				console.log(dataString);
-				$("#submit").html("tunggu..");
-				$("#submitButton").prop("disabled", true);
-				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls,
-					type: 'POST',
-					data: dataString,
-					success: function (response) {
-						console.log(value);
-						if (response == "berhasil mengubah data") {
-							setCookie(value);
-							window.location = "<?php echo base_url() ?>index.php/registrasisukses";
-						} else {
-							alert("Gagal");
-							$("#submit").html("Submit");
+					$("#submit").html("tunggu..");
+					$("#submitButton").prop("disabled", true);
+
+					$.ajax({
+						url: "<?php echo base_url() ?>index.php/" + urls,
+						type: 'POST',
+						data: dataString,
+						success: function (response) {
+							console.log(value);
+							if (response == "berhasil mengubah data") {
+								setCookie(value);
+								window.location = "<?php echo base_url() ?>index.php/registrasisukses";
+							} else {
+								alert("Gagal");
+								$("#submit").html("Submit");
+								$("#submitButton").prop("disabled", false);
+							}
+						},
+						error: function () {
+							alert('Gagal');
 							$("#submitButton").prop("disabled", false);
 						}
-					},
-					error: function () {
-						alert('Gagal');
-						$("#submitButton").prop("disabled", false);
-					}
-				});
+					});
+				} else {
+
+				}
 			}
 
 		</script>
