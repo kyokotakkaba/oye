@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 15, 2019 at 04:01 PM
+-- Generation Time: Jul 21, 2019 at 05:22 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 5.6.38
 
@@ -61,9 +61,9 @@ CREATE TABLE `bonus_pair` (
 --
 
 INSERT INTO `bonus_pair` (`username`, `tanggal`, `harga_pair`, `jumlah_pair`, `total`, `icash`, `poin`) VALUES
-('benny', '2019-07-15 20:56:24', 4000, 5, 20000, 16000, 4000),
-('enniecorn', '2019-07-15 20:56:24', 2000, 4, 8000, 6400, 1600),
-('enniecorn', '2019-07-15 20:56:24', 4000, 16, 64000, 51200, 12800);
+('oye', '2019-07-18 18:40:01', 4000, 1, 4000, 3200, 800),
+('oye', '2019-07-18 18:41:50', 2000, 4, 8000, 6400, 1600),
+('oye', '2019-07-18 18:41:50', 4000, 16, 64000, 51200, 12800);
 
 -- --------------------------------------------------------
 
@@ -83,8 +83,10 @@ CREATE TABLE `bonus_sponsor` (
 --
 
 INSERT INTO `bonus_sponsor` (`sponsor`, `username_member`, `nominal`, `poin`) VALUES
-('enniecorn', 'aks', 40000, 10000),
-('enniecorn', 'benny', 40000, 10000);
+('oye', 'oye2', 40000, 10000),
+('oye', 'oye3', 40000, 10000),
+('oye', 'oye6', 40000, 10000),
+('oye2', 'oye4', 40000, 10000);
 
 -- --------------------------------------------------------
 
@@ -121,13 +123,12 @@ CREATE TABLE `member` (
 --
 
 INSERT INTO `member` (`username`, `password`, `nama`, `email`, `no_telepon`, `ktp`, `alamat`, `nama_bank`, `no_rekening`, `atas_nama_bank`, `security_code`, `sponsor`, `replacement_user`, `posisi_kaki`, `icash`, `poin`, `bv_kanan`, `bv_kiri`, `tanggal_registrasi`, `nominal_pembayaran`, `status`) VALUES
-('abc', '827ccb0eea8a706c4c34a16891f84e7b', 'abcd edfg', '', '', '', '', '', '', '', NULL, 'benny', 'enniecorn', NULL, 0, 0, 0, 0, '2019-07-09 17:53:05', 100667, 'Pending'),
-('aks', '827ccb0eea8a706c4c34a16891f84e7b', 'andre', 'ksabfjshdf@dfhgd.com', '', '', '', '', '', '', NULL, 'enniecorn', 'benny', 'kiri', 0, 0, 0, 0, '2019-07-08 18:09:31', 100713, 'active'),
-('andreas', '827ccb0eea8a706c4c34a16891f84e7b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'enniecorn', 'enniecorn', 'kanan', 0, 0, 0, 0, NULL, NULL, 'active'),
-('ben12', '827ccb0eea8a706c4c34a16891f84e7b', 'Benny', '', '', '', '', '', '', '', NULL, 'benny', 'enniecorn', NULL, 0, 0, 0, 0, '2019-07-09 16:43:56', 100513, 'Pending'),
-('benny', '827ccb0eea8a706c4c34a16891f84e7b', 'benny hartono', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'enniecorn', 'enniecorn', 'kiri', 16000, 4000, 5, 0, NULL, NULL, 'active'),
-('enniecorn', '827ccb0eea8a706c4c34a16891f84e7b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 57600, 14400, 0, 16, '2019-07-06 13:03:19', NULL, 'active'),
-('yoko', '827ccb0eea8a706c4c34a16891f84e7b', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'enniecorn', NULL, 0, 0, 0, 0, '2019-07-06 14:25:13', 100584, 'Pending');
+('oye', '827ccb0eea8a706c4c34a16891f84e7b', 'OYE', 'oye@gmail.com', '', '945789547985479', '', '', '', '', '123456', NULL, NULL, NULL, 590800, 45200, 1, 10, '2019-07-06 13:03:19', NULL, 'active'),
+('oye2', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 2', '', '', '94859845895', '', '', '', '', NULL, 'oye', 'oye', 'kiri', 40000, 10000, 0, 1, '2019-07-18 18:22:36', 100869, 'active'),
+('oye3', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 3', '', '', '094869548609546854069', '', '', '', '', NULL, 'oye', 'oye', 'kanan', 0, 0, 0, 1, '2019-07-18 18:34:03', 100931, 'active'),
+('oye4', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 4', '', '', '95846984569854', '', '', '', '', NULL, 'oye2', 'oye2', 'kiri', 0, 0, 0, 0, '2019-07-18 18:36:28', 100537, 'active'),
+('oye5', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 5', '', '', '95894864968', '', '', '', '', NULL, 'oye', 'oye2', NULL, 0, 0, 0, 0, '2019-07-18 19:01:20', 100843, 'Pending'),
+('oye6', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 6', '', '', '45984594859458945', '', '', '', '', NULL, 'oye', 'oye3', 'kiri', 0, 0, 0, 0, '2019-07-18 19:02:21', 100561, 'active');
 
 -- --------------------------------------------------------
 
@@ -143,15 +144,19 @@ CREATE TABLE `parameter` (
   `bonus_pairing_kedua` int(11) NOT NULL DEFAULT '0',
   `batas_pairing_pertama` int(11) NOT NULL DEFAULT '0',
   `persentase_poin` int(11) NOT NULL,
-  `admin_fee` int(11) NOT NULL
+  `admin_fee` int(11) NOT NULL,
+  `minim_wd` int(11) NOT NULL,
+  `nama_bank` varchar(255) NOT NULL,
+  `no_rekening` varchar(255) NOT NULL,
+  `atas_nama` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `parameter`
 --
 
-INSERT INTO `parameter` (`id`, `biaya_registrasi`, `bonus_sponsor`, `bonus_pairing_pertama`, `bonus_pairing_kedua`, `batas_pairing_pertama`, `persentase_poin`, `admin_fee`) VALUES
-(1, 100000, 50000, 4000, 2000, 16, 20, 5000);
+INSERT INTO `parameter` (`id`, `biaya_registrasi`, `bonus_sponsor`, `bonus_pairing_pertama`, `bonus_pairing_kedua`, `batas_pairing_pertama`, `persentase_poin`, `admin_fee`, `minim_wd`, `nama_bank`, `no_rekening`, `atas_nama`) VALUES
+(1, 100000, 50000, 4000, 2000, 16, 20, 10000, 100000, 'BCA', '02348230948', 'Agung Kurniawan');
 
 -- --------------------------------------------------------
 
@@ -173,7 +178,9 @@ CREATE TABLE `withdraw` (
 --
 
 INSERT INTO `withdraw` (`username`, `tanggal`, `nominal`, `admin_fee`, `total`, `status`) VALUES
-('enniecorn', '2019-07-13 19:44:58', 60000, 5000, 65000, 'Done');
+('oye', '2019-07-18 18:46:46', 100000, 10000, 110000, 'Success'),
+('oye', '2019-07-18 19:05:06', 60000, 10000, 70000, 'Success'),
+('oye', '2019-07-21 21:59:35', 100000, 10000, 110000, 'Pending');
 
 --
 -- Indexes for dumped tables

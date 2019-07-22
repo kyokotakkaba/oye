@@ -388,29 +388,43 @@ class default_controller extends CI_Controller {
 	}
 
 	//withdraw member
-	//note: lakukan withdraw oleh member dengan request POST nominal withdraw.
+	//note: lakukan withdraw oleh member dengan request POST nominal withdraw. Kurangi icash member
+	//output: Minimum Withdraw adalah Rp $minim_wd
 	//output: saldo tidak cukup (setiap penarikan dikenakan biaya administrasi sebesar Rp $admin_fee) / user tidak ditemukan
-	//Output: berhasil mengubah data / gagal mengubah data
+	//Output: berhasil mengubah data / gagal mengubah data / gagal mengurangi icash member
 	public function insert_withdraw(){
 		$value = $this->input->post('nominal');
 		$parameter = $this->get_parameter(true);
-		$total = $value + $parameter['admin_fee'];
-		$insertStatus = $this->validasiwithdraw($this->input->cookie('memberCookie',true),$total,true);
-		if ($insertStatus == "bisa melakukan withdraw") {
-			date_default_timezone_set('Asia/Jakarta');
-			$data = array(
-				'username' => $this->input->cookie('memberCookie',true),
-				'tanggal' => date('Y-m-d H:i:s'),
-				'nominal' => $value,
-				'admin_fee' => $parameter['admin_fee'],
-				'total' => $value + $parameter['admin_fee'],
-				'status' => 'Pending'
-			);
+		if ($value>=$parameter['minim_wd']) {
+			$total = $value + $parameter['admin_fee'];
+			$insertStatus = $this->validasiwithdraw($this->input->cookie('memberCookie',true),$total,true);
+			if ($insertStatus == "bisa melakukan withdraw") {
+				date_default_timezone_set('Asia/Jakarta');
+				$data = array(
+					'username' => $this->input->cookie('memberCookie',true),
+					'tanggal' => date('Y-m-d H:i:s'),
+					'nominal' => $value,
+					'admin_fee' => $parameter['admin_fee'],
+					'total' => $total,
+					'status' => 'Pending'
+				);
 
-			$insertStatus = $this->default_model->insert_withdraw($data);
-			echo $insertStatus;
+				$insertStatus = $this->default_model->insert_withdraw($data);
+				if ($insertStatus == "berhasil mengubah data") {
+					$insertStatus = $this->default_model->update_subtract_icash($this->input->cookie('memberCookie',true),$total);
+					if ($insertStatus == "berhasil mengubah data"){
+						echo $insertStatus;
+					}else{
+						echo "gagal mengurangi icash member";
+					}
+				}else{
+					echo $insertStatus;
+				}
+			}else{
+				echo $insertStatus;
+			}
 		}else{
-			echo $insertStatus;
+			echo "Minimum Withdraw adalah Rp ".number_format($parameter['minim_wd'],0,",",".");
 		}
 	}
 
@@ -611,10 +625,10 @@ class default_controller extends CI_Controller {
 
 	//note: verifikasi withdraw berdasarkan parameter 1 username, dan post tanggal
 	//post tanggal menggunakan format date time [Y-m-d H:i:s] contoh: 2019-07-13 19:19:47
-	//Mengurangi icash member dan mengubah status withdraw
+	//mengubah status withdraw
 	//output: data withdraw tidak ditemukan / user tidak ditemukan
 	//output: saldo tidak cukup (setiap penarikan dikenakan biaya administrasi sebesar Rp $admin_fee)
-	//output: gagal mengubah status withdraw / gagal mengurangi icash member
+	//output: gagal mengubah status withdraw
 	//output: verifikasi sukses
 	public function update_verifikasi_withdraw($id){
 		$tanggal = $this->input->post('tanggal');
@@ -625,16 +639,11 @@ class default_controller extends CI_Controller {
 			$response = $this->validasiwithdraw($id,$datawithdraw['total'],true);
 			if ($response == 'bisa melakukan withdraw') {
 				$data = array(
-					'status' => "Done"
+					'status' => "Success"
 				);
 				$insertStatus = $this->default_model->update_withdraw($id,$tanggal,$data);
 				if ($insertStatus == "berhasil mengubah data") {
-					$insertStatus = $this->default_model->update_subtract_icash($id,$datawithdraw['total']);
-					if ($insertStatus == "berhasil mengubah data"){
-						echo "verifikasi sukses";
-					}else{
-						echo "gagal mengurangi icash member";
-					}
+					echo "verifikasi sukses";
 				}else{
 					echo "gagal mengubah status withdraw";
 				}
