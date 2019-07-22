@@ -58,6 +58,7 @@
     											<th>Nominal</th>
     											<th>Admin Fee</th>
     											<th>Total</th>
+												<th>Rekening</th>
     											<th>Verifikasi</th>
     										</tr>
     									</thead>
@@ -113,7 +114,8 @@
 								'<td>' + response[i].tanggal + '</td>' +
     							'<td>' + response[i].nominal + '</td>' +
     							'<td>' + response[i].admin_fee + '</td>' +
-    							'<td>' + response[i].total + '</td>';;
+    							'<td>' + response[i].total + '</td>'+
+								'<td>' + response[i].atas_nama_bank +' - '+response[i].no_rekening +'</td>';
     						if (response[i].status != "Success") {
     							tr_str +=
     								'<td><button class="btn btn-sm btn-warning" onclick="verifikasiWithdraw(&quot;' +
