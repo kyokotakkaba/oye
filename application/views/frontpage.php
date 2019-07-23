@@ -25,12 +25,14 @@
     <meta name="theme-color" content="#ffffff">
     <!-- favicons -->
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="css/custom-responsive-style.css">
+    <link rel="stylesheet" type="text/css" href="<?=base_url("dist/css/style.css");?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url("dist/css/custom-responsive-style.css");?>">
+    
     <link href="//fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-    <script type="text/javascript" src="script/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="script/all-plugins.js"></script>
-    <script type="text/javascript" src="script/plugin-active.js"></script>
+    <script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
+    <script type="text/javascript" src="<?=base_url("dist/js/all-plugins.js");?>"></script>
+    <script type="text/javascript" src="<?=base_url("dist/js/plugin-active.js");?>"></script>
+    
 </head>
 <body data-spy="scroll" data-target=".main-navigation" data-offset="150">
     <section id="MainContainer">
@@ -49,7 +51,7 @@
                             <li><a class="nav-link" href="javascript:void(0)" data-target="#About">About</a></li>
                             <li><a class="nav-link" href="javascript:void(0)" data-target="#Portfolio">Portfolio</a></li>
                             <li><a class="nav-link" href="javascript:void(0)" data-target="#ContactUs">Contact</a></li>
-							<li><a class="nav-link" href="<?php echo base_url(); ?>index.php/login" data-target="#ContactUs">Sign In</a></li>
+							<li><a class="nav-link" href="<?php echo base_url(); ?>index.php/login" >Sign In</a></li>
 							
                         </ul>
                     </div>
@@ -136,7 +138,7 @@
                 </div>
                 <div class="portfolio-wrapper clearfix">
                     <a class="each-portfolio" data-fancybox="gallery" href="images/p-one.jpg">
-                    <img src="images/p-one.jpg" alt="p-one">
+                    <img src="<?=base_url("dist/images/p-one.jpg");?>" alt="p-one">
                     <div class="hover-cont-wrap">
                         <div class="hover-cont-block">
                            <h5 class="p-title">Title</h5>
@@ -148,7 +150,7 @@
                     </div>
                    </a>
                     <a class="each-portfolio" data-fancybox="gallery" href="images/p-two.jpg">
-                    <img src="images/p-two.jpg" alt="p-one">
+                    <img src="<?=base_url("dist/images/p-two.jpg");?>" alt="p-one">
                     <div class="hover-cont-wrap">
                         <div class="hover-cont-block">
                            <h5 class="p-title">Title</h5>
@@ -160,7 +162,7 @@
                     </div>
                    </a>
                     <a class="each-portfolio" data-fancybox="gallery" href="images/p-three.jpg">
-                    <img src="images/p-three.jpg" alt="p-one">
+                    <img src="<?=base_url("dist/images/p-three.jpg");?>" alt="p-one">
                     <div class="hover-cont-wrap">
                        <div class="hover-cont-block">
                            <h5 class="p-title">Title</h5>
@@ -172,7 +174,7 @@
                     </div>
                    </a>
                     <a class="each-portfolio" data-fancybox="gallery" href="images/p-four.jpg">
-                    <img src="images/p-four.jpg" alt="p-one">
+                    <img src="<?=base_url("dist/images/p-four.jpg");?>" alt="p-one">
                     <div class="hover-cont-wrap">
                         <div class="hover-cont-block">
                            <h5 class="p-title">Title</h5>
@@ -184,7 +186,7 @@
                     </div>
                    </a>
                     <a class="each-portfolio" data-fancybox="gallery" href="images/p-five.jpg">
-                    <img src="images/p-five.jpg" alt="p-one">
+                    <img src="<?=base_url("dist/images/p-five.jpg");?>" alt="p-one">
                     <div class="hover-cont-wrap">
                         <div class="hover-cont-block">
                            <h5 class="p-title">Title</h5>
@@ -196,7 +198,7 @@
                     </div>
                    </a>
                     <a class="each-portfolio" data-fancybox="gallery" href="images/p-six.jpg">
-                    <img src="images/p-six.jpg" alt="p-one">
+                    <img src="<?=base_url("dist/images/p-six.jpg");?>" alt="p-one">
                     <div class="hover-cont-wrap">
                         <div class="hover-cont-block">
                            <h5 class="p-title">Title</h5>
@@ -208,7 +210,7 @@
                     </div>
                    </a>
                     <a class="each-portfolio" data-fancybox="gallery" href="images/p-one.jpg">
-                    <img src="images/p-one.jpg" alt="p-one">
+                    <img src="<?=base_url("dist/images/p-one.jpg");?>" alt="p-one">
                     <div class="hover-cont-wrap">
                         <div class="hover-cont-block">
                            <h5 class="p-title">Title</h5>
@@ -220,7 +222,7 @@
                     </div>
                    </a>
                     <a class="each-portfolio" data-fancybox="gallery" href="images/p-two.jpg">
-                    <img src="images/p-two.jpg" alt="p-one">
+                    <img src="<?=base_url("dist/images/p-two.jpg");?>" alt="p-one">
                     <div class="hover-cont-wrap">
                         <div class="hover-cont-block">
                            <h5 class="p-title">Title</h5>
@@ -232,7 +234,7 @@
                     </div>
                    </a>
                     <a class="each-portfolio" data-fancybox="gallery" href="images/p-three.jpg">
-                    <img src="images/p-three.jpg" alt="p-one">
+                    <img src="<?=base_url("dist/images/p-three.jpg");?>" alt="p-one">
                     <div class="hover-cont-wrap">
                         <div class="hover-cont-block">
                             <h5 class="p-title">Title</h5>
