@@ -51,13 +51,13 @@
 						<div class="col-sm-12">
 							<h3 class="box-title">Ubah Password</h3>
 							<hr>
-							
-								
-								<div class="col-sm-9">
-									<button class="btn btn-warning" onclick="changepassword()">Ubah Password</button>
-								</div>
-							
-							
+
+
+							<div class="col-sm-9">
+								<button class="btn btn-warning" onclick="changepassword()">Ubah Password</button>
+							</div>
+
+
 						</div>
 						<div class="col-sm-12">
 							<h3 class="box-title">Data Diri</h3>
@@ -135,12 +135,14 @@
 								<hr>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-3 control-label"><label style="color:red">*</label>Security Code</label>
+								<label class="col-sm-3 control-label"><label style="color:red">*</label>Security
+									Code</label>
 								<div class="col-sm-9">
-									<input class="form-control" id="security_code" type="password" name="security_code" placeholder="Masukkan security code anda">
+									<input class="form-control" id="security_code" type="password" name="security_code"
+										placeholder="Masukkan security code anda">
 								</div>
 							</div>
-							
+
 							<div class="form-group">
 								<div class="col-sm-12 text-center">
 									<button type="submit" id="submitButton" class="btn btn-primary btn-md">
@@ -195,59 +197,63 @@
 			}
 
 			$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls,
-					type: 'get',
-					dataType: "json",
-					success: function (response) {
-						console.log(response);
-						$("#replacement_user").val(response.replacement_user);
-						$("#sponsor").val(response.sponsor);
-						$("#usernamebaru").val(response.username);
-						$("#nama").val(response.nama);
-						$("#email").val(response.email);
-						$("#no_telepon").val(response.no_telepon);
-						$("#ktp").val(response.ktp);
-						$("#alamat").val(response.alamat);
-						$("#nama_bank").val(response.nama_bank);
-						$("#no_rekening").val(response.no_rekening);
-						$("#atas_nama_bank").val(response.atas_nama_bank);
-						$("#security_code").val(response.security_code);
-					}
-				})
+				url: "<?php echo base_url() ?>index.php/" + urls,
+				type: 'get',
+				dataType: "json",
+				success: function (response) {
+					console.log(response);
+					$("#replacement_user").val(response.replacement_user);
+					$("#sponsor").val(response.sponsor);
+					$("#usernamebaru").val(response.username);
+					$("#nama").val(response.nama);
+					$("#email").val(response.email);
+					$("#no_telepon").val(response.no_telepon);
+					$("#ktp").val(response.ktp);
+					$("#alamat").val(response.alamat);
+					$("#nama_bank").val(response.nama_bank);
+					$("#no_rekening").val(response.no_rekening);
+					$("#atas_nama_bank").val(response.atas_nama_bank);
+					$("#security_code").val(response.security_code);
+				}
+			})
 		})
 
 		function insertfunction(e) {
-			e.preventDefault(); // will stop the form submission						
-			urls = "update_profilmember";
-
-			var dataString = $("#insert_member").serialize();
-			console.log(dataString);
-			$("#submit").html("tunggu..");
-			$("#submitButton").prop("disabled", true);
-			$.ajax({
-				url: "<?php echo base_url() ?>index.php/" + urls,
-				type: 'POST',
-				data: dataString,
-				success: function (response) {
-					if (response == "berhasil mengubah data") {
-						alert(response);
-						location.reload();
-					} else {
-						alert("Gagal");
-						$("#submit").html("Submit");
+			if (confirm("Apakah anda yakin ?")) {
+				e.preventDefault(); // will stop the form submission						
+				urls = "update_profilmember";
+				var dataString = $("#insert_member").serialize();
+				console.log(dataString);
+				$("#submit").html("tunggu..");
+				$("#submitButton").prop("disabled", true);
+				$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urls,
+					type: 'POST',
+					data: dataString,
+					success: function (response) {
+						if (response == "berhasil mengubah data") {
+							alert(response);
+							location.reload();
+						} else {
+							alert("Gagal");
+							$("#submit").html("Submit");
+							$("#submitButton").prop("disabled", false);
+						}
+					},
+					error: function () {
+						alert('Gagal');
 						$("#submitButton").prop("disabled", false);
 					}
-				},
-				error: function () {
-					alert('Gagal');
-					$("#submitButton").prop("disabled", false);
-				}
-			});
+				});
+			} else {
+
+			}
 		}
 
-		function changepassword(){
+		function changepassword() {
 			window.location = "<?php echo base_url() ?>index.php/changepasswordmember";
 		}
+
 	</script>
 </body>
 

@@ -65,8 +65,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Sponsor</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="sponsor" type="text"
-											name="sponsor">
+										<input class="form-control" id="sponsor" type="text" name="sponsor">
 									</div>
 								</div>
 								<div class="form-group">
@@ -134,7 +133,8 @@
 									<div class="col-sm-6">
 										<button type="submit" id="editButton" class="btn btn-success btn-md">
 											<span id="edit">Update Data</span></button>
-										<button id="verifikasiButton" class="btn btn-warning btn-md" onclick="verifikasi()">
+										<button id="verifikasiButton" class="btn btn-warning btn-md"
+											onclick="verifikasi()">
 											<span id="verifikasi">Verifikasi Member</span></button>
 									</div>
 								</div>
@@ -194,7 +194,7 @@
 						// console.log(response);
 						$("#replacement_user").val(response.replacement_user);
 						$("#sponsor").val(response.sponsor);
-						$("#username").val(response.username);						
+						$("#username").val(response.username);
 						$("#nama").val(response.nama);
 						$("#email").val(response.email);
 						$("#no_telepon").val(response.no_telepon);
@@ -204,7 +204,7 @@
 						$("#no_rekening").val(response.no_rekening);
 						$("#atas_nama_bank").val(response.atas_nama_bank);
 
-						if(response.status == "active"){
+						if (response.status == "active") {
 							$("#verifikasiButton").remove();
 							$("#replacement_user").prop('disabled', true);
 						}
@@ -213,58 +213,65 @@
 			})
 
 			function insertfunction(e) {
-				e.preventDefault(); // will stop the form submission						
-				urls = "update_profilmember_admin/";
-				var value = $('#username').val();
-				var dataString = $("#insert_member").serialize();
-
-				$("#submitButton").prop("disabled", true);
-				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls + value,
-					type: 'POST',
-					data: dataString,
-					success: function (response) {
-						$("#submit").html("tunggu..");
-						if (response == "berhasil mengubah data") {
-							location.reload();
-						} else {
-							alert("Gagal");
-							$("#submit").html("Submit");
+				if (confirm("Apakah anda yakin ?")) {
+					e.preventDefault(); // will stop the form submission						
+					urls = "update_profilmember_admin/";
+					var value = $('#username').val();
+					var dataString = $("#insert_member").serialize();
+					$("#submitButton").prop("disabled", true);
+					$.ajax({
+						url: "<?php echo base_url() ?>index.php/" + urls + value,
+						type: 'POST',
+						data: dataString,
+						success: function (response) {
+							$("#submit").html("tunggu..");
+							if (response == "berhasil mengubah data") {
+								location.reload();
+							} else {
+								alert("Gagal");
+								$("#submit").html("Submit");
+								$("#submitButton").prop("disabled", false);
+							}
+						},
+						error: function () {
+							alert('Gagal');
 							$("#submitButton").prop("disabled", false);
 						}
-					},
-					error: function () {
-						alert('Gagal');
-						$("#submitButton").prop("disabled", false);
-					}
-				});
+					});
+				} else {
+
+				}
 			}
 
-			function verifikasi(){
-				urls = "update_verifikasi_member/";
-				var value = $('#username').val();
-				
-				$("#verifikasiButton").prop("disabled", true);
-				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls + value,
-					type: 'POST',
-					success: function (response) {
-						console.log(response);
-						$("#submit").html("tunggu..");
-						if (response == "verifikasi sukses") {
-							location.reload();
-						} else {
-							alert("Gagal");
-							$("#verifikasi").html("Verifikasi Member");
+			function verifikasi() {
+				if (confirm("Apakah anda yakin ?")) {
+					urls = "update_verifikasi_member/";
+					var value = $('#username').val();
+					$("#verifikasiButton").prop("disabled", true);
+					$.ajax({
+						url: "<?php echo base_url() ?>index.php/" + urls + value,
+						type: 'POST',
+						success: function (response) {
+							console.log(response);
+							$("#submit").html("tunggu..");
+							if (response == "verifikasi sukses") {
+								location.reload();
+							} else {
+								alert("Gagal");
+								$("#verifikasi").html("Verifikasi Member");
+								$("#verifikasiButton").prop("disabled", false);
+							}
+						},
+						error: function () {
+							alert('Gagal');
 							$("#verifikasiButton").prop("disabled", false);
 						}
-					},
-					error: function () {
-						alert('Gagal');
-						$("#verifikasiButton").prop("disabled", false);
-					}
-				});
+					});
+				} else {
+
+				}
 			}
+
 		</script>
 	</body>
 
