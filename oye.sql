@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 21, 2019 at 05:22 PM
+-- Generation Time: Jul 25, 2019 at 04:04 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 5.6.38
 
@@ -123,12 +123,12 @@ CREATE TABLE `member` (
 --
 
 INSERT INTO `member` (`username`, `password`, `nama`, `email`, `no_telepon`, `ktp`, `alamat`, `nama_bank`, `no_rekening`, `atas_nama_bank`, `security_code`, `sponsor`, `replacement_user`, `posisi_kaki`, `icash`, `poin`, `bv_kanan`, `bv_kiri`, `tanggal_registrasi`, `nominal_pembayaran`, `status`) VALUES
-('oye', '827ccb0eea8a706c4c34a16891f84e7b', 'OYE', 'oye@gmail.com', '', '945789547985479', '', '', '', '', '123456', NULL, NULL, NULL, 590800, 45200, 1, 10, '2019-07-06 13:03:19', NULL, 'active'),
-('oye2', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 2', '', '', '94859845895', '', '', '', '', NULL, 'oye', 'oye', 'kiri', 40000, 10000, 0, 1, '2019-07-18 18:22:36', 100869, 'active'),
-('oye3', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 3', '', '', '094869548609546854069', '', '', '', '', NULL, 'oye', 'oye', 'kanan', 0, 0, 0, 1, '2019-07-18 18:34:03', 100931, 'active'),
-('oye4', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 4', '', '', '95846984569854', '', '', '', '', NULL, 'oye2', 'oye2', 'kiri', 0, 0, 0, 0, '2019-07-18 18:36:28', 100537, 'active'),
-('oye5', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 5', '', '', '95894864968', '', '', '', '', NULL, 'oye', 'oye2', NULL, 0, 0, 0, 0, '2019-07-18 19:01:20', 100843, 'Pending'),
-('oye6', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 6', '', '', '45984594859458945', '', '', '', '', NULL, 'oye', 'oye3', 'kiri', 0, 0, 0, 0, '2019-07-18 19:02:21', 100561, 'active');
+('oye', '827ccb0eea8a706c4c34a16891f84e7b', 'OYE', 'bekkostudio@gmail.com', '082331602198', '945789547985479', '', '', '', '', '123456', NULL, NULL, NULL, 590800, 45200, 1, 10, '2019-07-06 13:03:19', NULL, 'active'),
+('oye2', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 2', 'bekkostudio@gmail.com', '082331602198', '94859845895', '', '', '', '', NULL, 'oye', 'oye', 'kiri', 40000, 10000, 0, 1, '2019-07-18 18:22:36', 100869, 'active'),
+('oye3', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 3', 'bekkostudio@gmail.com', '082331602198', '094869548609546854069', '', '', '', '', NULL, 'oye', 'oye', 'kanan', 0, 0, 0, 1, '2019-07-18 18:34:03', 100931, 'active'),
+('oye4', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 4', 'bekkostudio@gmail.com', '082331602198', '95846984569854', '', '', '', '', NULL, 'oye2', 'oye2', 'kiri', 0, 0, 0, 0, '2019-07-18 18:36:28', 100537, 'active'),
+('oye5', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 5', 'bekkostudio@gmail.com', '082331602198', '95894864968', '', '', '', '', NULL, 'oye', 'oye2', NULL, 0, 0, 0, 0, '2019-07-18 19:01:20', 100843, 'Pending'),
+('oye6', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 6', 'bekkostudio@gmail.com', '082331602198', '45984594859458945', '', '', '', '', NULL, 'oye', 'oye3', 'kiri', 0, 0, 0, 0, '2019-07-18 19:02:21', 100561, 'active');
 
 -- --------------------------------------------------------
 
@@ -148,15 +148,16 @@ CREATE TABLE `parameter` (
   `minim_wd` int(11) NOT NULL,
   `nama_bank` varchar(255) NOT NULL,
   `no_rekening` varchar(255) NOT NULL,
-  `atas_nama` varchar(255) NOT NULL
+  `atas_nama` varchar(255) NOT NULL,
+  `no_admin` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `parameter`
 --
 
-INSERT INTO `parameter` (`id`, `biaya_registrasi`, `bonus_sponsor`, `bonus_pairing_pertama`, `bonus_pairing_kedua`, `batas_pairing_pertama`, `persentase_poin`, `admin_fee`, `minim_wd`, `nama_bank`, `no_rekening`, `atas_nama`) VALUES
-(1, 100000, 50000, 4000, 2000, 16, 20, 10000, 100000, 'BCA', '02348230948', 'Agung Kurniawan');
+INSERT INTO `parameter` (`id`, `biaya_registrasi`, `bonus_sponsor`, `bonus_pairing_pertama`, `bonus_pairing_kedua`, `batas_pairing_pertama`, `persentase_poin`, `admin_fee`, `minim_wd`, `nama_bank`, `no_rekening`, `atas_nama`, `no_admin`) VALUES
+(1, 100000, 50000, 4000, 2000, 16, 20, 10000, 100000, 'BCA', '02348230948', 'Agung Kurniawan', '08123456789');
 
 -- --------------------------------------------------------
 

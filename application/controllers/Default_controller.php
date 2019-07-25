@@ -344,7 +344,8 @@ class Default_controller extends CI_Controller {
 	//register new member
 	//note: registrasi member baru dengan request POST seperti di bawah.
 	//output: username sudah dipakai / replacement user tidak ditemukan / Replacement user tidak bisa digunakan
-	//Output: berhasil mengubah data / gagal mengubah data
+	//output: gagal mengubah data / gagal mengirim email
+	//output: registrasi sukses
 	public function insert_registrasimember(){
 		$insertStatus = $this->validasiusername($this->input->post('username'),true);
 		if ($insertStatus == "username tersedia") {
@@ -355,7 +356,7 @@ class Default_controller extends CI_Controller {
 				date_default_timezone_set('Asia/Jakarta');
 				$data = array(
 					'username' => $this->input->post('username'),
-					'password' => md5($this->input->post('password')),
+					//'password' => md5($this->input->post('password')),
 					'nama' => $this->input->post('nama'),
 					'email' => $this->input->post('email'),
 					'no_telepon' => $this->input->post('no_telepon'),
@@ -379,6 +380,14 @@ class Default_controller extends CI_Controller {
 
 			}else if ($insertStatus == 2){
 				echo "Replacement user tidak bisa digunakan";
+			}else if ($insertStatus == "berhasil mengubah data"){
+				if ($this->sendmail_registrasi($this->input->post('email'),$this->input->post('username'),$biaya)) {
+					//to do if send sms
+					echo "registrasi sukses";
+				}else{
+					echo "gagal mengirim email";
+				}
+				
 			}else{
 				echo $insertStatus;
 			}
@@ -522,6 +531,7 @@ class Default_controller extends CI_Controller {
 	//output: Replacement user tidak bisa digunakan
 	//output: gagal mengubah status / gagal menambah icash sponsor / gagal menambah poin sponsor
 	//output: gagal menambah bv upline $userUpline
+	//output: gagal mengirim email
 	//output: verifikasi sukses
 	public function update_verifikasi_member($id){
 		// $updateprofil = $this->update_profilmember_admin($id,true); //apakah profil diupdate dulu sebelum verifikasi atau tidak?
@@ -538,6 +548,7 @@ class Default_controller extends CI_Controller {
 		//update status verifikasi
 		if ($posisikaki != 'batal') {
 			$data = array(
+				'password' => md5($datauser['no_telepon']),
 				'posisi_kaki' => $posisikaki,
 				'status' => "active"
 			);
@@ -580,7 +591,12 @@ class Default_controller extends CI_Controller {
 									}
 								}
 								if ($sukses) {
-									echo "verifikasi sukses";
+									if ($this->sendmail_verifikasi($datauser['email'],$datauser['username'],$datauser['no_telepon'])) {
+										//to do if send sms
+										echo "verifikasi sukses";
+									}else{
+										echo "gagal mengirim email";
+									}
 								}else{
 									echo "gagal menambah bv upline ".$dataupline['username'];
 								}
@@ -964,6 +980,38 @@ class Default_controller extends CI_Controller {
 				echo $response;
 			}
 		}	
+	}
+
+	//untuk mengirim email registrasi, tidak untuk front end
+	//output: true / false
+	public function sendmail_registrasi($to, $username, $biaya){
+		$parameter = $this->get_parameter(true);
+		$subject = "Pendaftaran member oye.co.id";
+		$txt = "Member yang terhormat, terima kasih telah melakukan pendaftaran di oye.co.id.\nAnda telah mendaftarkan diri dengan detail \nusername: ".$username."\nSilahkan lakukan pembayaran ke rekening berikut:\n".$parameter['nama_bank']."\nNo rekening: ".$parameter['no_rekening']."\nAtas Nama: ".$parameter['atas_nama']."\nNominal Pembayaran: Rp ".number_format($biaya,0,",",".")."\nKirim bukti transfer untuk verifikasi ke no WA admin: ".$parameter['no_admin'];
+		$txt = wordwrap($txt,140);
+		$headers = "From: oye@oye.co.id";
+
+		return mail($to,$subject,$txt,$headers);
+	}
+
+	//untuk mengirim email verifikasi, tidak untuk front end
+	//output: true / false
+	public function sendmail_verifikasi($to, $username, $password){
+		$subject = "Pendaftaran member oye.co.id";
+		$txt = "Member yang terhormat, terima kasih pendaftaran anda telah di kami setujui. \nAnda telah terdaftar dengan detail \nUsername:".$username."\npassword:".$password."\nSilahkan login ke oye.co.id untuk mengakses dashboard anda.";
+		$txt = wordwrap($txt,140);
+		$headers = "From: oye@oye.co.id";
+
+		return mail($to,$subject,$txt,$headers);
+	}
+
+	//hanya untuk testing
+	public function testemailregistrasi(){
+		if ($this->sendmail_registrasi("bekkostudio@gmail.com","oye7",100899)) {
+			echo "registrasi sukses";
+		}else{
+			echo "gagal mengirim email";
+		}
 	}
 
 
