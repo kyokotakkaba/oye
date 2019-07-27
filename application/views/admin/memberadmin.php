@@ -141,7 +141,7 @@
     		});
 
     		function halamanEdit(username) {
-				var myPath = "/oye/index.php/editmember";
+				var myPath = "<?php echo base_url() ?>index.php/editmember";
     			document.cookie = "editMember=" + username + ";path="+myPath;
 				window.location = "<?php echo base_url() ?>index.php/editmember";
     		}

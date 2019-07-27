@@ -68,34 +68,27 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-3 control-label">Password</label>
-									<div class="col-sm-9">
-										<input class="form-control" id="password" type="password" name="password"
-											minlength="6" required>
-									</div>
-								</div>
-								<div class="form-group">
 									<label class="col-sm-3 control-label">Nama Lengkap</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="nama" type="text" name="nama" required>
+										<input class="form-control" id="nama" type="text" pattern="^[A-Za-z ,.'-]+$" name="nama" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Email</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="email" type="email" name="email" required>
+										<input class="form-control" id="email" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nomor Telepon</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="no_telepon" type="text" name="no_telepon" required>
+										<input class="form-control" id="no_telepon" type="text" name="no_telepon" placeholder="format: +6281333777999 / 081333777999" pattern="\+?([ -]?\d+)+|\(\d+\)([ -]\d+)" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">KTP</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="ktp" type="text" name="ktp" required>
+										<input class="form-control" id="ktp" type="text" name="ktp" pattern="^[0-9]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
@@ -107,20 +100,19 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nama Bank</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="nama_bank" type="text" name="nama_bank" required>
+										<input class="form-control" id="nama_bank" type="text" name="nama_bank" pattern="^[A-Za-z ,.'-]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nomor Rekening</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="no_rekening" type="text" name="no_rekening"
-											required>
+										<input class="form-control" id="no_rekening" type="text" name="no_rekening" pattern="^[0-9]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Atas Nama Bank</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank"
+										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank" pattern="^[A-Za-z ,.'-]+$"
 											required>
 									</div>
 								</div>
@@ -182,9 +174,10 @@
 			function setCookie(value) {
 				var expires = "";
 				var date = new Date();
+				var base_url = "<?php echo base_url() ?>";
 				date.setTime(date.getTime() + (5 * 60 * 1000));
 				expires = "; expires=" + date.toUTCString();
-				document.cookie = "memberBaru =" + (value || "") + expires + "; path=/oye/index.php/registrasisukses";
+				document.cookie = "memberBaru =" + (value || "") + expires + "; path="+base_url+"index.php/registrasisukses";
 			}
 
 			function insertfunction(e) {
