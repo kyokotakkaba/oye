@@ -1,8 +1,8 @@
 <?php
-class default_controller extends CI_Controller {
+class Default_controller extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
-		$this->load->model('default_model');
+		$this->load->model('Default_model');
 		$this->load->helper('url_helper');
 	}
 
@@ -165,7 +165,7 @@ class default_controller extends CI_Controller {
 	//note: ambil semua data dari database parameter. 
 	//Parameter return_var tidak untuk front end, jadi bisa langsung request url dengan /get_parameter
 	public function get_parameter($return_var = NULL){
-		$data = $this->default_model->get_data_parameter();
+		$data = $this->Default_model->get_data_parameter();
 		if (empty($data)){
 			$data = [];
 		}
@@ -181,7 +181,7 @@ class default_controller extends CI_Controller {
 
 	//note: ambil data user secara spesifik dengan parameter username. Parameter dua bisa diabaikan front end
 	public function get_specificuser($id, $return_var = NULL){
-		$data = $this->default_model->get_data_member($id);
+		$data = $this->Default_model->get_data_member($id);
 		if (empty($data)){
 			$data = [];
 		}
@@ -207,7 +207,7 @@ class default_controller extends CI_Controller {
 
 	//note: ambil semua data user
 	public function get_alluser(){
-		$data = $this->default_model->get_data_member();
+		$data = $this->Default_model->get_data_member();
 		if (empty($data)){
 			$data = [];
 		}
@@ -216,7 +216,7 @@ class default_controller extends CI_Controller {
 
 	//note: tidak untuk front end, ambil data user dengan parameter filter array
 	public function get_filtereduser($filter, $return_var = NULL){
-		$data = $this->default_model->get_data_member_filter($filter);
+		$data = $this->Default_model->get_data_member_filter($filter);
 		if (empty($data)){
 			$data = [];
 		}
@@ -249,7 +249,7 @@ class default_controller extends CI_Controller {
 
 	//note: mengambil satu level downline user dengan parameter username
 	public function get_downlineuser($id, $return_var = NULL){
-		$data = $this->default_model->get_data_member_filter(array('status'=> 'active','replacement_user'=>$id));
+		$data = $this->Default_model->get_data_member_filter(array('status'=> 'active','replacement_user'=>$id));
 		if (empty($data)){
 			$data = [];
 		}
@@ -265,7 +265,7 @@ class default_controller extends CI_Controller {
 
 	//note: ambil data withdraw dari user yang sedang login
 	public function get_currentuser_withdraw(){
-		$data = $this->default_model->get_data_withdraw($this->input->cookie('memberCookie',true));
+		$data = $this->Default_model->get_data_withdraw($this->input->cookie('memberCookie',true));
 		if (empty($data)){
 			$data = [];
 		}
@@ -274,7 +274,7 @@ class default_controller extends CI_Controller {
 
 	//note: ambil data withdraw dari semua user
 	public function get_alluser_withdraw(){
-		$data = $this->default_model->get_data_withdraw();
+		$data = $this->Default_model->get_data_withdraw();
 		if (empty($data)){
 			$data = [];
 		}
@@ -284,7 +284,7 @@ class default_controller extends CI_Controller {
 	//note: Tidak untuk front end karena datetime format tidak bisa jadi parameter.
 	//Ambil data withdraw spesifik berdasarkan user dan tanggal
 	public function get_specific_withdraw($user, $tanggal, $return_var = NULL){
-		$data = $this->default_model->get_data_withdraw($user, $tanggal);
+		$data = $this->Default_model->get_data_withdraw($user, $tanggal);
 		if (empty($data)){
 			$data = [];
 		}
@@ -299,7 +299,7 @@ class default_controller extends CI_Controller {
 
 	//note: ambil data sponsor dari user yang sedang login
 	public function get_currentuser_bonussponsor(){
-		$data = $this->default_model->get_data_bonussponsor($this->input->cookie('memberCookie',true));
+		$data = $this->Default_model->get_data_bonussponsor($this->input->cookie('memberCookie',true));
 		if (empty($data)){
 			$data = [];
 		}
@@ -308,7 +308,7 @@ class default_controller extends CI_Controller {
 
 	//note: ambil data sponsor dari semua user
 	public function get_alluser_bonussponsor(){
-		$data = $this->default_model->get_data_bonussponsor();
+		$data = $this->Default_model->get_data_bonussponsor();
 		if (empty($data)){
 			$data = [];
 		}
@@ -320,7 +320,7 @@ class default_controller extends CI_Controller {
 
 	//note: ambil data pair dari user yang sedang login
 	public function get_currentuser_bonuspair(){
-		$data = $this->default_model->get_data_bonuspair($this->input->cookie('memberCookie',true));
+		$data = $this->Default_model->get_data_bonuspair($this->input->cookie('memberCookie',true));
 		if (empty($data)){
 			$data = [];
 		}
@@ -329,7 +329,7 @@ class default_controller extends CI_Controller {
 
 	//note: ambil data pair dari semua user
 	public function get_alluser_bonuspair(){
-		$data = $this->default_model->get_data_bonuspair();
+		$data = $this->Default_model->get_data_bonuspair();
 		if (empty($data)){
 			$data = [];
 		}
@@ -344,7 +344,8 @@ class default_controller extends CI_Controller {
 	//register new member
 	//note: registrasi member baru dengan request POST seperti di bawah.
 	//output: username sudah dipakai / replacement user tidak ditemukan / Replacement user tidak bisa digunakan
-	//Output: berhasil mengubah data / gagal mengubah data
+	//output: gagal mengubah data / gagal mengirim email
+	//output: registrasi sukses
 	public function insert_registrasimember(){
 		$insertStatus = $this->validasiusername($this->input->post('username'),true);
 		if ($insertStatus == "username tersedia") {
@@ -355,7 +356,7 @@ class default_controller extends CI_Controller {
 				date_default_timezone_set('Asia/Jakarta');
 				$data = array(
 					'username' => $this->input->post('username'),
-					'password' => md5($this->input->post('password')),
+					//'password' => md5($this->input->post('password')),
 					'nama' => $this->input->post('nama'),
 					'email' => $this->input->post('email'),
 					'no_telepon' => $this->input->post('no_telepon'),
@@ -374,11 +375,19 @@ class default_controller extends CI_Controller {
 					'status' => "Pending"
 				);
 
-				$insertStatus = $this->default_model->insert_member($data);
+				$insertStatus = $this->Default_model->insert_member($data);
 				echo $insertStatus;
 
 			}else if ($insertStatus == 2){
 				echo "Replacement user tidak bisa digunakan";
+			}else if ($insertStatus == "berhasil mengubah data"){
+				if ($this->sendmail_registrasi($this->input->post('email'),$this->input->post('username'),$biaya)) {
+					//to do if send sms
+					echo "registrasi sukses";
+				}else{
+					echo "gagal mengirim email";
+				}
+				
 			}else{
 				echo $insertStatus;
 			}
@@ -409,9 +418,9 @@ class default_controller extends CI_Controller {
 					'status' => 'Pending'
 				);
 
-				$insertStatus = $this->default_model->insert_withdraw($data);
+				$insertStatus = $this->Default_model->insert_withdraw($data);
 				if ($insertStatus == "berhasil mengubah data") {
-					$insertStatus = $this->default_model->update_subtract_icash($this->input->cookie('memberCookie',true),$total);
+					$insertStatus = $this->Default_model->update_subtract_icash($this->input->cookie('memberCookie',true),$total);
 					if ($insertStatus == "berhasil mengubah data"){
 						echo $insertStatus;
 					}else{
@@ -438,12 +447,12 @@ class default_controller extends CI_Controller {
 	//Output: berhasil mengubah data / gagal mengubah data / password lama salah
 	public function update_passwordadmin(){
 		$oldpassword = md5($this->input->post('oldpassword'));
-		$data = $this->default_model->get_data_admin();
+		$data = $this->Default_model->get_data_admin();
 		if ($oldpassword == $data['password']){
 			$data = array(
 				'password' => md5($this->input->post('newpassword'))
 			);
-			$insertStatus = $this->default_model->update_admin($this->input->cookie('backendCookie',true),$data);
+			$insertStatus = $this->Default_model->update_admin($this->input->cookie('backendCookie',true),$data);
 			echo $insertStatus;
 		}else{
 			echo "password lama salah";
@@ -459,7 +468,7 @@ class default_controller extends CI_Controller {
 			$data = array(
 				'password' => md5($this->input->post('newpassword'))
 			);
-			$insertStatus = $this->default_model->update_member($this->input->cookie('memberCookie',true),$data);
+			$insertStatus = $this->Default_model->update_member($this->input->cookie('memberCookie',true),$data);
 			echo $insertStatus;
 		}else{
 			echo "password lama salah";
@@ -480,7 +489,7 @@ class default_controller extends CI_Controller {
 			'security_code' => $this->input->post('security_code')
 		);
 
-		$insertStatus = $this->default_model->update_member($this->input->cookie('memberCookie',true),$data);
+		$insertStatus = $this->Default_model->update_member($this->input->cookie('memberCookie',true),$data);
 		echo $insertStatus;
 	}
 
@@ -509,7 +518,7 @@ class default_controller extends CI_Controller {
 			$data['password'] = md5($this->input->post('password'));//password reset
 		}
 
-		$insertStatus = $this->default_model->update_member($id,$data);
+		$insertStatus = $this->Default_model->update_member($id,$data);
 		if ($return_var==true) {
 			return $insertStatus;
 		}else{
@@ -522,6 +531,7 @@ class default_controller extends CI_Controller {
 	//output: Replacement user tidak bisa digunakan
 	//output: gagal mengubah status / gagal menambah icash sponsor / gagal menambah poin sponsor
 	//output: gagal menambah bv upline $userUpline
+	//output: gagal mengirim email
 	//output: verifikasi sukses
 	public function update_verifikasi_member($id){
 		// $updateprofil = $this->update_profilmember_admin($id,true); //apakah profil diupdate dulu sebelum verifikasi atau tidak?
@@ -538,10 +548,11 @@ class default_controller extends CI_Controller {
 		//update status verifikasi
 		if ($posisikaki != 'batal') {
 			$data = array(
+				'password' => md5($datauser['no_telepon']),
 				'posisi_kaki' => $posisikaki,
 				'status' => "active"
 			);
-			$insertStatus = $this->default_model->update_member($id,$data);
+			$insertStatus = $this->Default_model->update_member($id,$data);
 			if ($insertStatus == "berhasil mengubah data") {
 
 				//insert bonus sponsor
@@ -554,14 +565,14 @@ class default_controller extends CI_Controller {
 					'nominal' => $nominal,
 					'poin' => $poin
 				);
-				$insertStatus = $this->default_model->insert_bonussponsor($data);
+				$insertStatus = $this->Default_model->insert_bonussponsor($data);
 
 				if ($insertStatus == "berhasil mengubah data"){
 					//tambah icash dari bonus sponsor
-					$insertStatus = $this->default_model->update_add_icash($datauser['sponsor'],$nominal);
+					$insertStatus = $this->Default_model->update_add_icash($datauser['sponsor'],$nominal);
 					if ($insertStatus == "berhasil mengubah data"){
 					//tambah poin dari bonus sponsor
-						$insertStatus = $this->default_model->update_add_poin($datauser['sponsor'],$poin);
+						$insertStatus = $this->Default_model->update_add_poin($datauser['sponsor'],$poin);
 						if ($insertStatus == "berhasil mengubah data"){
 							//tambah bv semua upline
 							$dataupline = $this->get_specificuser($datauser['replacement_user'],true);
@@ -580,7 +591,12 @@ class default_controller extends CI_Controller {
 									}
 								}
 								if ($sukses) {
-									echo "verifikasi sukses";
+									if ($this->sendmail_verifikasi($datauser['email'],$datauser['username'],$datauser['no_telepon'])) {
+										//to do if send sms
+										echo "verifikasi sukses";
+									}else{
+										echo "gagal mengirim email";
+									}
 								}else{
 									echo "gagal menambah bv upline ".$dataupline['username'];
 								}
@@ -613,9 +629,9 @@ class default_controller extends CI_Controller {
 	//Mengecek posisi kaki bv dan menambah bv
 	public function update_add_bv($idupline, $kakidownline){
 		if ($kakidownline == 'kiri') {
-			$insertStatus = $this->default_model->update_add_bvkiri($idupline,1);
+			$insertStatus = $this->Default_model->update_add_bvkiri($idupline,1);
 		}else if ($kakidownline == 'kanan'){
-			$insertStatus = $this->default_model->update_add_bvkanan($idupline,1);
+			$insertStatus = $this->Default_model->update_add_bvkanan($idupline,1);
 		}else{
 			$insertStatus = "gagal mengubah data";
 		}
@@ -641,7 +657,7 @@ class default_controller extends CI_Controller {
 				$data = array(
 					'status' => "Success"
 				);
-				$insertStatus = $this->default_model->update_withdraw($id,$tanggal,$data);
+				$insertStatus = $this->Default_model->update_withdraw($id,$tanggal,$data);
 				if ($insertStatus == "berhasil mengubah data") {
 					echo "verifikasi sukses";
 				}else{
@@ -700,7 +716,7 @@ class default_controller extends CI_Controller {
 					'icash' => $icash,
 					'poin' => $poin
 				);
-				$insertStatus = $this->default_model->insert_bonuspair($data);
+				$insertStatus = $this->Default_model->insert_bonuspair($data);
 
 				if ($insertStatus == "berhasil mengubah data"){
 					if ($payoutBV2>0) {
@@ -718,7 +734,7 @@ class default_controller extends CI_Controller {
 							'icash' => $icash2,
 							'poin' => $poin2
 						);
-						$insertStatus = $this->default_model->insert_bonuspair($data);
+						$insertStatus = $this->Default_model->insert_bonuspair($data);
 						if ($insertStatus != "berhasil mengubah data") {
 							echo "gagal menginput bonus pair kedua ".$member['username']."<br>";
 						}
@@ -736,13 +752,13 @@ class default_controller extends CI_Controller {
 
 
 					//tambah icash member
-					$insertStatus = $this->default_model->update_add_icash($member['username'],$icash);
+					$insertStatus = $this->Default_model->update_add_icash($member['username'],$icash);
 					if ($insertStatus == "berhasil mengubah data"){
 					//tambah poin member
-						$insertStatus = $this->default_model->update_add_poin($member['username'],$poin);
+						$insertStatus = $this->Default_model->update_add_poin($member['username'],$poin);
 						if ($insertStatus == "berhasil mengubah data"){
 							//kurangi bv member
-							$insertStatus = $this->default_model->update_subtract_bv($member['username'],$payoutBV);
+							$insertStatus = $this->Default_model->update_subtract_bv($member['username'],$payoutBV);
 							if ($insertStatus == "berhasil mengubah data"){
 								echo "payout bonus pair ".$member['username']." sukses <br>";
 							}else{
@@ -771,7 +787,7 @@ class default_controller extends CI_Controller {
 	//Hanya bisa menghapus user yang pending
 	//Output: berhasil menghapus data / gagal menghapus data
 	public function delete_member($id){
-		$insertStatus = $this->default_model->delete_member($id); 
+		$insertStatus = $this->Default_model->delete_member($id); 
 		echo $insertStatus;
 	}
 
@@ -781,7 +797,7 @@ class default_controller extends CI_Controller {
 	//Output: berhasil menghapus data / gagal menghapus data
 	public function delete_withdraw($id){
 		$tanggal = $this->input->post('tanggal');
-		$insertStatus = $this->default_model->delete_withdraw($id,$tanggal);
+		$insertStatus = $this->Default_model->delete_withdraw($id,$tanggal);
 		echo $insertStatus;
 	}
 
@@ -798,7 +814,7 @@ class default_controller extends CI_Controller {
 	public function ceklogin(){
 		$username = $this->input->post('username');
 		$password = md5($this->input->post('password'));
-		$data = $this->default_model->get_data_admin();
+		$data = $this->Default_model->get_data_admin();
 		if ($username == $data['username'] && $password == $data['password']) {
 			$this->load->helper('cookie');
 			$cookie= array(
@@ -964,6 +980,38 @@ class default_controller extends CI_Controller {
 				echo $response;
 			}
 		}	
+	}
+
+	//untuk mengirim email registrasi, tidak untuk front end
+	//output: true / false
+	public function sendmail_registrasi($to, $username, $biaya){
+		$parameter = $this->get_parameter(true);
+		$subject = "Pendaftaran member oye.co.id";
+		$txt = "Member yang terhormat, terima kasih telah melakukan pendaftaran di oye.co.id.\nAnda telah mendaftarkan diri dengan detail \nusername: ".$username."\nSilahkan lakukan pembayaran ke rekening berikut:\n".$parameter['nama_bank']."\nNo rekening: ".$parameter['no_rekening']."\nAtas Nama: ".$parameter['atas_nama']."\nNominal Pembayaran: Rp ".number_format($biaya,0,",",".")."\nKirim bukti transfer untuk verifikasi ke no WA admin: ".$parameter['no_admin'];
+		$txt = wordwrap($txt,140);
+		$headers = "From: oye@oye.co.id";
+
+		return mail($to,$subject,$txt,$headers);
+	}
+
+	//untuk mengirim email verifikasi, tidak untuk front end
+	//output: true / false
+	public function sendmail_verifikasi($to, $username, $password){
+		$subject = "Pendaftaran member oye.co.id";
+		$txt = "Member yang terhormat, terima kasih pendaftaran anda telah di kami setujui. \nAnda telah terdaftar dengan detail \nUsername:".$username."\npassword:".$password."\nSilahkan login ke oye.co.id untuk mengakses dashboard anda.";
+		$txt = wordwrap($txt,140);
+		$headers = "From: oye@oye.co.id";
+
+		return mail($to,$subject,$txt,$headers);
+	}
+
+	//hanya untuk testing
+	public function testemailregistrasi(){
+		if ($this->sendmail_registrasi("bekkostudio@gmail.com","oye7",100899)) {
+			echo "registrasi sukses";
+		}else{
+			echo "gagal mengirim email";
+		}
 	}
 
 
