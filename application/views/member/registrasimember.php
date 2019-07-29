@@ -57,8 +57,11 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Replacement User</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="replacement_user" type="text"
-											name="replacement_user" required>
+										<select class="form-control" id="replacement_user" name="replacement_user"
+											required>
+										</select>
+										<!-- <input class="form-control" id="replacement_user" type="text"
+											name="replacement_user" required> -->
 									</div>
 								</div>
 								<div class="form-group">
@@ -70,25 +73,30 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nama Lengkap</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="nama" type="text" pattern="^[A-Za-z ,.'-]+$" name="nama" required>
+										<input class="form-control" id="nama" type="text" pattern="^[A-Za-z ,.'-]+$"
+											name="nama" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Email</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="email" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
+										<input class="form-control" id="email" type="email" name="email"
+											pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nomor Telepon</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="no_telepon" type="text" name="no_telepon" placeholder="format: +6281333777999 / 081333777999" pattern="\+?([ -]?\d+)+|\(\d+\)([ -]\d+)" required>
+										<input class="form-control" id="no_telepon" type="text" name="no_telepon"
+											placeholder="format: +6281333777999 / 081333777999"
+											pattern="\+?([ -]?\d+)+|\(\d+\)([ -]\d+)" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">KTP</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="ktp" type="text" name="ktp" pattern="^[0-9]+$" required>
+										<input class="form-control" id="ktp" type="text" name="ktp" pattern="^[0-9]+$"
+											required>
 									</div>
 								</div>
 								<div class="form-group">
@@ -100,20 +108,22 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nama Bank</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="nama_bank" type="text" name="nama_bank" pattern="^[A-Za-z ,.'-]+$" required>
+										<input class="form-control" id="nama_bank" type="text" name="nama_bank"
+											pattern="^[A-Za-z ,.'-]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nomor Rekening</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="no_rekening" type="text" name="no_rekening" pattern="^[0-9]+$" required>
+										<input class="form-control" id="no_rekening" type="text" name="no_rekening"
+											pattern="^[0-9]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Atas Nama Bank</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank" pattern="^[A-Za-z ,.'-]+$"
-											required>
+										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank"
+											pattern="^[A-Za-z ,.'-]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
@@ -150,7 +160,7 @@
 		<script>
 			$(document).ready(function () {
 				var userCookie = getCookie("memberCookie");
-
+				var urls = "get_alldownlineuser/"
 				$("#registrasimember").addClass('active');
 				$("#username").text(userCookie);
 
@@ -169,6 +179,25 @@
 					}
 					return "";
 				}
+
+				$.ajax({
+					url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
+					type: 'get',
+					dataType: "json",
+					success: function (response) {
+						// console.log(response[i].username);
+						for (var i = 0; i < response.length; i++) {
+							var user = "Username : "+ response[i].username +"    ,    Nama : "+ response[i].nama;
+							$('#replacement_user').append(
+								$('<option>', {
+									value: response[i].username,
+									text: user
+								})
+							);
+						}
+					}
+				})
+
 			})
 
 			function setCookie(value) {
@@ -177,7 +206,7 @@
 				var base_url = "<?php echo base_url() ?>";
 				date.setTime(date.getTime() + (5 * 60 * 1000));
 				expires = "; expires=" + date.toUTCString();
-				document.cookie = "memberBaru =" + (value || "") + expires + "; path="+base_url+"index.php/registrasisukses";
+				document.cookie = "memberBaru =" + (value || "") + expires + "; path=" + base_url + "index.php/registrasisukses";
 			}
 
 			function insertfunction(e) {
@@ -210,8 +239,7 @@
 							$("#submitButton").prop("disabled", false);
 						}
 					});
-				} else {
-				}
+				} else {}
 			}
 
 		</script>
