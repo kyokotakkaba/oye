@@ -83,49 +83,49 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nama Lengkap</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="nama" type="text" name="nama">
+										<input class="form-control" id="nama" type="text" name="nama" pattern="^[A-Za-z ,.'-]+$" name="nama" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Email</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="email" type="email" name="email">
+										<input class="form-control" id="email" type="email" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nomor Telepon</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="no_telepon" type="text" name="no_telepon">
+										<input class="form-control" id="no_telepon" type="text" name="no_telepon" placeholder="format: +6281333777999 / 081333777999" pattern="\+?([ -]?\d+)+|\(\d+\)([ -]\d+)" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">KTP</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="ktp" type="text" name="ktp">
+										<input class="form-control" id="ktp" type="text" name="ktp" pattern="^[0-9]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Alamat</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="alamat" type="text" name="alamat">
+										<input class="form-control" id="alamat" type="text" name="alamat" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nama Bank</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="nama_bank" type="text" name="nama_bank">
+										<input class="form-control" id="nama_bank" type="text" name="nama_bank" pattern="^[A-Za-z ,.'-]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Nomor Rekening</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="no_rekening" type="text" name="no_rekening">
+										<input class="form-control" id="no_rekening" type="text" name="no_rekening" pattern="^[0-9]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Atas Nama Bank</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank">
+										<input class="form-control" id="atas_nama_bank" type="text" name="atas_nama_bank" pattern="^[A-Za-z ,.'-]+$" required>
 									</div>
 								</div>
 								<div class="form-group">

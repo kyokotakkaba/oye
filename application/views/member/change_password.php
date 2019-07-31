@@ -62,7 +62,7 @@
 										<label class="col-sm-3 control-label">Password Baru</label>
 										<div class="col-sm-9">
 											<input class="form-control" id="newpassword" type="password" name="newpassword"
-												minlength="8" required>
+												placeholder="Mnimal 6 karakter" minlength="6" required>
 										</div>
 									</div>
 									<div class="form-group">
@@ -103,6 +103,28 @@
 		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
 
 		<script>
+		$(document).ready(function () {
+			var userCookie = getCookie("memberCookie");
+
+				$("#registrasimember").addClass('active');
+				$("#username").text(userCookie);
+
+				function getCookie(cname) {
+					var name = cname + "=";
+					var decodedCookie = decodeURIComponent(document.cookie);
+					var ca = decodedCookie.split(';');
+					for (var i = 0; i < ca.length; i++) {
+						var c = ca[i];
+						while (c.charAt(0) == ' ') {
+							c = c.substring(1);
+						}
+						if (c.indexOf(name) == 0) {
+							return c.substring(name.length, c.length);
+						}
+					}
+					return "";
+				}
+		})
 			function insertfunction(e) {
 				if (confirm("Apakah anda yakin ?")) {
 					e.preventDefault(); // will stop the form submission						
