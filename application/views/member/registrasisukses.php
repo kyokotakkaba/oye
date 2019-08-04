@@ -122,7 +122,7 @@
 										</tr>
 										<tr>
 											<td>
-												<span>Alamat Pengiriman :<b id="bank_admin"> </b></span>
+												<span>Rekening :<b id="bank_admin"> </b></span>
 											</td>
 										</tr>
 										<tr>
@@ -142,7 +142,7 @@
 										</tr>
 										<tr>
 											<td>
-												<span><b>*Segera catat, dalam 5 menit halaman ini tidak bisa di akses kembali</b></span>
+												<span><b>*Catat info pembayaran di atas, halaman ini tidak bisa di akses kembali</b></span>
 											</td>
 										</tr>
 									</tbody>
@@ -230,7 +230,7 @@
 					type: 'get',
 					dataType: "json",
 					success: function (response) {
-						$("#bank_admin").text(" "+response.nama_bank+" "+response.no_rekening);
+						$("#bank_admin").text(" "+response.nama_bank+" "+response.no_rekening+" a/n "+response.atas_nama);
 					}
 				})
 			})

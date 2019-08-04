@@ -345,6 +345,7 @@ class Default_controller extends CI_Controller {
 	//note: registrasi member baru dengan request POST seperti di bawah.
 	//output: username sudah dipakai / replacement user tidak ditemukan / Replacement user tidak bisa digunakan
 	//output: gagal mengubah data / gagal mengirim email
+	//output: gagal mengirim sms. Respon : $respon / gagal mengirim sms. Curl belum aktif.
 	//output: registrasi sukses
 	public function insert_registrasimember(){
 		$insertStatus = $this->validasiusername($this->input->post('username'),true);
@@ -382,8 +383,12 @@ class Default_controller extends CI_Controller {
 				echo "Replacement user tidak bisa digunakan";
 			}else if ($insertStatus == "berhasil mengubah data"){
 				if ($this->sendmail_registrasi($this->input->post('email'),$this->input->post('username'),$biaya)) {
-					//to do if send sms
-					echo "registrasi sukses";
+					$respon = $this->sendsms_registrasi($this->input->post('no_telepon'),$this->input->post('username'),$biaya);
+					if ($respon == "berhasil mengirim sms") {
+						echo "registrasi sukses";
+					}else{
+						echo $respon;
+					}
 				}else{
 					echo "gagal mengirim email";
 				}
@@ -532,6 +537,7 @@ class Default_controller extends CI_Controller {
 	//output: gagal mengubah status / gagal menambah icash sponsor / gagal menambah poin sponsor
 	//output: gagal menambah bv upline $userUpline
 	//output: gagal mengirim email
+	//output: gagal mengirim sms. Respon : $respon / gagal mengirim sms. Curl belum aktif.
 	//output: verifikasi sukses
 	public function update_verifikasi_member($id){
 		// $updateprofil = $this->update_profilmember_admin($id,true); //apakah profil diupdate dulu sebelum verifikasi atau tidak?
@@ -592,8 +598,12 @@ class Default_controller extends CI_Controller {
 								}
 								if ($sukses) {
 									if ($this->sendmail_verifikasi($datauser['email'],$datauser['username'],$datauser['no_telepon'])) {
-										//to do if send sms
-										echo "verifikasi sukses";
+										$respon = $this->sendsms_verifikasi($datauser['no_telepon'],$datauser['username'],$datauser['no_telepon']);
+										if ($respon == "berhasil mengirim sms") {
+											echo "verifikasi sukses";
+										}else{
+											echo $respon;
+										}
 									}else{
 										echo "gagal mengirim email";
 									}
@@ -1005,13 +1015,49 @@ class Default_controller extends CI_Controller {
 		return mail($to,$subject,$txt,$headers);
 	}
 
-	//hanya untuk testing
-	public function testemailregistrasi(){
-		if ($this->sendmail_registrasi("bekkostudio@gmail.com","oye7",100899)) {
-			echo "registrasi sukses";
+
+	//untuk mengirim sms registrasi, tidak untuk front end
+	//output: berhasil mengirim sms / gagal mengirim sms. Respon : $respon / gagal mengirim sms. Curl belum aktif.
+	public function sendsms_registrasi($to, $username, $biaya){
+		$parameter = $this->get_parameter(true);
+		$txt = "Registrasi oye.co.id : ".$username.". Pembayaran Rp ".number_format($biaya,0,",",".")." ke rek ".$parameter['nama_bank']." ".$parameter['no_rekening']." a/n ".$parameter['atas_nama'].". Kirim bukti transfer ke WA: ".$parameter['no_admin'];
+
+		return $this->sendsms($to,$txt);
+	}
+
+	//untuk mengirim sms verifikasi, tidak untuk front end
+	//output: berhasil mengirim sms / gagal mengirim sms. Respon : $respon / gagal mengirim sms. Curl belum aktif.
+	public function sendsms_verifikasi($to, $username, $password){
+		$txt = "Pendaftaran oye.co.id telah disetujui. Silahkan login dengan username:".$username." password:".$password;
+		return $this->sendsms($to,$txt);
+	}
+
+	//memanggil api pengirim sms, tidak untuk front end
+	//output: berhasil mengirim sms / gagal mengirim sms. Respon : $respon / gagal mengirim sms. Curl belum aktif.
+	public function sendsms($to,$text){
+		$username    = 'bekkostudio'; 
+		$apikey      = '75e1663ea2429a322f889ed11c3cf671'; 
+		$urlserver   = 'http://sms241.xyz';
+		if(!function_exists('curl_version')){
+			return "gagal mengirim sms. Curl belum aktif.";
 		}else{
-			echo "gagal mengirim email";
+			$number  = $to;
+			$message = $text;
+			$url     = $urlserver."/sms/smsreguler.php?username=".urlencode($username)."&key=".urlencode($apikey)."&number=".urlencode($number)."&message=".urlencode($message);
+			$curlHandle = curl_init();
+			curl_setopt($curlHandle, CURLOPT_URL,$url);
+			curl_setopt($curlHandle, CURLOPT_HEADER, 0);
+			curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
+			$respon = curl_exec($curlHandle);
+			curl_close($curlHandle);			
+			if (substr($respon,0,1)=='0') {
+				return "berhasil mengirim sms";		
+			} else {
+				return "gagal mengirim sms. Respon : $respon";		
+			}
 		}
+
 	}
 
 
