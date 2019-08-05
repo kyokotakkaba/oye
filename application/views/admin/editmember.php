@@ -254,7 +254,7 @@
 						success: function (response) {
 							console.log(response);
 							$("#submit").html("tunggu..");
-							if (response == "verifikasi sukses") {
+							if (response.startsWith("verifikasi sukses", 0)) {
 								location.reload();
 							} else {
 								alert("Gagal");

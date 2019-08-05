@@ -377,24 +377,30 @@ class Default_controller extends CI_Controller {
 				);
 
 				$insertStatus = $this->Default_model->insert_member($data);
-				echo $insertStatus;
+				if ($insertStatus == "berhasil mengubah data"){
+					echo "registrasi sukses "; //tetap sukses walau email sms gagal
+					
+					//kirim email
+					if ($this->sendmail_registrasi($this->input->post('email'),$this->input->post('username'),$biaya)) {
+					}else{
+						echo "|gagal mengirim email ";
+					}
+
+					//kirim sms
+					$respon = $this->sendsms_registrasi($this->input->post('no_telepon'),$this->input->post('username'),$biaya);
+					if ($respon == "berhasil mengirim sms") {
+						// echo "registrasi sukses"; //echo di atas
+					}else{
+						echo "|".$respon;
+					}
+
+
+				}else{
+					echo $insertStatus;
+				}
 
 			}else if ($insertStatus == 2){
 				echo "Replacement user tidak bisa digunakan";
-			}else if ($insertStatus == "berhasil mengubah data"){
-				if ($this->sendmail_registrasi($this->input->post('email'),$this->input->post('username'),$biaya)) {
-					$respon = $this->sendsms_registrasi($this->input->post('no_telepon'),$this->input->post('username'),$biaya);
-					if ($respon == "berhasil mengirim sms") {
-						echo "registrasi sukses";
-					}else{
-						echo $respon;
-					}
-				}else{
-					echo "gagal mengirim email";
-				}
-				
-			}else{
-				echo $insertStatus;
 			}
 		}else{
 			echo $insertStatus;
@@ -597,15 +603,20 @@ class Default_controller extends CI_Controller {
 									}
 								}
 								if ($sukses) {
+									echo "verifikasi sukses "; //tetap sukses walau email sms gagal
+									
+									//kirim email
 									if ($this->sendmail_verifikasi($datauser['email'],$datauser['username'],$datauser['no_telepon'])) {
-										$respon = $this->sendsms_verifikasi($datauser['no_telepon'],$datauser['username'],$datauser['no_telepon']);
-										if ($respon == "berhasil mengirim sms") {
-											echo "verifikasi sukses";
-										}else{
-											echo $respon;
-										}
 									}else{
-										echo "gagal mengirim email";
+										echo "|gagal mengirim email ";
+									}
+
+									//kirim sms
+									$respon = $this->sendsms_verifikasi($datauser['no_telepon'],$datauser['username'],$datauser['no_telepon']);
+									if ($respon == "berhasil mengirim sms") {
+										// echo "verifikasi sukses"; //echo di atas
+									}else{
+										echo "|".$respon;
 									}
 								}else{
 									echo "gagal menambah bv upline ".$dataupline['username'];

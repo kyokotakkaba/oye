@@ -225,7 +225,8 @@
 						data: dataString,
 						success: function (response) {
 							console.log(value);
-							if (response == "berhasil mengubah data") {
+							console.log(response);
+							if (response.startsWith("registrasi sukses", 0)) {
 								setCookie(value);
 								window.location = "<?php echo base_url() ?>index.php/registrasisukses";
 							} else {
