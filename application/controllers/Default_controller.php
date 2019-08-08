@@ -231,6 +231,8 @@ class Default_controller extends CI_Controller {
 	public function get_alldownlineuser($id, $return_var = NULL){
 		$childrentemp = $this->get_downlineuser($id,true); //get first level children
 		$children = []; //initialize main children data
+		$currentuser = $this->get_currentuser(true);
+		$children[] = $currentuser;
 		while (!empty($childrentemp)) {
 			$nextlevelchildren = []; //initialize next level children data
 			foreach ($childrentemp as $child) {
@@ -559,8 +561,10 @@ class Default_controller extends CI_Controller {
 
 		//update status verifikasi
 		if ($posisikaki != 'batal') {
+			$passwordrandom = rand(10000000, 99999999);
 			$data = array(
-				'password' => md5($datauser['no_telepon']),
+				// 'password' => md5($datauser['no_telepon']),
+				'password' => md5($passwordrandom),
 				'posisi_kaki' => $posisikaki,
 				'status' => "active"
 			);
@@ -606,13 +610,13 @@ class Default_controller extends CI_Controller {
 									echo "verifikasi sukses "; //tetap sukses walau email sms gagal
 									
 									//kirim email
-									if ($this->sendmail_verifikasi($datauser['email'],$datauser['username'],$datauser['no_telepon'])) {
+									if ($this->sendmail_verifikasi($datauser['email'],$datauser['username'],$passwordrandom)) {
 									}else{
 										echo "|gagal mengirim email ";
 									}
 
 									//kirim sms
-									$respon = $this->sendsms_verifikasi($datauser['no_telepon'],$datauser['username'],$datauser['no_telepon']);
+									$respon = $this->sendsms_verifikasi($datauser['no_telepon'],$datauser['username'],$passwordrandom);
 									if ($respon == "berhasil mengirim sms") {
 										// echo "verifikasi sukses"; //echo di atas
 									}else{
