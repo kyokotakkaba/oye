@@ -133,7 +133,7 @@
 									<div class="col-sm-6">
 										<button type="submit" id="editButton" class="btn btn-success btn-md">
 											<span id="edit">Update Data</span></button>
-										<button id="verifikasiButton" class="btn btn-warning btn-md"
+										<button type="button" id="verifikasiButton" class="btn btn-warning btn-md"
 											onclick="verifikasi()">
 											<span id="verifikasi">Verifikasi Member</span></button>
 									</div>
