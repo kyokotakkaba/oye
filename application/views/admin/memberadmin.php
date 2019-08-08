@@ -59,6 +59,7 @@
     											<th>No Telepon</th>
     											<th>i-cash</th>
 												<th>Poin</th>
+												<th>Status</th>
     										</tr>
     									</thead>
     									<tbody id="datamember">
@@ -121,6 +122,7 @@
     							'<td>' + response[i].no_telepon + '</td>' +
     							'<td>' + response[i].icash + '</td>' +
 								'<td>' + response[i].poin + '</td>' +
+								'<td>' + response[i].status + '</td>' +
     							'</tr>';
 						}
 						$.extend($.fn.dataTable.defaults, {

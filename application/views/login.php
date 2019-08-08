@@ -21,11 +21,13 @@
 
 <body class="hold-transition login-page">
 	<div class="login-box">
-		<div class="login-logo">
-			<a href="../../index2.html"><b>Welcome</b>OYE</a>
+		<div class="login-logo" >
+		<!-- <img src="<?=base_url("dist/images/logo.png");?>"> -->
+		<br>
+			<a href="../../index2.html"><b>Welcome</b>OYE</a>	
 		</div>
 		<!-- /.login-logo -->
-		<div class="login-box-body">
+		<div class="login-box-body" style="  box-shadow: 2px 2px 2px 2px #888888;">
 			<p class="login-box-msg">Sign in</p>
 
 			<form id="form" method="POST">
