@@ -88,8 +88,8 @@
 									<label class="col-sm-3 control-label">Nomor Telepon</label>
 									<div class="col-sm-9">
 										<input class="form-control" id="no_telepon" type="text" name="no_telepon"
-											placeholder="format: +6281333777999 / 081333777999"
-											pattern="\+?([ -]?\d+)+|\(\d+\)([ -]\d+)" required>
+											placeholder="format: 081333777999"
+											pattern="^[0-9]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
@@ -225,7 +225,8 @@
 						data: dataString,
 						success: function (response) {
 							console.log(value);
-							if (response == "berhasil mengubah data") {
+							console.log(response);
+							if (response.startsWith("registrasi sukses", 0)) {
 								setCookie(value);
 								window.location = "<?php echo base_url() ?>index.php/registrasisukses";
 							} else {
