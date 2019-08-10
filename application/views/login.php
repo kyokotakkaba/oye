@@ -22,9 +22,9 @@
 <body class="hold-transition login-page">
 	<div class="login-box">
 		<div class="login-logo" >
-		<!-- <img src="<?=base_url("dist/images/logo.png");?>"> -->
+		<img src="<?=base_url("dist/images/logo.png");?>">
 		<br>
-			<a href="../../index2.html"><b>Welcome</b>OYE</a>	
+			<a href="../../index2.html"><b style="color:white">Welcome</b><span style="color:black">OYE<span></a>	
 		</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body" style="  box-shadow: 2px 2px 2px 2px #888888;">
