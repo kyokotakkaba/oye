@@ -261,6 +261,31 @@ class Default_model extends CI_Model {
 	}
 
 
+	public function update_add_kuota_sponsor_kiri($id, $value){
+		$this->db->where('username', $id);
+		$this->db->set('kuota_sponsor_kiri', 'kuota_sponsor_kiri+'.$value,false);
+		$this->db->update('member');
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+	public function update_subtract_kuota_sponsor_kiri($id, $value){
+		$this->db->where('username', $id);
+		$this->db->set('kuota_sponsor_kiri', 'kuota_sponsor_kiri-'.$value,false);
+		$this->db->update('member');
+		if ($this->db->affected_rows() > 0 ) {
+			$return_message = 'berhasil mengubah data';
+		}else{
+			$return_message = 'gagal mengubah data';
+		}
+		return $return_message;
+	}
+
+
 
 	//DELETE DATABASE
 	public function delete_member($id){
