@@ -160,7 +160,7 @@
 		<script>
 			$(document).ready(function () {
 				var userCookie = getCookie("memberCookie");
-				var urls = "get_alldownlineuser/"
+				var urls = "get_lockkanan_alldownlineuser/"
 				$("#registrasimember").addClass('active');
 				$("#username").text(userCookie);
 

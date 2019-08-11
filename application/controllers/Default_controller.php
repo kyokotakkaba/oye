@@ -227,11 +227,36 @@ class Default_controller extends CI_Controller {
 		}
 	}
 
+	//note: mengambil semua downline user dengan syarat downline kanan hanya boleh diambil jika punya kuota kiri
+	public function get_lockkanan_alldownlineuser($id, $return_var = NULL){
+		$currentuser = $this->get_specificuser($id,true);
+		if ($currentuser['kuota_sponsor_kiri']>0) {
+			$result = $this->get_alldownlineuser($id,true);
+		}else{
+			$childrentemp = $this->get_downlineuser($id,true); //get first level children
+			$result = []; //initialize main children data
+			$result[] = $currentuser;
+			foreach ($childrentemp as $child) {
+				if ($child['posisi_kaki']=='kiri') {
+					$result = array_merge($result,$this->get_alldownlineuser($child['username'],true));
+					break;
+				}
+			}
+		}
+
+
+		if ($return_var == true) {
+			return $result;
+		}else{
+			echo json_encode($result);
+		}
+	}
+
 	//note: mengambil semua downline user dengan parameter username
 	public function get_alldownlineuser($id, $return_var = NULL){
 		$childrentemp = $this->get_downlineuser($id,true); //get first level children
 		$children = []; //initialize main children data
-		$currentuser = $this->get_currentuser(true);
+		$currentuser = $this->get_specificuser($id,true);
 		$children[] = $currentuser;
 		while (!empty($childrentemp)) {
 			$nextlevelchildren = []; //initialize next level children data
@@ -373,6 +398,7 @@ class Default_controller extends CI_Controller {
 					'icash' => 0,
 					'bv_kanan' => 0,
 					'bv_kiri' => 0,
+					'kuota_sponsor_kiri'=>0,
 					'tanggal_registrasi' => date('Y-m-d H:i:s'),
 					'nominal_pembayaran' => $biaya,
 					'status' => "Pending"
@@ -391,7 +417,6 @@ class Default_controller extends CI_Controller {
 					//kirim sms
 					$respon = $this->sendsms_registrasi($this->input->post('no_telepon'),$this->input->post('username'),$biaya);
 					if ($respon == "berhasil mengirim sms") {
-						// echo "registrasi sukses"; //echo di atas
 					}else{
 						echo "|".$respon;
 					}
@@ -551,7 +576,6 @@ class Default_controller extends CI_Controller {
 		// $updateprofil = $this->update_profilmember_admin($id,true); //apakah profil diupdate dulu sebelum verifikasi atau tidak?
 		$datauser = $this->get_specificuser($id,true);
 		$jumlahdownline = $this->validasireplacementuser($datauser['replacement_user'],true);
-		$datadownline= $this->get_filtereduser(array('status'=> 'active','replacement_user'=>$datauser['replacement_user']), true);
 		$posisikaki = 'batal';
 		if ($jumlahdownline === 0) { // === untuk memastikan variabel bernilai angka 0
 			$posisikaki = 'kiri';
@@ -587,26 +611,41 @@ class Default_controller extends CI_Controller {
 					//tambah icash dari bonus sponsor
 					$insertStatus = $this->Default_model->update_add_icash($datauser['sponsor'],$nominal);
 					if ($insertStatus == "berhasil mengubah data"){
-					//tambah poin dari bonus sponsor
-						$insertStatus = $this->Default_model->update_add_poin($datauser['sponsor'],$poin);
+						//ambil kaki kiri downline
+						$datadownlinesponsorkiri= $this->get_filtereduser(array('status'=> 'active','replacement_user'=>$datauser['sponsor'],'posisi_kaki'=>'kiri'), true);
+						foreach ($datadownlinesponsorkiri as $row){
+							$downlinesponsorkiri = $row['username'];
+						}
+
+						//check apakah user di kaki kiri sponsor
+						if ($this->checkdownline($datauser['replacement_user'], $downlinesponsorkiri, true)) {
+							//Tambah kuota kiri sponsor
+							$insertStatus = $this->Default_model->update_add_kuota_sponsor_kiri($datauser['sponsor'],1);
+						}else{
+							//Kurangi kuota kiri sponsor
+							$insertStatus = $this->Default_model->update_subtract_kuota_sponsor_kiri($datauser['sponsor'],1);
+						}
 						if ($insertStatus == "berhasil mengubah data"){
-							//tambah bv semua upline
-							$dataupline = $this->get_specificuser($datauser['replacement_user'],true);
-							$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
-							if ($insertStatus == "berhasil mengubah data") {
-								$sukses = true;
-								while (!empty($dataupline['replacement_user'])) {
-									set_time_limit(30);
-									$posisikaki = $dataupline['posisi_kaki'];
-									$dataupline = $this->get_specificuser($dataupline['replacement_user'],true);
-									$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
-									if ($insertStatus == "gagal mengubah data"){
-										// $sukses = false; //comment untuk tetap jalankan program walau gagal
-										// break;
-										echo "gagal menambah bv upline ".$dataupline['username'];
+							//tambah poin dari bonus sponsor
+							$insertStatus = $this->Default_model->update_add_poin($datauser['sponsor'],$poin);
+							if ($insertStatus == "berhasil mengubah data"){
+								//tambah bv semua upline
+								$dataupline = $this->get_specificuser($datauser['replacement_user'],true);
+								$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
+								if ($insertStatus == "berhasil mengubah data") {
+									$sukses = true;
+									while (!empty($dataupline['replacement_user'])) {
+										set_time_limit(30);
+										$posisikaki = $dataupline['posisi_kaki'];
+										$dataupline = $this->get_specificuser($dataupline['replacement_user'],true);
+										$insertStatus = $this->update_add_bv($dataupline['username'],$posisikaki);
+										if ($insertStatus == "gagal mengubah data"){
+											// $sukses = false; //comment untuk tetap jalankan program walau gagal
+											// break;
+											echo "gagal menambah bv upline ".$dataupline['username'];
+										}
 									}
-								}
-								if ($sukses) {
+									if ($sukses) {
 									echo "verifikasi sukses "; //tetap sukses walau email sms gagal
 									
 									//kirim email
@@ -618,7 +657,6 @@ class Default_controller extends CI_Controller {
 									//kirim sms
 									$respon = $this->sendsms_verifikasi($datauser['no_telepon'],$datauser['username'],$passwordrandom);
 									if ($respon == "berhasil mengirim sms") {
-										// echo "verifikasi sukses"; //echo di atas
 									}else{
 										echo "|".$respon;
 									}
@@ -631,37 +669,39 @@ class Default_controller extends CI_Controller {
 						}else{
 							echo "gagal menambah poin sponsor";
 						}
-					}else{
-						echo "gagal menambah icash sponsor";
+
 					}
-
-
 				}else{
-					echo "gagal menginput bonus sponsor";
+					echo "gagal menambah icash sponsor";
 				}
 
 
 			}else{
-				echo "gagal mengubah status";
+				echo "gagal menginput bonus sponsor";
 			}
-			//continue here
+
+
 		}else{
-			echo "Replacement user tidak bisa digunakan";
+			echo "gagal mengubah status";
 		}
+			//continue here
+	}else{
+		echo "Replacement user tidak bisa digunakan";
 	}
+}
 
 	//note: bukan untuk front end
 	//Mengecek posisi kaki bv dan menambah bv
-	public function update_add_bv($idupline, $kakidownline){
-		if ($kakidownline == 'kiri') {
-			$insertStatus = $this->Default_model->update_add_bvkiri($idupline,1);
-		}else if ($kakidownline == 'kanan'){
-			$insertStatus = $this->Default_model->update_add_bvkanan($idupline,1);
-		}else{
-			$insertStatus = "gagal mengubah data";
-		}
-		return $insertStatus;
+public function update_add_bv($idupline, $kakidownline){
+	if ($kakidownline == 'kiri') {
+		$insertStatus = $this->Default_model->update_add_bvkiri($idupline,1);
+	}else if ($kakidownline == 'kanan'){
+		$insertStatus = $this->Default_model->update_add_bvkanan($idupline,1);
+	}else{
+		$insertStatus = "gagal mengubah data";
 	}
+	return $insertStatus;
+}
 
 
 	//note: verifikasi withdraw berdasarkan parameter 1 username, dan post tanggal
@@ -671,28 +711,28 @@ class Default_controller extends CI_Controller {
 	//output: saldo tidak cukup (setiap penarikan dikenakan biaya administrasi sebesar Rp $admin_fee)
 	//output: gagal mengubah status withdraw
 	//output: verifikasi sukses
-	public function update_verifikasi_withdraw($id){
-		$tanggal = $this->input->post('tanggal');
-		$datawithdraw = $this->get_specific_withdraw($id,$tanggal,true);
-		if (empty($datawithdraw)) {
-			echo 'data withdraw tidak ditemukan';
-		}else{
-			$response = $this->validasiwithdraw($id,$datawithdraw['total'],true);
-			if ($response == 'bisa melakukan withdraw') {
-				$data = array(
-					'status' => "Success"
-				);
-				$insertStatus = $this->Default_model->update_withdraw($id,$tanggal,$data);
-				if ($insertStatus == "berhasil mengubah data") {
-					echo "verifikasi sukses";
-				}else{
-					echo "gagal mengubah status withdraw";
-				}
+public function update_verifikasi_withdraw($id){
+	$tanggal = $this->input->post('tanggal');
+	$datawithdraw = $this->get_specific_withdraw($id,$tanggal,true);
+	if (empty($datawithdraw)) {
+		echo 'data withdraw tidak ditemukan';
+	}else{
+		$response = $this->validasiwithdraw($id,$datawithdraw['total'],true);
+		if ($response == 'bisa melakukan withdraw') {
+			$data = array(
+				'status' => "Success"
+			);
+			$insertStatus = $this->Default_model->update_withdraw($id,$tanggal,$data);
+			if ($insertStatus == "berhasil mengubah data") {
+				echo "verifikasi sukses";
 			}else{
-				echo $response;
+				echo "gagal mengubah status withdraw";
 			}
+		}else{
+			echo $response;
 		}
 	}
+}
 
 
 
@@ -701,14 +741,14 @@ class Default_controller extends CI_Controller {
 	//output: data member kosong / gagal menginput bonus pair $member / gagal menginput bonus pair kedua $member
 	//output: gagal menambah icash $member / gagal menambah poin $member / gagal mengurangi bv $member 
 	//output: payout bonus pair $member sukses 
-	public function update_payout_bonuspair(){
+public function update_payout_bonuspair(){
 		//ambil member yang memiliki bv kiri dan kanan
-		$allActiveMember= $this->get_filtereduser(array('status'=> 'active','bv_kiri >'=>0, 'bv_kanan >'=>0), true);
-		if (empty($allActiveMember)) {
-			echo 'data member kosong';
-		}else{
-			$parameter = $this->get_parameter(true);
-			foreach ($allActiveMember as $member) {
+	$allActiveMember= $this->get_filtereduser(array('status'=> 'active','bv_kiri >'=>0, 'bv_kanan >'=>0), true);
+	if (empty($allActiveMember)) {
+		echo 'data member kosong';
+	}else{
+		$parameter = $this->get_parameter(true);
+		foreach ($allActiveMember as $member) {
 				set_time_limit(30); //reset timeout tiap member
 
 				//hitung payout BV
@@ -1005,6 +1045,30 @@ class Default_controller extends CI_Controller {
 				echo $response;
 			}
 		}	
+	}
+
+	//untuk mengecek apakah user parameter 1 adalah downline dari user parameter 2
+	//output: true / false
+	public function checkdownline($iddownline, $idupline, $return_var = NULL){
+		$childrentemp = $this->get_downlineuser($idupline,true); //get first level children
+		$result = false;
+		while (!empty($childrentemp)) {
+			$nextlevelchildren = []; //initialize next level children data
+			foreach ($childrentemp as $child) {
+				set_time_limit(30); //reset timeout
+				if ($child['username']==$iddownline) {
+					$result = true;
+					break 2;
+				}
+				$nextlevelchildren = array_merge($nextlevelchildren,$this->get_downlineuser($child['username'],true));
+			}
+			$childrentemp = $nextlevelchildren;
+		}
+		if ($return_var == true) {
+			return $result;
+		}else{
+			echo $result;
+		}
 	}
 
 	//untuk mengirim email registrasi, tidak untuk front end

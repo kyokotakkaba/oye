@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 25, 2019 at 04:04 PM
+-- Generation Time: Aug 10, 2019 at 03:58 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 5.6.38
 
@@ -61,9 +61,9 @@ CREATE TABLE `bonus_pair` (
 --
 
 INSERT INTO `bonus_pair` (`username`, `tanggal`, `harga_pair`, `jumlah_pair`, `total`, `icash`, `poin`) VALUES
-('oye', '2019-07-18 18:40:01', 4000, 1, 4000, 3200, 800),
-('oye', '2019-07-18 18:41:50', 2000, 4, 8000, 6400, 1600),
-('oye', '2019-07-18 18:41:50', 4000, 16, 64000, 51200, 12800);
+('oye', '2019-08-09 00:01:01', 4000, 3, 12000, 9600, 2400),
+('oye2', '2019-08-09 00:01:01', 4000, 1, 4000, 3200, 800),
+('oye3', '2019-08-09 00:01:01', 4000, 1, 4000, 3200, 800);
 
 -- --------------------------------------------------------
 
@@ -85,8 +85,10 @@ CREATE TABLE `bonus_sponsor` (
 INSERT INTO `bonus_sponsor` (`sponsor`, `username_member`, `nominal`, `poin`) VALUES
 ('oye', 'oye2', 40000, 10000),
 ('oye', 'oye3', 40000, 10000),
-('oye', 'oye6', 40000, 10000),
-('oye2', 'oye4', 40000, 10000);
+('oye2', 'oye4', 40000, 10000),
+('oye2', 'oye5', 40000, 10000),
+('oye3', 'oye6', 40000, 10000),
+('oye3', 'oye7', 40000, 10000);
 
 -- --------------------------------------------------------
 
@@ -113,6 +115,7 @@ CREATE TABLE `member` (
   `poin` int(11) DEFAULT '0',
   `bv_kanan` int(11) DEFAULT '0',
   `bv_kiri` int(11) DEFAULT '0',
+  `kuota_sponsor_kiri` int(11) NOT NULL DEFAULT '0',
   `tanggal_registrasi` datetime DEFAULT NULL,
   `nominal_pembayaran` int(11) DEFAULT '0',
   `status` varchar(255) DEFAULT NULL
@@ -122,13 +125,14 @@ CREATE TABLE `member` (
 -- Dumping data for table `member`
 --
 
-INSERT INTO `member` (`username`, `password`, `nama`, `email`, `no_telepon`, `ktp`, `alamat`, `nama_bank`, `no_rekening`, `atas_nama_bank`, `security_code`, `sponsor`, `replacement_user`, `posisi_kaki`, `icash`, `poin`, `bv_kanan`, `bv_kiri`, `tanggal_registrasi`, `nominal_pembayaran`, `status`) VALUES
-('oye', '827ccb0eea8a706c4c34a16891f84e7b', 'OYE', 'bekkostudio@gmail.com', '082331602198', '945789547985479', '', '', '', '', '123456', NULL, NULL, NULL, 590800, 45200, 1, 10, '2019-07-06 13:03:19', NULL, 'active'),
-('oye2', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 2', 'bekkostudio@gmail.com', '082331602198', '94859845895', '', '', '', '', NULL, 'oye', 'oye', 'kiri', 40000, 10000, 0, 1, '2019-07-18 18:22:36', 100869, 'active'),
-('oye3', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 3', 'bekkostudio@gmail.com', '082331602198', '094869548609546854069', '', '', '', '', NULL, 'oye', 'oye', 'kanan', 0, 0, 0, 1, '2019-07-18 18:34:03', 100931, 'active'),
-('oye4', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 4', 'bekkostudio@gmail.com', '082331602198', '95846984569854', '', '', '', '', NULL, 'oye2', 'oye2', 'kiri', 0, 0, 0, 0, '2019-07-18 18:36:28', 100537, 'active'),
-('oye5', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 5', 'bekkostudio@gmail.com', '082331602198', '95894864968', '', '', '', '', NULL, 'oye', 'oye2', NULL, 0, 0, 0, 0, '2019-07-18 19:01:20', 100843, 'Pending'),
-('oye6', 'e10adc3949ba59abbe56e057f20f883e', 'OYE 6', 'bekkostudio@gmail.com', '082331602198', '45984594859458945', '', '', '', '', NULL, 'oye', 'oye3', 'kiri', 0, 0, 0, 0, '2019-07-18 19:02:21', 100561, 'active');
+INSERT INTO `member` (`username`, `password`, `nama`, `email`, `no_telepon`, `ktp`, `alamat`, `nama_bank`, `no_rekening`, `atas_nama_bank`, `security_code`, `sponsor`, `replacement_user`, `posisi_kaki`, `icash`, `poin`, `bv_kanan`, `bv_kiri`, `kuota_sponsor_kiri`, `tanggal_registrasi`, `nominal_pembayaran`, `status`) VALUES
+('oye', '827ccb0eea8a706c4c34a16891f84e7b', 'OYE', 'optimayieldselectronik@gmail.com', '081335855555', '3578251212770003', 'Surabaya', 'BCA', '02985093845', 'oye', NULL, NULL, NULL, NULL, 89600, 22400, 0, 0, 0, '2019-07-06 13:03:19', NULL, 'active'),
+('oye2', '9f55aae2935ee3fd5ef77a71f33add03', 'oye', 'optimayieldselectronik@gmail.com', '081335855555', '824093840923', 'Surabaya', 'BCA', '3485798954', 'Oye', NULL, 'oye', 'oye', 'kiri', 83200, 20800, 0, 0, 0, '2019-08-08 19:00:00', 100913, 'active'),
+('oye3', '9f55aae2935ee3fd5ef77a71f33add03', 'josh', 'optimayieldselectronik@gmail.com', '081335855555', '12345678', 'sby', 'BCA', '12345678', 'josh', NULL, 'oye', 'oye', 'kanan', 83200, 20800, 0, 0, 0, '2019-08-08 19:33:01', 100535, 'active'),
+('oye4', 'cdfde213b6c87df4eed960f281238cd4', 'joel', 'optimayieldselectronik@gmail.com', '082143009887', '12345678', 'sby', 'BCA', '12345678', 'joel', NULL, 'oye2', 'oye2', 'kiri', 0, 0, 0, 0, 0, '2019-08-08 19:50:32', 100728, 'active'),
+('oye5', '9f55aae2935ee3fd5ef77a71f33add03', 'isaac', 'optimayieldselectronik@gmail.com', '082143009887', '12345678', 'sda', 'BCA', '1234567', 'isaac', NULL, 'oye2', 'oye2', 'kanan', 0, 0, 0, 0, 0, '2019-08-08 20:17:06', 100847, 'active'),
+('oye6', '9f55aae2935ee3fd5ef77a71f33add03', 'linda', 'optimayieldselectronik@gmail.com', '082143009887', '12345678', 'sda', 'bca', '12345678', 'linda', NULL, 'oye3', 'oye3', 'kiri', 0, 0, 0, 0, 0, '2019-08-08 20:37:58', 100586, 'active'),
+('oye7', '9f55aae2935ee3fd5ef77a71f33add03', 'felix', 'optimayieldselectronik@gmail.com', '082143009887', '12345678', 'jkt', 'BCA', '12345678', 'felix', NULL, 'oye3', 'oye3', 'kanan', 0, 0, 0, 0, 0, '2019-08-08 20:48:57', 100626, 'active');
 
 -- --------------------------------------------------------
 
@@ -157,7 +161,7 @@ CREATE TABLE `parameter` (
 --
 
 INSERT INTO `parameter` (`id`, `biaya_registrasi`, `bonus_sponsor`, `bonus_pairing_pertama`, `bonus_pairing_kedua`, `batas_pairing_pertama`, `persentase_poin`, `admin_fee`, `minim_wd`, `nama_bank`, `no_rekening`, `atas_nama`, `no_admin`) VALUES
-(1, 100000, 50000, 4000, 2000, 16, 20, 10000, 100000, 'BCA', '02348230948', 'Agung Kurniawan', '08123456789');
+(1, 100000, 50000, 4000, 1000, 16, 20, 10000, 100000, 'BCA', '1521688888', 'Desy Purwanto', '08113409292');
 
 -- --------------------------------------------------------
 
@@ -173,15 +177,6 @@ CREATE TABLE `withdraw` (
   `total` int(11) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `withdraw`
---
-
-INSERT INTO `withdraw` (`username`, `tanggal`, `nominal`, `admin_fee`, `total`, `status`) VALUES
-('oye', '2019-07-18 18:46:46', 100000, 10000, 110000, 'Success'),
-('oye', '2019-07-18 19:05:06', 60000, 10000, 70000, 'Success'),
-('oye', '2019-07-21 21:59:35', 100000, 10000, 110000, 'Pending');
 
 --
 -- Indexes for dumped tables
