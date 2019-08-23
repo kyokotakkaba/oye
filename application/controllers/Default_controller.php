@@ -1099,7 +1099,7 @@ public function update_payout_bonuspair(){
 	//output: berhasil mengirim sms / gagal mengirim sms. Respon : $respon / gagal mengirim sms. Curl belum aktif.
 	public function sendsms_registrasi($to, $username, $biaya){
 		$parameter = $this->get_parameter(true);
-		$txt = "Registrasi oye.co.id : ".$username.". Pembayaran Rp ".number_format($biaya,0,",",".")." ke rek ".$parameter['nama_bank']." ".$parameter['no_rekening']." a/n ".$parameter['atas_nama'].". Kirim bukti transfer ke WA: ".$parameter['no_admin'];
+		$txt = "Registrasi oye.co.id : ".$username.". Pembayaran Rp ".number_format($biaya,0,",",".")." ke rek ".$parameter['nama_bank']." ".$parameter['no_rekening']." a/n ".$parameter['atas_nama'].". Kirim bukti transfer ke WA: ".$parameter['no_admin'].". Sertakan nama username anda untuk verifikasi.";
 
 		return $this->sendsms($to,$txt);
 	}
