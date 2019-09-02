@@ -248,6 +248,7 @@
 					urls = "update_verifikasi_member/";
 					var value = $('#username').val();
 					$("#verifikasiButton").prop("disabled", true);
+					$("#verifikasi").html("Tunggu..");
 					$.ajax({
 						url: "<?php echo base_url() ?>index.php/" + urls + value,
 						type: 'POST',

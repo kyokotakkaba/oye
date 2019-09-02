@@ -122,7 +122,7 @@
 										</tr>
 										<tr>
 											<td>
-												<span>Rekening :<b id="bank_admin"> </b></span>
+												<span>Rekening : <b id="bank_admin"> </b></span>
 											</td>
 										</tr>
 										<tr>

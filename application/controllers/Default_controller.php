@@ -575,16 +575,21 @@ class Default_controller extends CI_Controller {
 	public function update_verifikasi_member($id){
 		// $updateprofil = $this->update_profilmember_admin($id,true); //apakah profil diupdate dulu sebelum verifikasi atau tidak?
 		$datauser = $this->get_specificuser($id,true);
-		$jumlahdownline = $this->validasireplacementuser($datauser['replacement_user'],true);
-		$posisikaki = 'batal';
-		if ($jumlahdownline === 0) { // === untuk memastikan variabel bernilai angka 0
-			$posisikaki = 'kiri';
-		}else if ($jumlahdownline == 1) {
-			$posisikaki = 'kanan';
+		if($datauser['status']=="Pending"){
+			$jumlahdownline = $this->validasireplacementuser($datauser['replacement_user'],true);
+			$posisikaki = 'batal';
+		    if ($jumlahdownline === 0) { // === untuk memastikan variabel bernilai angka 0
+		    	$posisikaki = 'kiri';
+		    }else if ($jumlahdownline == 1) {
+		    	$posisikaki = 'kanan';
+		    }
+		}else{
+			$posisikaki = 'sudah verifikasi';
 		}
+		
 
 		//update status verifikasi
-		if ($posisikaki != 'batal') {
+		if ($posisikaki != 'batal' && $posisikaki != 'sudah verifikasi') {
 			$passwordrandom = rand(10000000, 99999999);
 			$data = array(
 				// 'password' => md5($datauser['no_telepon']),
@@ -1099,7 +1104,7 @@ public function update_payout_bonuspair(){
 	//output: berhasil mengirim sms / gagal mengirim sms. Respon : $respon / gagal mengirim sms. Curl belum aktif.
 	public function sendsms_registrasi($to, $username, $biaya){
 		$parameter = $this->get_parameter(true);
-		$txt = "Registrasi oye.co.id : ".$username.". Pembayaran Rp ".number_format($biaya,0,",",".")." ke rek ".$parameter['nama_bank']." ".$parameter['no_rekening']." a/n ".$parameter['atas_nama'].". Kirim bukti transfer ke WA: ".$parameter['no_admin'].". Sertakan nama username anda untuk verifikasi.";
+		$txt = "Registrasi oye.co.id : ".$username.". Pembayaran Rp ".number_format($biaya,0,",",".")." ke rek ".$parameter['nama_bank']." ".$parameter['no_rekening']." a/n ".$parameter['atas_nama'].". Kirim bukti transfer ke WA ".$parameter['no_admin']." dalam waktu kurang dari 6 jam. Sertakan nama username anda untuk verifikasi.";
 
 		return $this->sendsms($to,$txt);
 	}
@@ -1137,6 +1142,22 @@ public function update_payout_bonuspair(){
 			}
 		}
 
+	}
+	
+	
+	//untuk membuat cookie
+	//output: 
+	public function create_cookie(){
+		$name = $this->input->post('name');
+		$value = $this->input->post('value');
+		$this->load->helper('cookie');
+		$cookie= array(
+			'name'   => $name,
+			'value'  => $value,
+			'expire' => 0
+		);
+		$this->input->set_cookie($cookie);
+		echo "cookie created";
 	}
 
 

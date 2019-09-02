@@ -67,7 +67,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 control-label">Username</label>
 									<div class="col-sm-9">
-										<input class="form-control" id="usernamebaru" type="text" name="username" required>
+										<input class="form-control" id="usernamebaru" type="text" name="username" placeholder="format: huruf, angka, dash atau underscore tanpa spasi. Contoh: user_oye78" pattern="^[A-Za-z0-9-_]+$" required>
 									</div>
 								</div>
 								<div class="form-group">
@@ -200,20 +200,34 @@
 
 			})
 
-			function setCookie(value) {
+			function setCookie(values) {
 				var expires = "";
 				var date = new Date();
 				var base_url = "<?php echo base_url() ?>";
 				date.setTime(date.getTime() + (5 * 60 * 1000));
-				expires = "; expires=" + date.toUTCString();
-				document.cookie = "memberBaru =" + (value || "") + expires + "; path=" + base_url + "index.php/registrasisukses";
+				expires = date.toUTCString();
+				$.ajax({
+						url: "<?php echo base_url() ?>index.php/create_cookie",
+						type: 'POST',
+						data: {name: "memberBaru", value: values},
+						success: function (response) {
+								console.log(response);
+								window.location = "<?php echo base_url() ?>index.php/registrasisukses";
+						},
+						error: function () {
+							alert('Gagal');
+							$("#submitButton").prop("disabled", false);
+						}
+					});
+				
+				
 			}
 
 			function insertfunction(e) {
 				if (confirm("Apakah anda yakin ?")) {
 					e.preventDefault(); // will stop the form submission						
 					urls = "insert_registrasimember";
-					var value = $('#usernamebaru').val();
+					var values = $('#usernamebaru').val();
 					var dataString = $("#insert_member").serialize();
 
 					$("#submit").html("tunggu..");
@@ -224,11 +238,10 @@
 						type: 'POST',
 						data: dataString,
 						success: function (response) {
-							console.log(value);
-							console.log(response);
+							
 							if (response.startsWith("registrasi sukses", 0)) {
-								setCookie(value);
-								window.location = "<?php echo base_url() ?>index.php/registrasisukses";
+								setCookie(values);
+								
 							} else {
 								alert("Gagal");
 								$("#submit").html("Submit");
