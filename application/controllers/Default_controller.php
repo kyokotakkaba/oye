@@ -618,18 +618,29 @@ class Default_controller extends CI_Controller {
 					if ($insertStatus == "berhasil mengubah data"){
 						//ambil kaki kiri downline
 						$datadownlinesponsorkiri= $this->get_filtereduser(array('status'=> 'active','replacement_user'=>$datauser['sponsor'],'posisi_kaki'=>'kiri'), true);
+						$downlinesponsorkiri = "";
 						foreach ($datadownlinesponsorkiri as $row){
 							$downlinesponsorkiri = $row['username'];
-							//SALAH LOGIC, BUG!!!
 						}
 
 						//check apakah user di kaki kiri sponsor
-						if ($this->checkdownline($datauser['replacement_user'], $downlinesponsorkiri, true)) { //SALAH LOGIC HERE, NGEBUG SELALU ELSE YANG KEPANGGIL!!
+						if ($this->checkdownline($datauser['replacement_user'], $downlinesponsorkiri, true)) {
 							//Tambah kuota kiri sponsor
 							$insertStatus = $this->Default_model->update_add_kuota_sponsor_kiri($datauser['sponsor'],1);
 						}else{
-							//Kurangi kuota kiri sponsor
-							$insertStatus = $this->Default_model->update_subtract_kuota_sponsor_kiri($datauser['sponsor'],1);
+
+							if ($datauser['replacement_user'] == $downlinesponsorkiri) {
+								//Bila replacement tepat di kaki kiri sponsor
+								//Tambah kuota kiri sponsor
+								$insertStatus = $this->Default_model->update_add_kuota_sponsor_kiri($datauser['sponsor'],1);
+							}else if ($datauser['replacement_user'] == $datauser['sponsor'] && $posisikaki == 'kiri') {
+								//bila replacement dan sponsor sama
+								//Tambah kuota kiri sponsor
+								$insertStatus = $this->Default_model->update_add_kuota_sponsor_kiri($datauser['sponsor'],1);
+							}else{
+								//Kurangi kuota kiri sponsor
+								$insertStatus = $this->Default_model->update_subtract_kuota_sponsor_kiri($datauser['sponsor'],1);
+							}	
 						}
 						if ($insertStatus == "berhasil mengubah data"){
 							//tambah poin dari bonus sponsor
@@ -1147,7 +1158,7 @@ public function update_payout_bonuspair(){
 	
 	
 	//untuk membuat cookie
-	//output: 
+	//output: cookie created
 	public function create_cookie(){
 		$name = $this->input->post('name');
 		$value = $this->input->post('value');
@@ -1162,7 +1173,7 @@ public function update_payout_bonuspair(){
 	}
 
 	//untuk mengambil cookie
-	//output: 
+	//output: no cookie / $cookie
 	public function get_cookie($name){
 		$this->load->helper('cookie');
 		if ($this->input->cookie($name,true)!=NULL) {
