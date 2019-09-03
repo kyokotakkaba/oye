@@ -620,10 +620,11 @@ class Default_controller extends CI_Controller {
 						$datadownlinesponsorkiri= $this->get_filtereduser(array('status'=> 'active','replacement_user'=>$datauser['sponsor'],'posisi_kaki'=>'kiri'), true);
 						foreach ($datadownlinesponsorkiri as $row){
 							$downlinesponsorkiri = $row['username'];
+							//SALAH LOGIC, BUG!!!
 						}
 
 						//check apakah user di kaki kiri sponsor
-						if ($this->checkdownline($datauser['replacement_user'], $downlinesponsorkiri, true)) {
+						if ($this->checkdownline($datauser['replacement_user'], $downlinesponsorkiri, true)) { //SALAH LOGIC HERE, NGEBUG SELALU ELSE YANG KEPANGGIL!!
 							//Tambah kuota kiri sponsor
 							$insertStatus = $this->Default_model->update_add_kuota_sponsor_kiri($datauser['sponsor'],1);
 						}else{
@@ -890,7 +891,7 @@ public function update_payout_bonuspair(){
 			$cookie= array(
 				'name'   => 'backendCookie',
 				'value'  => $username,
-				'expire' => '0',
+				'expire' => 0
 			);
 			$this->input->set_cookie($cookie);
 			echo "berhasil login admin";
@@ -903,7 +904,7 @@ public function update_payout_bonuspair(){
 					$cookie= array(
 						'name'   => 'memberCookie',
 						'value'  => $username,
-						'expire' => '0',
+						'expire' => 0
 					);
 					$this->input->set_cookie($cookie);
 					$is_login = true;
@@ -974,7 +975,7 @@ public function update_payout_bonuspair(){
 	//note: menghapus cookie admin dan langsung redirect ke halaman login
 	public function logoutadmin(){
 		$this->load->helper('cookie');
-		delete_cookie("memberCookie");
+		delete_cookie("backendCookie");
 		header("Location: ".base_url()."index.php/login");
 		die();
 	}
@@ -1158,6 +1159,17 @@ public function update_payout_bonuspair(){
 		);
 		$this->input->set_cookie($cookie);
 		echo "cookie created";
+	}
+
+	//untuk mengambil cookie
+	//output: 
+	public function get_cookie($name){
+		$this->load->helper('cookie');
+		if ($this->input->cookie($name,true)!=NULL) {
+			echo $this->input->cookie($name,true); //to output cookie
+		}else{
+			echo "no cookie";
+		}
 	}
 
 
