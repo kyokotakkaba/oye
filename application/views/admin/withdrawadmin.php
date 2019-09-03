@@ -97,6 +97,10 @@
 <script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
         <script>
             $(document).ready(function () {
+                $.ajaxSetup({
+                    headers: { "cache-control": "no-cache" }
+                });
+                
                 $("#withdraw").addClass('active');
                 urls = "get_alluser_withdraw";
 

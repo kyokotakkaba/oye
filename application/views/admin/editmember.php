@@ -15,11 +15,11 @@
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
 		<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
 		<link rel="stylesheet"
-			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
+		href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
 
 		<!-- Google Font -->
 		<link rel="stylesheet"
-			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	</head>
 
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -46,11 +46,11 @@
 
 							<div class="box-tools pull-right">
 								<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-									title="Collapse">
-									<i class="fa fa-minus"></i></button>
+								title="Collapse">
+								<i class="fa fa-minus"></i></button>
 								<button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
-									title="Remove">
-									<i class="fa fa-times"></i></button>
+								title="Remove">
+								<i class="fa fa-times"></i></button>
 							</div>
 						</div>
 						<div class="box-body">
@@ -59,7 +59,7 @@
 									<label class="col-sm-3 control-label">Replacement User</label>
 									<div class="col-sm-9">
 										<input class="form-control" id="replacement_user" type="text"
-											name="replacement_user">
+										name="replacement_user">
 									</div>
 								</div>
 								<div class="form-group">
@@ -133,87 +133,98 @@
 									<div class="col-sm-6">
 										<button type="submit" id="editButton" class="btn btn-success btn-md">
 											<span id="edit">Update Data</span></button>
-										<button type="button" id="verifikasiButton" class="btn btn-warning btn-md"
+											<button type="button" id="verifikasiButton" class="btn btn-warning btn-md"
 											onclick="verifikasi()">
 											<span id="verifikasi">Verifikasi Member</span></button>
+											<button type="button" id="deleteButton" class="btn btn-danger btn-md"
+											onclick="deleteMember()">
+											<span id="deleteMember">Hapus Member</span></button>
+										</div>
 									</div>
+									<form>
+									</div>
+									<!-- /.box-body -->
+									<div class="box-footer">
+										Edit & Verifikasi Member
+									</div>
+									<!-- /.box-footer-->
 								</div>
-								<form>
+								<!-- /.box -->
+							</section>
+							<!-- /.content -->
 						</div>
-						<!-- /.box-body -->
-						<div class="box-footer">
-							Edit & Verifikasi Member
-						</div>
-						<!-- /.box-footer-->
+						<!-- /.content-wrapper -->
+						<?php $this->load->view("member/footer");?>
 					</div>
-					<!-- /.box -->
-				</section>
-				<!-- /.content -->
-			</div>
-			<!-- /.content-wrapper -->
-			<?php $this->load->view("member/footer");?>
-		</div>
-		<!-- ./wrapper -->
+					<!-- ./wrapper -->
 
-		<!-- jQuery 3 -->
-		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
-		<!-- Bootstrap 3.3.7 -->
-		<script src="<?=base_url("bower_components/bootstrap/dist/js/bootstrap.min.js");?>"></script>
-		<!-- SlimScroll -->
-		<script src="<?=base_url("bower_components/jquery-slimscroll/jquery.slimscroll.min.js");?>"></script>
-		<!-- FastClick -->
-		<script src="<?=base_url("bower_components/fastclick/lib/fastclick.js");?>"></script>
-		<!-- AdminLTE App -->
-		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
-		<script>
-			$(document).ready(function () {
-				editMember = getCookie("editMember");
-				urls = "get_specificuser/";
+					<!-- jQuery 3 -->
+					<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
+					<!-- Bootstrap 3.3.7 -->
+					<script src="<?=base_url("bower_components/bootstrap/dist/js/bootstrap.min.js");?>"></script>
+					<!-- SlimScroll -->
+					<script src="<?=base_url("bower_components/jquery-slimscroll/jquery.slimscroll.min.js");?>"></script>
+					<!-- FastClick -->
+					<script src="<?=base_url("bower_components/fastclick/lib/fastclick.js");?>"></script>
+					<!-- AdminLTE App -->
+					<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
+					<script>
+						$(document).ready(function () {
+							$.ajaxSetup({
+								headers: { "cache-control": "no-cache" }
+							});
+							getCookie("editMember", getDashboardData);
+							function getCookie(cname, callBack){
+								$.ajax({
+									url: "<?php echo base_url() ?>index.php/get_cookie/" + cname,
+									type: 'post',
+									success: function (response) {
+										callBack(response);
+									}
+								})
+							}
 
-				function getCookie(cname) {
-					var name = cname + "=";
-					var decodedCookie = decodeURIComponent(document.cookie);
-					var ca = decodedCookie.split(';');
-					for (var i = 0; i < ca.length; i++) {
-						var c = ca[i];
-						while (c.charAt(0) == ' ') {
-							c = c.substring(1);
-						}
-						if (c.indexOf(name) == 0) {
-							return c.substring(name.length, c.length);
-						}
-					}
-					return "";
-				}
+							function getDashboardData(response){
+								userCookie = response;
+								urls = "get_specificuser/";
 
-				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls + editMember,
-					type: 'get',
-					dataType: "json",
-					success: function (response) {
-						// console.log(response);
-						$("#replacement_user").val(response.replacement_user);
-						$("#sponsor").val(response.sponsor);
-						$("#username").val(response.username);
-						$("#nama").val(response.nama);
-						$("#email").val(response.email);
-						$("#no_telepon").val(response.no_telepon);
-						$("#ktp").val(response.ktp);
-						$("#alamat").val(response.alamat);
-						$("#nama_bank").val(response.nama_bank);
-						$("#no_rekening").val(response.no_rekening);
-						$("#atas_nama_bank").val(response.atas_nama_bank);
+								$("#reporting").addClass('active');
+								$("#laporanbonuspair").addClass('active');
+								$("#username").text(userCookie);
 
-						if (response.status == "active") {
-							$("#verifikasiButton").remove();
-							$("#replacement_user").prop('disabled', true);
-						}
-					}
-				})
-			})
 
-			function insertfunction(e) {
-				if (confirm("Apakah anda yakin ?")) {
+								$.ajax({
+									url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
+									type: 'get',
+									dataType: "json",
+									success: function (response) {
+										$("#replacement_user").val(response.replacement_user);
+										$("#sponsor").val(response.sponsor);
+										$("#username").val(response.username);
+										$("#nama").val(response.nama);
+										$("#email").val(response.email);
+										$("#no_telepon").val(response.no_telepon);
+										$("#ktp").val(response.ktp);
+										$("#alamat").val(response.alamat);
+										$("#nama_bank").val(response.nama_bank);
+										$("#no_rekening").val(response.no_rekening);
+										$("#atas_nama_bank").val(response.atas_nama_bank);
+
+										if (response.status == "active") {
+											$("#verifikasiButton").remove();
+											$("#replacement_user").prop('disabled', true);
+											$("#deleteButton").remove();
+										}
+									}
+								})
+							}
+
+
+
+						})
+
+						function insertfunction(e) {
+							if (confirm("Apakah anda yakin ?")) {
 					e.preventDefault(); // will stop the form submission						
 					urls = "update_profilmember_admin/";
 					var value = $('#username').val();
@@ -236,6 +247,36 @@
 						error: function () {
 							alert('Gagal');
 							$("#submitButton").prop("disabled", false);
+						}
+					});
+				} else {
+
+				}
+			}
+
+			function deleteMember(){
+				if (confirm("Apakah anda yakin ingin menghapus member ini?")) {
+					urls = "delete_member/";
+					var value = $('#username').val();
+					$("#deleteButton").prop("disabled", true);
+					$("#deleteMember").html("Tunggu..");
+					$.ajax({
+						url: "<?php echo base_url() ?>index.php/" + urls + value,
+						type: 'POST',
+						success: function (response) {
+							
+							$("#submit").html("tunggu..");
+							if (response.startsWith("berhasil menghapus data", 0)) {
+								window.location="<?php echo base_url() ?>index.php/memberadmin";
+							} else {
+								alert(response);
+								$("#deleteMember").html("Hapus Member");
+								$("#deleteButton").prop("disabled", false);
+							}
+						},
+						error: function () {
+							alert(response);
+							$("#deleteButton").prop("disabled", false);
 						}
 					});
 				} else {

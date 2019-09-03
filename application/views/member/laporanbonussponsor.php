@@ -14,9 +14,9 @@
 
 		<!-- DataTables -->
 		<link rel="stylesheet"
-			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
+		href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
 		<link rel="stylesheet"
-			href="<?=base_url("bower_components/datatables.net-bs/css/responsive.dataTables.min.css");?>">
+		href="<?=base_url("bower_components/datatables.net-bs/css/responsive.dataTables.min.css");?>">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
 		<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
@@ -25,7 +25,7 @@
 		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
 		<!-- Google Font -->
 		<link rel="stylesheet"
-			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	</head>
 
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -94,56 +94,59 @@
 
 		<script>
 			$(document).ready(function () {
+				$.ajaxSetup({
+                    headers: { "cache-control": "no-cache" }
+                });
+                
 				const formatUang = new Intl.NumberFormat('id-ID', {
 					style: 'currency',
 					currency: 'IDR',
 					minimumFractionDigits: 2
 				});
-				userCookie = getCookie("memberCookie");
-				urls = "get_currentuser_bonussponsor";
 
-				$("#reporting").addClass('active');
-				$("#laporanbonussponsor").addClass('active');
-				$("#username").text(userCookie);
 
-				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls,
-					type: 'get',
-					dataType: "json",
-					success: function (response) {
-						console.log(response);
-						var tr_str;
-						for (var i = 0; i < response.length; i++) {
-							tr_str +=
+				getCookie("memberCookie", getDashboardData);
+				function getCookie(cname, callBack){
+					$.ajax({
+						url: "<?php echo base_url() ?>index.php/get_cookie/" + cname,
+						type: 'post',
+						success: function (response) {
+							callBack(response);
+						}
+					})
+				}
+
+				function getDashboardData(response){
+					userCookie = response;
+					urls = "get_currentuser_bonussponsor/";
+
+					$("#reporting").addClass('active');
+					$("#laporanbonussponsor").addClass('active');
+					$("#username").text(userCookie);
+
+					$.ajax({
+						url: "<?php echo base_url() ?>index.php/" + urls,
+						type: 'post',
+						dataType: "json",
+						success: function (response) {
+							console.log(response);
+							var tr_str;
+							for (var i = 0; i < response.length; i++) {
+								tr_str +=
 								'<tr class="text-center" >' +
 								'<td>' + response[i].sponsor + '</td>' +
 								'<td>' + response[i].username_member + '</td>' +
 								'<td>' + formatUang.format(response[i].nominal) + '</td>' +
 								'<td>' + formatUang.format(response[i].poin) + '</td>' +
 								'</tr>';
+							}
+							$.extend($.fn.dataTable.defaults, {
+								responsive: true
+							});
+							$('#databonussponsor').append(tr_str);
+							$("#tablebonussponsor").DataTable({});
 						}
-						$.extend($.fn.dataTable.defaults, {
-							responsive: true
-						});
-						$('#databonussponsor').append(tr_str);
-						$("#tablebonussponsor").DataTable({});
-					}
-				})
-
-				function getCookie(cname) {
-					var name = cname + "=";
-					var decodedCookie = decodeURIComponent(document.cookie);
-					var ca = decodedCookie.split(';');
-					for (var i = 0; i < ca.length; i++) {
-						var c = ca[i];
-						while (c.charAt(0) == ' ') {
-							c = c.substring(1);
-						}
-						if (c.indexOf(name) == 0) {
-							return c.substring(name.length, c.length);
-						}
-					}
-					return "";
+					})
 				}
 			})
 

@@ -19,7 +19,7 @@
 
         <!-- Google Font -->
         <link rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
     </head>
 
     <body class="hold-transition skin-blue sidebar-mini">
@@ -97,7 +97,9 @@
         <script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
         <script>
             $(document).ready(function () {
-                
+                $.ajaxSetup({
+                    headers: { "cache-control": "no-cache" }
+                });
                 
                 $("#member").addClass('active');
                 urls = "get_alluser";
@@ -111,18 +113,18 @@
                         var tr_str;
                         for (var i = 0; i < response.length; i++) {
                             tr_str +=
-                                '<tr class="text-center" >' +
-                                '<td><button class="btn btn-sm btn-primary" onclick="halamanEdit(&quot;' +
-                                response[i].username + '&quot;)">Detail</button></td>' +
-                                '<td class="status_member">' + response[i].status + '</td>' +
-                                '<td>' + response[i].username + '</td>' +
-                                '<td>' + response[i].nama + '</td>' +
-                                '<td>' + response[i].replacement_user + '</td>' +
-                                '<td>' + response[i].email + '</td>' +
-                                '<td>' + response[i].no_telepon + '</td>' +
-                                '<td>' + response[i].icash + '</td>' +
-                                '<td>' + response[i].poin + '</td>' +
-                                '</tr>';
+                            '<tr class="text-center" >' +
+                            '<td><button class="btn btn-sm btn-primary" onclick="halamanEdit(&quot;' +
+                            response[i].username + '&quot;)">Detail</button></td>' +
+                            '<td class="status_member">' + response[i].status + '</td>' +
+                            '<td>' + response[i].username + '</td>' +
+                            '<td>' + response[i].nama + '</td>' +
+                            '<td>' + response[i].replacement_user + '</td>' +
+                            '<td>' + response[i].email + '</td>' +
+                            '<td>' + response[i].no_telepon + '</td>' +
+                            '<td>' + response[i].icash + '</td>' +
+                            '<td>' + response[i].poin + '</td>' +
+                            '</tr>';
                         }
                         $.extend($.fn.dataTable.defaults, {
                             responsive: true
@@ -130,7 +132,7 @@
                         $('#datamember').append(tr_str);
                         $("#tablemember").DataTable({
                             order: [
-                                [1, 'asc']
+                            [1, 'asc']
                             ],
                             'columnDefs': [{
                                 'orderable': false,
@@ -139,11 +141,8 @@
                         });
                         
                         $('.status_member').each(function() {
-                           let text = $(this).text();
-                           if(text != 'active') {
-                               $(this).css('color', 'red');
-                           }
-                        });
+                         let text = $(this).text();
+                     });
                     }
                 })
             });
@@ -151,18 +150,18 @@
             function halamanEdit(username) {
                 var myPath = "<?php echo base_url() ?>index.php/editmember";
                 $.ajax({
-                        url: "<?php echo base_url() ?>index.php/create_cookie",
-                        type: 'POST',
-                        data: {name: "editMember", value: username},
-                        success: function (response) {
-                                console.log(response);
-                                window.location = "<?php echo base_url() ?>index.php/editmember";
-                        },
-                        error: function () {
-                            console.log("gagal set cookie");
-                            
-                        }
-                    });
+                    url: "<?php echo base_url() ?>index.php/create_cookie",
+                    type: 'POST',
+                    data: {name: "editMember", value: username},
+                    success: function (response) {
+                        console.log(response);
+                        window.location = "<?php echo base_url() ?>index.php/editmember";
+                    },
+                    error: function () {
+                        console.log("gagal set cookie");
+
+                    }
+                });
                 
                 
             }
