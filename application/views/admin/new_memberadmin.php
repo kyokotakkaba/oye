@@ -89,6 +89,10 @@
     	<script src="<?=base_url("dist/js/demo.js");?>"></script>
     	<script>
     		$(document).ready(function () {
+                $.ajaxSetup({
+                    headers: { "cache-control": "no-cache" }
+                });
+                
     			$("#member").addClass('active');
     			urls = "get_alluser";
 

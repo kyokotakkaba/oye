@@ -14,7 +14,7 @@
 		
 		<!-- DataTables -->
 		<link rel="stylesheet"
-			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
+		href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
 		<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
@@ -23,7 +23,7 @@
 		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
 		<!-- Google Font -->
 		<link rel="stylesheet"
-			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	</head>
 
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -85,6 +85,10 @@
 		
 		<script>
 			$(document).ready(function () {
+				$.ajaxSetup({
+                    headers: { "cache-control": "no-cache" }
+                });
+                
 				userCookie = getCookie("memberCookie");
 				urls = "get_specificuser/";
 				
@@ -92,31 +96,28 @@
 				$("#genealogytree").addClass('active');
 				$("#username").text(userCookie);
 
-				function getCookie(cname) {
-					var name = cname + "=";
-					var decodedCookie = decodeURIComponent(document.cookie);
-					var ca = decodedCookie.split(';');
-					for (var i = 0; i < ca.length; i++) {
-						var c = ca[i];
-						while (c.charAt(0) == ' ') {
-							c = c.substring(1);
-						}
-						if (c.indexOf(name) == 0) {
-							return c.substring(name.length, c.length);
-						}
-					}
-					return "";
-				}
-
 				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
-					type: 'get',
-					dataType: "json",
+					url: "<?php echo base_url() ?>index.php/get_cookie/memberCookie",
+					type: 'post',
 					success: function (response) {
-						console.log(response.bv_kanan);
-						$("#bvkiri").text(response.bv_kiri);
-						$("#bvkanan").text(response.bv_kanan);
-						$("#icash").text(response.icash);
+						userCookie = response;
+						urls = "get_specificuser/";
+
+						$("#dashboard").addClass('active');
+						$("#username").text(userCookie);
+
+						$.ajax({
+							url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
+							type: 'post',
+							dataType: "json",
+							success: function (response) {
+								console.log(response.bv_kanan);
+								$("#bvkiri").text(formatUang.format(response.bv_kiri*2000));
+								$("#bvkanan").text(formatUang.format(response.bv_kanan*2000));
+								$("#icash").text(formatUang.format(response.icash));
+								$("#poin").text(formatUang.format(response.poin));
+							}
+						})
 					}
 				})
 			})

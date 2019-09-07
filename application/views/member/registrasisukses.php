@@ -14,7 +14,7 @@
 		
 		<!-- DataTables -->
 		<link rel="stylesheet"
-			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
+		href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
 		<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
@@ -23,7 +23,7 @@
 		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
 		<!-- Google Font -->
 		<link rel="stylesheet"
-			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	</head>
 
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -122,7 +122,7 @@
 										</tr>
 										<tr>
 											<td>
-												<span>Rekening :<b id="bank_admin"> </b></span>
+												<span>Rekening : <b id="bank_admin"> </b></span>
 											</td>
 										</tr>
 										<tr>
@@ -147,7 +147,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<button class="btn btn-primary" onclick="deleteCookie(memberBaru)">Tutup</button>
+								<button class="btn btn-primary" onclick="tutup()">Tutup</button>
 							</div>
 
 						</div>
@@ -176,40 +176,45 @@
 		
 		<script>
 			$(document).ready(function () {
+				$.ajaxSetup({
+                    headers: { "cache-control": "no-cache" }
+                });
+                
 				const formatUang = new Intl.NumberFormat('id-ID', {
 					style: 'currency',
 					currency: 'IDR',
 					minimumFractionDigits: 2
 				});
-				
-				memberBaru = getCookie("memberBaru");
-				var userCookie = getCookie("memberCookie");
-				var urls = "get_specificuser/";
 
-				$("#registrasimember").addClass('active');
-				$("#username").text(userCookie);
+				getCookie("memberBaru", getMemberData);
+				getCookie("memberCookie", getDashboardData);
 
-				function getCookie(cname) {
-					var name = cname + "=";
-					var decodedCookie = decodeURIComponent(document.cookie);
-					var ca = decodedCookie.split(';');
-					for (var i = 0; i < ca.length; i++) {
-						var c = ca[i];
-						while (c.charAt(0) == ' ') {
-							c = c.substring(1);
+				function getCookie(cname, callBack){
+					$.ajax({
+						url: "<?php echo base_url() ?>index.php/get_cookie/" + cname,
+						type: 'post',
+						success: function (response) {
+							callBack(response);
 						}
-						if (c.indexOf(name) == 0) {
-							return c.substring(name.length, c.length);
-						}
-					}
-					return "";
+					})
 				}
 
-				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls + memberBaru,
-					type: 'get',
-					dataType: "json",
-					success: function (response) {
+				function getDashboardData(response){
+					userCookie = response;
+					
+
+					$("#registrasimember").addClass('active');
+					$("#username").text(userCookie);					
+				}
+
+				function getMemberData(response){
+					memberBaru = response;
+					urls = "get_specificuser/";
+					$.ajax({
+						url: "<?php echo base_url() ?>index.php/" + urls + memberBaru,
+						type: 'post',
+						dataType: "json",
+						success: function (response) {
 						// console.log(response);
 						$("#replacement_user").text(": " + response.replacement_user);
 						$("#usernameBaru").text(": " + response.username);
@@ -224,10 +229,11 @@
 						$("#nominal").text(": " + formatUang.format(response.nominal_pembayaran));
 					}
 				})
+				}
 
 				$.ajax({
 					url: "<?php echo base_url() ?>index.php/get_parameter",
-					type: 'get',
+					type: 'post',
 					dataType: "json",
 					success: function (response) {
 						$("#bank_admin").text(" "+response.nama_bank+" "+response.no_rekening+" a/n "+response.atas_nama);
@@ -235,10 +241,9 @@
 				})
 			})
 			
-			function deleteCookie(name){
-				document.cookie = "memberBaru=?; Path=/; Expires=Thu, 01 Jan 1970 00:00:01"
-				window.location = "<?php echo base_url() ?>index.php/registrasimember";
-			}
+			function tutup(){
+					window.location = "<?php echo base_url() ?>index.php/registrasimember";
+				}
 		</script>
 	</body>
 

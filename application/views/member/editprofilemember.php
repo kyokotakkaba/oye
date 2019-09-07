@@ -22,7 +22,7 @@
 	<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
 	<!-- Google Font -->
 	<link rel="stylesheet"
-		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -136,125 +136,131 @@
 							</div>
 							<div class="form-group">
 								<label class="col-sm-3 control-label"><label style="color:red">*</label>Security
-									Code</label>
-								<div class="col-sm-9">
-									<input class="form-control" id="security_code" type="password" name="security_code"
-										placeholder="Kode Pin 6 angka" pattern="^[0-9]{1,6}$" required>
-								</div>
+							Code</label>
+							<div class="col-sm-9">
+								<input class="form-control" id="security_code" type="password" name="security_code"
+								placeholder="Kode Pin 6 angka" pattern="^[0-9]{1,6}$" required>
 							</div>
+						</div>
 
-							<div class="form-group">
-								<div class="col-sm-12 text-center">
-									<button type="submit" id="submitButton" class="btn btn-primary btn-md">
-										<span id="submit">Edit Profil</span></button>
+						<div class="form-group">
+							<div class="col-sm-12 text-center">
+								<button type="submit" id="submitButton" class="btn btn-primary btn-md">
+									<span id="submit">Edit Profil</span></button>
 								</div>
 							</div>
 							<form>
-					</div>
-					<!-- /.box-body -->
+							</div>
+							<!-- /.box-body -->
+						</div>
+						<!-- /.box -->
+					</section>
+					<!-- /.content -->
 				</div>
-				<!-- /.box -->
-			</section>
-			<!-- /.content -->
-		</div>
-		<!-- /.content-wrapper -->
-		<?php $this->load->view("member/footer");?>
-	</div>
-	<!-- ./wrapper -->
+				<!-- /.content-wrapper -->
+				<?php $this->load->view("member/footer");?>
+			</div>
+			<!-- ./wrapper -->
 
-	<!-- Bootstrap 3.3.7 -->
-	<script src="<?=base_url("bower_components/bootstrap/dist/js/bootstrap.min.js");?>"></script>
-	<!-- SlimScroll -->
-	<script src="<?=base_url("bower_components/jquery-slimscroll/jquery.slimscroll.min.js");?>"></script>
-	<!-- FastClick -->
-	<script src="<?=base_url("bower_components/fastclick/lib/fastclick.js");?>"></script>
-	<!-- DataTables -->
-	<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
-	<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
-	<!-- AdminLTE App -->
-	<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
+			<!-- Bootstrap 3.3.7 -->
+			<script src="<?=base_url("bower_components/bootstrap/dist/js/bootstrap.min.js");?>"></script>
+			<!-- SlimScroll -->
+			<script src="<?=base_url("bower_components/jquery-slimscroll/jquery.slimscroll.min.js");?>"></script>
+			<!-- FastClick -->
+			<script src="<?=base_url("bower_components/fastclick/lib/fastclick.js");?>"></script>
+			<!-- DataTables -->
+			<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
+			<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
+			<!-- AdminLTE App -->
+			<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
 
-	<script>
-		$(document).ready(function () {
-			var userCookie = getCookie("memberCookie");
-			var urls = "get_currentuser";
-			$("#username").text(userCookie);
+			<script>
+				$(document).ready(function () {
+					$.ajaxSetup({
+						headers: { "cache-control": "no-cache" }
+					});
+					
 
-			function getCookie(cname) {
-				var name = cname + "=";
-				var decodedCookie = decodeURIComponent(document.cookie);
-				var ca = decodedCookie.split(';');
-				for (var i = 0; i < ca.length; i++) {
-					var c = ca[i];
-					while (c.charAt(0) == ' ') {
-						c = c.substring(1);
+					getCookie("memberCookie", getDashboardData);
+					function getCookie(cname, callBack){
+						$.ajax({
+							url: "<?php echo base_url() ?>index.php/get_cookie/" + cname,
+							type: 'post',
+							success: function (response) {
+								callBack(response);
+							}
+						})
 					}
-					if (c.indexOf(name) == 0) {
-						return c.substring(name.length, c.length);
+
+					function getDashboardData(response){
+						userCookie = response;
+						urls = "get_currentuser/";
+
+						$("#username").text(userCookie);
+
+						$.ajax({
+							url: "<?php echo base_url() ?>index.php/" + urls,
+							type: 'post',
+							dataType: "json",
+							success: function (response) {
+								console.log(response);
+								$("#replacement_user").val(response.replacement_user);
+								$("#sponsor").val(response.sponsor);
+								$("#usernamebaru").val(response.username);
+								$("#nama").val(response.nama);
+								$("#email").val(response.email);
+								$("#no_telepon").val(response.no_telepon);
+								$("#ktp").val(response.ktp);
+								$("#alamat").val(response.alamat);
+								$("#nama_bank").val(response.nama_bank);
+								$("#no_rekening").val(response.no_rekening);
+								$("#atas_nama_bank").val(response.atas_nama_bank);
+								$("#security_code").val(response.security_code);
+							}
+						})
+					}
+
+
+
+				})
+
+				function insertfunction(e) {
+					if (confirm("Apakah anda yakin ?")) {
+						e.preventDefault(); 			
+						urls = "update_profilmember";
+						var dataString = $("#insert_member").serialize();
+						console.log(dataString);
+						$("#submit").html("tunggu..");
+						$("#submitButton").prop("disabled", true);
+						$.ajax({
+							url: "<?php echo base_url() ?>index.php/" + urls,
+							type: 'POST',
+							data: dataString,
+							success: function (response) {
+								if (response == "berhasil mengubah data") {
+									alert(response);
+									location.reload();
+								} else {
+									alert("Gagal");
+									$("#submit").html("Submit");
+									$("#submitButton").prop("disabled", false);
+								}
+							},
+							error: function () {
+								alert('Gagal');
+								$("#submitButton").prop("disabled", false);
+							}
+						});
+					} else {
+
 					}
 				}
-				return "";
-			}
 
-			$.ajax({
-				url: "<?php echo base_url() ?>index.php/" + urls,
-				type: 'get',
-				dataType: "json",
-				success: function (response) {
-					console.log(response);
-					$("#replacement_user").val(response.replacement_user);
-					$("#sponsor").val(response.sponsor);
-					$("#usernamebaru").val(response.username);
-					$("#nama").val(response.nama);
-					$("#email").val(response.email);
-					$("#no_telepon").val(response.no_telepon);
-					$("#ktp").val(response.ktp);
-					$("#alamat").val(response.alamat);
-					$("#nama_bank").val(response.nama_bank);
-					$("#no_rekening").val(response.no_rekening);
-					$("#atas_nama_bank").val(response.atas_nama_bank);
-					$("#security_code").val(response.security_code);
+				function changepassword() {
+					window.location = "<?php echo base_url() ?>index.php/changepasswordmember";
 				}
-			})
-		})
 
-		function insertfunction(e) {
-			if (confirm("Apakah anda yakin ?")) {
-				e.preventDefault(); // will stop the form submission						
-				urls = "update_profilmember";
-				var dataString = $("#insert_member").serialize();
-				console.log(dataString);
-				$("#submit").html("tunggu..");
-				$("#submitButton").prop("disabled", true);
-				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls,
-					type: 'POST',
-					data: dataString,
-					success: function (response) {
-						if (response == "berhasil mengubah data") {
-							alert(response);
-							location.reload();
-						} else {
-							alert("Gagal");
-							$("#submit").html("Submit");
-							$("#submitButton").prop("disabled", false);
-						}
-					},
-					error: function () {
-						alert('Gagal');
-						$("#submitButton").prop("disabled", false);
-					}
-				});
-			} else {
+			</script>
+		</body>
 
-			}
-		}
-
-		function changepassword() {
-			window.location = "<?php echo base_url() ?>index.php/changepasswordmember";
-		}
-
-	</script>
-</body>
-
-</html>
+		</html>

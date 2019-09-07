@@ -14,14 +14,14 @@
 
 		<!-- DataTables -->
 		<link rel="stylesheet"
-			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
+		href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
 		<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
 
 		<!-- Google Font -->
 		<link rel="stylesheet"
-			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	</head>
 
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -55,78 +55,77 @@
 										<label class="col-sm-3 control-label">Password Lama</label>
 										<div class="col-sm-9">
 											<input class="form-control" id="oldpassword" type="password" name="oldpassword"
-												minlength="8" required>
+											minlength="8" required>
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-3 control-label">Password Baru</label>
 										<div class="col-sm-9">
 											<input class="form-control" id="newpassword" type="password" name="newpassword"
-												placeholder="Mnimal 6 karakter" minlength="6" required>
+											placeholder="Mnimal 6 karakter" minlength="6" required>
 										</div>
 									</div>
 									<div class="form-group">
 										<div class="col-sm-12 text-center">
 											<button type="submit" id="submitButton" class="btn btn-primary btn-md">
 												<span id="submit">Submit</span></button>
+											</div>
 										</div>
-									</div>
-								</form>
-							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
+									</form>
+								</div>
+								<!-- /.box-body -->
+								<div class="box-footer">
 
+								</div>
 							</div>
+
 						</div>
-
-					</div>
-				</section>
-				<!-- /.content -->
+					</section>
+					<!-- /.content -->
+				</div>
+				<!-- /.content-wrapper -->
+				<?php $this->load->view("member/footer");?>
 			</div>
-			<!-- /.content-wrapper -->
-			<?php $this->load->view("member/footer");?>
-		</div>
-		<!-- ./wrapper -->
+			<!-- ./wrapper -->
 
-		<!-- jQuery 3 -->
-		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
-		<!-- Bootstrap 3.3.7 -->
-		<script src="<?=base_url("bower_components/bootstrap/dist/js/bootstrap.min.js");?>"></script>
-		<!-- SlimScroll -->
-		<script src="<?=base_url("bower_components/jquery-slimscroll/jquery.slimscroll.min.js");?>"></script>
-		<!-- FastClick -->
-		<script src="<?=base_url("bower_components/fastclick/lib/fastclick.js");?>"></script>
-		<!-- DataTables -->
-		<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
-		<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
-		<!-- AdminLTE App -->
-		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
+			<!-- jQuery 3 -->
+			<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
+			<!-- Bootstrap 3.3.7 -->
+			<script src="<?=base_url("bower_components/bootstrap/dist/js/bootstrap.min.js");?>"></script>
+			<!-- SlimScroll -->
+			<script src="<?=base_url("bower_components/jquery-slimscroll/jquery.slimscroll.min.js");?>"></script>
+			<!-- FastClick -->
+			<script src="<?=base_url("bower_components/fastclick/lib/fastclick.js");?>"></script>
+			<!-- DataTables -->
+			<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
+			<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
+			<!-- AdminLTE App -->
+			<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
 
-		<script>
-		$(document).ready(function () {
-			var userCookie = getCookie("memberCookie");
-
-				$("#registrasimember").addClass('active');
-				$("#username").text(userCookie);
-
-				function getCookie(cname) {
-					var name = cname + "=";
-					var decodedCookie = decodeURIComponent(document.cookie);
-					var ca = decodedCookie.split(';');
-					for (var i = 0; i < ca.length; i++) {
-						var c = ca[i];
-						while (c.charAt(0) == ' ') {
-							c = c.substring(1);
-						}
-						if (c.indexOf(name) == 0) {
-							return c.substring(name.length, c.length);
-						}
+			<script>
+				$(document).ready(function () {
+					$.ajaxSetup({
+						headers: { "cache-control": "no-cache" }
+					});
+					
+					getCookie("memberCookie", getDashboardData);
+					function getCookie(cname, callBack){
+						$.ajax({
+							url: "<?php echo base_url() ?>index.php/get_cookie/" + cname,
+							type: 'post',
+							success: function (response) {
+								callBack(response);
+							}
+						})
 					}
-					return "";
-				}
-		})
-			function insertfunction(e) {
-				if (confirm("Apakah anda yakin ?")) {
+
+					function getDashboardData(response,e){
+						userCookie = response;
+						urls = "get_currentuser_bonuspair/";
+
+						$("#registrasimember").addClass('active');
+						$("#username").text(userCookie);
+						if (confirm("Apakah anda yakin ?")) {
 					e.preventDefault(); // will stop the form submission						
 					urls = "update_passwordmember";
 					var dataString = $("#insert_password").serialize();
@@ -155,6 +154,7 @@
 
 				}
 			}
+			
 
 		</script>
 	</body>

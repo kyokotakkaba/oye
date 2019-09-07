@@ -14,14 +14,14 @@
 
 		<!-- DataTables -->
 		<link rel="stylesheet"
-			href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
+		href="<?=base_url("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css");?>">
 		<!-- Theme style -->
 		<link rel="stylesheet" href="<?=base_url("dist/css/AdminLTE.min.css");?>">
 		<link rel="stylesheet" href="<?=base_url("dist/css/skins/skin-blue.min.css");?>">
 
 		<!-- Google Font -->
 		<link rel="stylesheet"
-			href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	</head>
 
 	<body class="hold-transition skin-blue sidebar-mini">
@@ -51,109 +51,110 @@
 								<div class="col-sm-6">
 									<h4 class="text-center">BV Kiri</h1>
 										<h1 class="text-center" id="bvkiri">...</h1>
+									</div>
+									<div class="col-sm-6">
+										<h4 class="text-center">BV Kanan</h1>
+											<h1 class="text-center" id="bvkanan">...</h1>
+										</div>
+									</div>
+									<!-- /.box-body -->
+									<div class="box-footer">
+
+									</div>
 								</div>
-								<div class="col-sm-6">
-									<h4 class="text-center">BV Kanan</h1>
-										<h1 class="text-center" id="bvkanan">...</h1>
-								</div>
-							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
 
 							</div>
+							<!-- /.box -->
+							<div class="col-sm-6">
+								<div class="box">
+									<div class="box-header with-border">
+										<h3 class="box-title">i-cash & Poin</h3>
+									</div>
+									<div class="box-body">
+										<div class="col-sm-6">
+											<h4 class="text-center">I-Cash</h1>
+												<h1 class="text-center" id="icash">...</h1>
+											</div>
+											<div class="col-sm-6">
+												<h4 class="text-center">Poin</h1>
+													<h1 class="text-center" id="poin">...</h1>
+												</div>
+											</div>
+											<!-- /.box-body -->
+											<div class="box-footer">
+
+											</div>
+										</div>
+									</div>
+									<!-- /.box -->
+								</section>
+								<!-- /.content -->
+							</div>
+							<!-- /.content-wrapper -->
+							<?php $this->load->view("member/footer");?>
 						</div>
+						<!-- ./wrapper -->
 
-					</div>
-					<!-- /.box -->
-					<div class="col-sm-6">
-						<div class="box">
-							<div class="box-header with-border">
-								<h3 class="box-title">i-cash & Poin</h3>
-							</div>
-							<div class="box-body">
-								<div class="col-sm-6">
-									<h4 class="text-center">I-Cash</h1>
-										<h1 class="text-center" id="icash">...</h1>
-								</div>
-								<div class="col-sm-6">
-									<h4 class="text-center">Poin</h1>
-										<h1 class="text-center" id="poin">...</h1>
-								</div>
-							</div>
-							<!-- /.box-body -->
-							<div class="box-footer">
+						<!-- jQuery 3 -->
+						<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
+						<!-- Bootstrap 3.3.7 -->
+						<script src="<?=base_url("bower_components/bootstrap/dist/js/bootstrap.min.js");?>"></script>
+						<!-- SlimScroll -->
+						<script src="<?=base_url("bower_components/jquery-slimscroll/jquery.slimscroll.min.js");?>"></script>
+						<!-- FastClick -->
+						<script src="<?=base_url("bower_components/fastclick/lib/fastclick.js");?>"></script>
+						<!-- DataTables -->
+						<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
+						<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
+						<!-- AdminLTE App -->
+						<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
 
-							</div>
-						</div>
-					</div>
-					<!-- /.box -->
-				</section>
-				<!-- /.content -->
-			</div>
-			<!-- /.content-wrapper -->
-			<?php $this->load->view("member/footer");?>
-		</div>
-		<!-- ./wrapper -->
+						<script>
+							$(document).ready(function () {
+								$.ajaxSetup({
+									headers: { "cache-control": "no-cache" }
+								});
+								
+								const formatUang = new Intl.NumberFormat('id-ID', {
+									style: 'currency',
+									currency: 'IDR',
+									minimumFractionDigits: 2
+								});
 
-		<!-- jQuery 3 -->
-		<script src="<?=base_url("bower_components/jquery/dist/jquery.min.js");?>"></script>
-		<!-- Bootstrap 3.3.7 -->
-		<script src="<?=base_url("bower_components/bootstrap/dist/js/bootstrap.min.js");?>"></script>
-		<!-- SlimScroll -->
-		<script src="<?=base_url("bower_components/jquery-slimscroll/jquery.slimscroll.min.js");?>"></script>
-		<!-- FastClick -->
-		<script src="<?=base_url("bower_components/fastclick/lib/fastclick.js");?>"></script>
-		<!-- DataTables -->
-		<script src="<?=base_url("bower_components/datatables.net/js/jquery.dataTables.min.js");?>"></script>
-		<script src="<?=base_url("bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js");?>"></script>
-		<!-- AdminLTE App -->
-		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
+								getCookie("memberCookie", getDashboardData);
+								function getCookie(cname, callBack){
+									$.ajax({
+										url: "<?php echo base_url() ?>index.php/get_cookie/" + cname,
+										type: 'post',
+										success: function (response) {
+											callBack(response);
+										}
+									})
+								}
 
-		<script>
-			$(document).ready(function () {
-				const formatUang = new Intl.NumberFormat('id-ID', {
-					style: 'currency',
-					currency: 'IDR',
-					minimumFractionDigits: 2
-				});
+								function getDashboardData(response){
+									userCookie = response;
+									urls = "get_specificuser/";
 
-				userCookie = getCookie("memberCookie");
-				urls = "get_specificuser/";
+									$("#dashboard").addClass('active');
+									$("#username").text(userCookie);
 
-				$("#dashboard").addClass('active');
-				$("#username").text(userCookie);
+									$.ajax({
+										url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
+										type: 'post',
+										dataType: "json",
+										success: function (response) {
+											console.log(response.bv_kanan);
+											$("#bvkiri").text(formatUang.format(response.bv_kiri*2000));
+											$("#bvkanan").text(formatUang.format(response.bv_kanan*2000));
+											$("#icash").text(formatUang.format(response.icash));
+											$("#poin").text(formatUang.format(response.poin));
+										}
+									})
+								}
+							})
 
-				function getCookie(cname) {
-					var name = cname + "=";
-					var decodedCookie = decodeURIComponent(document.cookie);
-					var ca = decodedCookie.split(';');
-					for (var i = 0; i < ca.length; i++) {
-						var c = ca[i];
-						while (c.charAt(0) == ' ') {
-							c = c.substring(1);
-						}
-						if (c.indexOf(name) == 0) {
-							return c.substring(name.length, c.length);
-						}
-					}
-					return "";
-				}
+						</script>
+					</body>
 
-				$.ajax({
-					url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
-					type: 'get',
-					dataType: "json",
-					success: function (response) {
-						console.log(response.bv_kanan);
-						$("#bvkiri").text(formatUang.format(response.bv_kiri*2000));
-						$("#bvkanan").text(formatUang.format(response.bv_kanan*2000));
-						$("#icash").text(formatUang.format(response.icash));
-						$("#poin").text(formatUang.format(response.poin));
-					}
-				})
-			})
-
-		</script>
-	</body>
-
-	</html>
+					</html>

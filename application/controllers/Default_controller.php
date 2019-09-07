@@ -575,16 +575,21 @@ class Default_controller extends CI_Controller {
 	public function update_verifikasi_member($id){
 		// $updateprofil = $this->update_profilmember_admin($id,true); //apakah profil diupdate dulu sebelum verifikasi atau tidak?
 		$datauser = $this->get_specificuser($id,true);
-		$jumlahdownline = $this->validasireplacementuser($datauser['replacement_user'],true);
-		$posisikaki = 'batal';
-		if ($jumlahdownline === 0) { // === untuk memastikan variabel bernilai angka 0
-			$posisikaki = 'kiri';
-		}else if ($jumlahdownline == 1) {
-			$posisikaki = 'kanan';
+		if($datauser['status']=="Pending"){
+			$jumlahdownline = $this->validasireplacementuser($datauser['replacement_user'],true);
+			$posisikaki = 'batal';
+		    if ($jumlahdownline === 0) { // === untuk memastikan variabel bernilai angka 0
+		    	$posisikaki = 'kiri';
+		    }else if ($jumlahdownline == 1) {
+		    	$posisikaki = 'kanan';
+		    }
+		}else{
+			$posisikaki = 'sudah verifikasi';
 		}
+		
 
 		//update status verifikasi
-		if ($posisikaki != 'batal') {
+		if ($posisikaki != 'batal' && $posisikaki != 'sudah verifikasi') {
 			$passwordrandom = rand(10000000, 99999999);
 			$data = array(
 				// 'password' => md5($datauser['no_telepon']),
@@ -613,6 +618,7 @@ class Default_controller extends CI_Controller {
 					if ($insertStatus == "berhasil mengubah data"){
 						//ambil kaki kiri downline
 						$datadownlinesponsorkiri= $this->get_filtereduser(array('status'=> 'active','replacement_user'=>$datauser['sponsor'],'posisi_kaki'=>'kiri'), true);
+						$downlinesponsorkiri = "";
 						foreach ($datadownlinesponsorkiri as $row){
 							$downlinesponsorkiri = $row['username'];
 						}
@@ -622,8 +628,19 @@ class Default_controller extends CI_Controller {
 							//Tambah kuota kiri sponsor
 							$insertStatus = $this->Default_model->update_add_kuota_sponsor_kiri($datauser['sponsor'],1);
 						}else{
-							//Kurangi kuota kiri sponsor
-							$insertStatus = $this->Default_model->update_subtract_kuota_sponsor_kiri($datauser['sponsor'],1);
+
+							if ($datauser['replacement_user'] == $downlinesponsorkiri) {
+								//Bila replacement tepat di kaki kiri sponsor
+								//Tambah kuota kiri sponsor
+								$insertStatus = $this->Default_model->update_add_kuota_sponsor_kiri($datauser['sponsor'],1);
+							}else if ($datauser['replacement_user'] == $datauser['sponsor'] && $posisikaki == 'kiri') {
+								//bila replacement dan sponsor sama
+								//Tambah kuota kiri sponsor
+								$insertStatus = $this->Default_model->update_add_kuota_sponsor_kiri($datauser['sponsor'],1);
+							}else{
+								//Kurangi kuota kiri sponsor
+								$insertStatus = $this->Default_model->update_subtract_kuota_sponsor_kiri($datauser['sponsor'],1);
+							}	
 						}
 						if ($insertStatus == "berhasil mengubah data"){
 							//tambah poin dari bonus sponsor
@@ -885,7 +902,7 @@ public function update_payout_bonuspair(){
 			$cookie= array(
 				'name'   => 'backendCookie',
 				'value'  => $username,
-				'expire' => '0',
+				'expire' => 0
 			);
 			$this->input->set_cookie($cookie);
 			echo "berhasil login admin";
@@ -898,7 +915,7 @@ public function update_payout_bonuspair(){
 					$cookie= array(
 						'name'   => 'memberCookie',
 						'value'  => $username,
-						'expire' => '0',
+						'expire' => 0
 					);
 					$this->input->set_cookie($cookie);
 					$is_login = true;
@@ -969,7 +986,7 @@ public function update_payout_bonuspair(){
 	//note: menghapus cookie admin dan langsung redirect ke halaman login
 	public function logoutadmin(){
 		$this->load->helper('cookie');
-		delete_cookie("memberCookie");
+		delete_cookie("backendCookie");
 		header("Location: ".base_url()."index.php/login");
 		die();
 	}
@@ -1099,7 +1116,7 @@ public function update_payout_bonuspair(){
 	//output: berhasil mengirim sms / gagal mengirim sms. Respon : $respon / gagal mengirim sms. Curl belum aktif.
 	public function sendsms_registrasi($to, $username, $biaya){
 		$parameter = $this->get_parameter(true);
-		$txt = "Registrasi oye.co.id : ".$username.". Pembayaran Rp ".number_format($biaya,0,",",".")." ke rek ".$parameter['nama_bank']." ".$parameter['no_rekening']." a/n ".$parameter['atas_nama'].". Kirim bukti transfer ke WA: ".$parameter['no_admin'];
+		$txt = "Registrasi oye.co.id : ".$username.". Pembayaran Rp ".number_format($biaya,0,",",".")." ke rek ".$parameter['nama_bank']." ".$parameter['no_rekening']." a/n ".$parameter['atas_nama'].". Kirim bukti transfer ke WA ".$parameter['no_admin']." dalam waktu kurang dari 6 jam. Sertakan nama username anda untuk verifikasi.";
 
 		return $this->sendsms($to,$txt);
 	}
@@ -1137,6 +1154,33 @@ public function update_payout_bonuspair(){
 			}
 		}
 
+	}
+	
+	
+	//untuk membuat cookie
+	//output: cookie created
+	public function create_cookie(){
+		$name = $this->input->post('name');
+		$value = $this->input->post('value');
+		$this->load->helper('cookie');
+		$cookie= array(
+			'name'   => $name,
+			'value'  => $value,
+			'expire' => 0
+		);
+		$this->input->set_cookie($cookie);
+		echo "cookie created";
+	}
+
+	//untuk mengambil cookie
+	//output: no cookie / $cookie
+	public function get_cookie($name){
+		$this->load->helper('cookie');
+		if ($this->input->cookie($name,true)!=NULL) {
+			echo $this->input->cookie($name,true); //to output cookie
+		}else{
+			echo "no cookie";
+		}
 	}
 
 

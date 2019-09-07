@@ -143,6 +143,11 @@
 
 		<script>
 			$(document).ready(function () {
+				$.ajaxSetup({
+                    headers: { "cache-control": "no-cache" }
+                });
+                
+                
 				const formatUang = new Intl.NumberFormat('id-ID', {
 					style: 'currency',
 					currency: 'IDR',
@@ -173,7 +178,7 @@
 
 				$.ajax({
 					url: "<?php echo base_url() ?>index.php/" + urls + userCookie,
-					type: 'get',
+					type: 'post',
 					dataType: "json",
 					success: function (response) {
 						$("#icash").val(formatUang.format(response.icash));
@@ -182,7 +187,7 @@
 
 				$.ajax({
 					url: "<?php echo base_url() ?>index.php/" + urlwithdraw,
-					type: 'get',
+					type: 'post',
 					dataType: "json",
 					success: function (response) {
 						console.log(response);
