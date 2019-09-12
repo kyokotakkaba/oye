@@ -59,16 +59,31 @@
 										</div>
 									</div>
 								</div>
-								<div class="form-group">
+							  	<div class="form-group">
 									<label class="col-sm-3 control-label">Nominal Penarikan</label>
 									<div class="col-sm-9">
-										<div class="input-group">
+									    <div class="input-group">
+									        <label class="radio-inline">
+                                                <input type="radio" id="optnominal1" name="optnominal" value="bawah" onclick="optionNominal1()" checked >Dibawah 2 Juta
+                                            </label>
+                                            <label class="radio-inline">
+                                                 <input type="radio" id="optnominal2" name="optnominal" value="atas" onclick="optionNominal2()">Diatas 2 Juta
+                                            </label>
+										</div>
+										</br>
+										<div class="input-group" id="nominal1">
+											<select class="form-control" id="nominal" type="text" name="nominal">
+                                         </select>
+										</div>
+										</br>
+										<div class="input-group" id="nominal2">
 											<div class="input-group-addon">Rp</div>
 											<input class="form-control" id="nominal" type="text" name="nominal"
-												placeholder="Minimal Penarikan Rp 100.000" onchange="checknominal()">
+												placeholder="Minimal Penarikan Rp 100.000 | Harus kelipatan 50.000" onchange="checknominal()" disabled>
 										</div>
 									</div>
 								</div>
+								
 								<div class="form-group">
 									<label class="col-sm-3 control-label"><label style="color:red">*</label>Security
 										Code</label>
@@ -142,17 +157,35 @@
 		<script src="<?=base_url("dist/js/adminlte.min.js");?>"></script>
 
 		<script>
+		    function optionNominal1(){
+	    	    	$("#nominal2 #nominal").prop('disabled', true);
+                    $("#nominal1 #nominal").removeAttr("disabled");
+		    }
+            function optionNominal2(){
+                    $("#nominal1 #nominal").prop('disabled', true);
+                    $("#nominal2 #nominal").removeAttr("disabled");
+                }
+			
 			$(document).ready(function () {
+			    
+			    const formatUang = new Intl.NumberFormat('id-ID', {
+					style: 'currency',
+					currency: 'IDR',
+					minimumFractionDigits: 2
+				});
+				
+			    var nominalWithdraw = 50000;
+	            for(var i= 0 ; i < 39; i++){
+                    nominalWithdraw = nominalWithdraw + 50000; 
+    	            $("#nominal").append(new Option(formatUang.format(nominalWithdraw), nominalWithdraw));
+                }
+                
 				$.ajaxSetup({
                     headers: { "cache-control": "no-cache" }
                 });
                 
                 
-				const formatUang = new Intl.NumberFormat('id-ID', {
-					style: 'currency',
-					currency: 'IDR',
-					minimumFractionDigits: 2
-				});
+				
 				userCookie = getCookie("memberCookie");
 				urls = "get_specificuser/";
 				urlwithdraw = "get_currentuser_withdraw";
@@ -254,9 +287,15 @@
 
 			function withdrawmember() {
 				var urls = "insert_withdraw";
-				var nominal = $("#nominal").val();
+				
+				if($('#nominal1 #nominal').prop("disabled")){
+				    var nominal = $("#nominal2 #nominal").val();
+				}else{
+				    var nominal = $("#nominal1 #nominal").val();
+				}
 
-				$("#submitButton").prop("disabled", true);
+                if(nominal%50000==0){
+                    $("#submitButton").prop("disabled", true);
 				$.ajax({
 					url: "<?php echo base_url() ?>index.php/" + urls,
 					type: 'POST',
@@ -276,9 +315,15 @@
 					},
 					error: function () {
 						alert('Gagal');
+						$("#submit").html("Submit");
 						$("#submitButton").prop("disabled", false);
 					}
 				});
+                }else{
+                    $("#submit").html("Submit");
+                    alert("Nominal Harus Kelipatan Rp 50.000");
+                }
+				
 			}
 
 		</script>
