@@ -107,8 +107,8 @@
 					$.ajaxSetup({
 						headers: { "cache-control": "no-cache" }
 					});
+				});
 					
-					getCookie("memberCookie", getDashboardData);
 					function getCookie(cname, callBack){
 						$.ajax({
 							url: "<?php echo base_url() ?>index.php/get_cookie/" + cname,
@@ -118,41 +118,44 @@
 							}
 						})
 					}
+					
+					function insertfunction(e){
+					    e.preventDefault(); // will stop the form submission
+					    getCookie("memberCookie", getDashboardData);
+					}
 
-					function getDashboardData(response,e){
+					function getDashboardData(response){
 						userCookie = response;
 						urls = "get_currentuser_bonuspair/";
 
 						$("#registrasimember").addClass('active');
 						$("#username").text(userCookie);
 						if (confirm("Apakah anda yakin ?")) {
-					e.preventDefault(); // will stop the form submission						
-					urls = "update_passwordmember";
-					var dataString = $("#insert_password").serialize();
-					$("#submitButton").prop("disabled", true);
-					$.ajax({
-						url: "<?php echo base_url() ?>index.php/" + urls,
-						type: 'POST',
-						data: dataString,
-						success: function (response) {
-							$("#submit").html("tunggu..");
-							if (response == "berhasil mengubah data") {
-								alert("Sukses");
-								window.location.href = "<?php echo base_url() ?>index.php/dashboardmember";
-							} else {
-								alert("Gagal");
-								$("#submit").html("Submit");
-								$("#submitButton").prop("disabled", false);
-							}
-						},
-						error: function () {
-							alert('Gagal');
-							$("#submitButton").prop("disabled", false);
-						}
-					});
-				} else {
-
-				}
+    					urls = "update_passwordmember";
+    					var dataString = $("#insert_password").serialize();
+    					$("#submitButton").prop("disabled", true);
+    					$.ajax({
+    						url: "<?php echo base_url() ?>index.php/" + urls,
+    						type: 'POST',
+    						data: dataString,
+    						success: function (response) {
+    							$("#submit").html("tunggu..");
+    							if (response == "berhasil mengubah data") {
+    								alert("Sukses");
+    								window.location.href = "<?php echo base_url() ?>index.php/dashboardmember";
+    							} else {
+    								alert(response);
+    								$("#submit").html("Submit");
+    								$("#submitButton").prop("disabled", false);
+    							}
+    						},
+    						error: function () {
+    							alert(response);
+    							$("#submitButton").prop("disabled", false);
+    						}
+    					});
+    				    } else {
+    				    }
 			}
 			
 
